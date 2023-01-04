@@ -2,31 +2,26 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
+from fake_useragent import UserAgent
 import time
 
 containerNum = "GAOU6627318"
+blNum = "SINC72210300"
 
-try: 
+try:
 
-    driver = webdriver.Chrome('/Users/varun/Downloads/chromedriver')
+    options = Options()
+
+    options.headless = True
+
+    options.add_argument("--window-size=1920,1080")
+
+    driver = webdriver.Chrome(options=options)
 
     driver.maximize_window()
 
-    driver.get('https://sg.one-line.com/')
-
-    time.sleep(3)
-
-    print(driver.current_window_handle)
-
-    print("First window title " + driver.title)
-
-    driver.find_element(By.ID, "ctrack-field").send_keys(containerNum, Keys.ENTER)
-
-    time.sleep(3)
-
-    driver.switch_to.window(driver.window_handles[1])
-
-    print("Second Window Title " + driver.title)
+    driver.get('https://ecomm.one-line.com/one-ecom/manage-shipment/cargo-tracking?ctrack-field=' + containerNum + '&trakNoParam=' + containerNum)
 
     time.sleep(3)
 
@@ -36,13 +31,15 @@ try:
 
     status = driver.find_element(By.XPATH, '//*[@id="1"]/td[9]').text
     
-    lastUpdatedTimeStamp = driver.find_element(By.XPATH, '//*[@id="1"]/td[8]').text
-
-    driver.find_element(By.LINK_TEXT, containerNum).click()
+    driver.find_element(By.XPATH, '//*[@id="1"]/td[4]/a').click()
 
     time.sleep(10)
 
     expectedArrivalTime = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[5]').text
+
+    destinationPort = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[4]').text
+
+    vesselName = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[1]').text
 
 
 finally:
@@ -55,7 +52,7 @@ finally:
 
         time.sleep(3)
 
-        print("ETA is: " + expectedArrivalTime[8:] + " and it is updated at " + lastUpdatedTimeStamp)
+        print("Status of your query : " + status + ". It is travelling on " + vesselName + " and it will reach " + destinationPort + " at " + expectedArrivalTime[8:])
 
         print("Webscraping Complete")
 
