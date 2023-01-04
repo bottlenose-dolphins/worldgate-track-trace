@@ -44,7 +44,7 @@ try:
 
 finally:
 
-    if expectedArrivalTime == None or lastUpdatedTimeStamp == None:
+    if status == None:
 
         print("No Status Found")
 
