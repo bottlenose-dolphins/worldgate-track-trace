@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import MyModal from './registerModal';
+import React, { useState } from "react";
+import RegisterModal from "./registerModal";
 
-const RegisterButton = () => {
+function RegisterButton() {
   
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -10,11 +10,11 @@ const RegisterButton = () => {
     }
     return (
     <>
-    <button className="mt-5 place-self-end bg-blue-500 hover:bg-blue-400 text-white font-medium py-2 px-4 w-1/4 rounded-lg justify-end" onClick={toggleModal}>
+    <button type="submit" className="mt-5 place-self-end bg-blue-500 hover:bg-blue-400 text-white font-medium py-2 px-4 w-1/4 rounded-lg justify-end" onClick={toggleModal}>
     Register
     </button>
 
-    <MyModal isOpen={modalIsOpen} toggleModal={toggleModal}></MyModal>
+    <RegisterModal isOpen={modalIsOpen} toggleModal={toggleModal} />
           </>
     );
 }
