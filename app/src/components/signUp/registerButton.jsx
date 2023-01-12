@@ -10,8 +10,8 @@ const RegisterButton = ({ handleClick }) => {
   
     return (
     <>
-    <button className="mt-5 place-self-end bg-green-600 hover:bg-green-500 text-white font-medium py-2 px-4 rounded-lg justify-end" onClick={() => setModalIsOpen(true)}>
-    Sign Up
+    <button className="mt-5 place-self-end bg-blue-500 hover:bg-blue-400 text-white font-medium py-2 px-4 w-1/4 rounded-lg justify-end" onClick={() => setModalIsOpen(true)}>
+    Register
     </button>
     <Modal
         isOpen={modalIsOpen}
