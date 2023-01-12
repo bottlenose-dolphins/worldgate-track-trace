@@ -15,7 +15,7 @@ const PasswordField = () => {
         value={password} 
         onChange={handleChange} 
         className='border border-blue-400 font-normal text-black text-sm rounded-lg focus:outline-blue-400 block w-full p-2.5'
-        placeholder="Enter your password" 
+        placeholder="Password" 
       />
     </div>
   );

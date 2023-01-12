@@ -20,9 +20,9 @@ const PhoneNumberField = () => {
           value={phoneNumber} 
           onChange={handleChange} 
           className='border border-blue-400 font-normal text-black text-sm rounded-lg focus:outline-blue-400 w-full p-2.5 px-4'
-          placeholder="Enter your phone number" 
+          placeholder="Contact Number" 
         />
-        {!isValid && <div>Invalid Singapore phone number</div>} 
+        {!isValid && <div className="text-red-900">Invalid Singapore phone number</div>} 
       </div>
     );
   }
