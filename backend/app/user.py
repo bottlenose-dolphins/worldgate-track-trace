@@ -4,6 +4,7 @@ from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.exc import IntegrityError
 
 import hashlib
+import re
 import shortuuid
 import uuid
 
@@ -59,6 +60,12 @@ def validate_username(username):
 def generate_uuid():
     return shortuuid.uuid()
 
+def is_email(email):
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    if(re.fullmatch(regex, email)):
+        return True
+    return False
+
 @app.route("/user/signup", methods=['POST'])
 def sign_up():
     """
@@ -106,12 +113,17 @@ def sign_up():
 
 @app.route("/user/signin", methods=['POST'])
 def sign_in():
+    """
+    :param: { username: <str:username/email>, password: <str:password> }
+    :return: { message: <str:message> }
+    :rtype: json string
+    """
     username_given = True
     try:
         json_payload = request.get_json()
         input_password = json_payload['password']
 
-        if '@' in json_payload['username']:
+        if is_email(json_payload['username']):
             input_email = json_payload['username']
             username_given = False
         else:
