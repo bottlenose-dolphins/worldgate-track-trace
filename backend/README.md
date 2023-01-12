@@ -39,3 +39,9 @@ Run
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
+
+NOTE: each time you pip install a new library/package that is utilised in committed code, run the following command (make sure you're in the backend folder):
+
+```bash
+pip freeze > requirements.txt
+```
