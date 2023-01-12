@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import PasswordInput from "./PasswordInput";
 import UsernameInput from "./UsernameInput";
 import SignInBackground from "../../img/SignInBackground.png";
@@ -7,6 +8,10 @@ import TrackAndTrace from "../../img/TrackAndTrace.png";
 export default function SignIn() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+    function handleClick() {
+        navigate('/sign-up');
+      }
 
     return (
         <div className='flex flex-row-reverse bg-[center_left_4rem]' style={{
@@ -19,7 +24,8 @@ export default function SignIn() {
                         Welcome to <img className='inline w-13 h-8 ml-1' src={TrackAndTrace} alt='Track&Trace logo' />
                     </h2>
                     <h2 className='basis-1/2 text-gray-500'>
-                        No account? <a href='Sign Up' className='block font-semibold text-blue-400 hover:underline'>Sign Up</a>
+                        No account? <a href='Sign Up' className='block font-semibold text-blue-400 hover:underline'></a>
+                        <button onClick={handleClick}>Sign Up</button>
                     </h2>
                 </div>
                 <h1 className='font-semibold text-4xl my-5 px-4'>Sign In</h1>
