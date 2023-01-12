@@ -24,8 +24,8 @@ class User(db.Model):
     email = db.Column(db.String, nullable=False)
     password_salt = db.Column(db.String, nullable=False)
     password_hash = db.Column(db.String, nullable=False)
-    phone = db.Column(db.Integer)
-    company = db.Column(db.String)
+    phone = db.Column(db.Integer, default=None)
+    company = db.Column(db.String, default=None)
 
     def __init__(self, username, email, password_salt, password_hash, phone, company):
         self.wguser_id = generate_uuid()
@@ -61,13 +61,18 @@ def generate_uuid():
 
 @app.route("/user/signup", methods=['POST'])
 def sign_up():
+    """
+    :param: { email: <str:email>, name: <str:name>, password: <str:password> , phone: <int:phone>, company: <str:company> }
+    :return: { message: <str:message> }
+    :rtype: json string
+    """
 
     json_payload = request.get_json()
     username = json_payload['username']
     email = json_payload['email']
+    password = json_payload['password']
     phone = json_payload['phone']
     company = json_payload['company']
-    password = json_payload['password']
 
     if validate_username(username) is not None:
         return validate_username(username)

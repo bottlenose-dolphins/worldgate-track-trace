@@ -10,8 +10,8 @@ export default function SignIn() {
 
     return (
         <div className='flex flex-row-reverse bg-[center_left_4rem]' style={{
-            backgroundImage: `url(${SignInBackground})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', width: '100vw',
-            height: '100vh'
+            backgroundImage: `url(${SignInBackground})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", width: "100vw",
+            height: "100vh"
         }} >
             <div className='basis-full lg:basis-5/12 p-4 bg-white bg-opacity-50 sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700'>
                 <div className='flex flex-row px-4'>
