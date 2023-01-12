@@ -3,13 +3,18 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.exc import IntegrityError
 
+from os import getenv
+from dotenv import load_dotenv
+
 import hashlib
 import re
 import shortuuid
 import uuid
 
+load_dotenv()
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "oracle://wg:wgdemo*()@202.73.56.175:1521/efprod" # TODO: Externalise into env config file
+app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)

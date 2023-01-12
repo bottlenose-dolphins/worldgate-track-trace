@@ -18,6 +18,18 @@ python -m venv <venvName>
 source <venvName>/Scripts/activate
 ```
 
+### Provide Environment Variables
+
+This backend application relies on a remote Oracle server for data persistence. We need to provide it with the following information. Edit the `.env-example` using any text editor (`vi .env.example`).
+
+1. Replace `<>` fields with the respective information
+2. Rename `.env.example` to `.env`
+
+```bash
+# Clone into a .env file
+SQLALCHEMY_DATABASE_URI=<DB URI>
+```
+
 ### Install Dependencies
 
 Run 
