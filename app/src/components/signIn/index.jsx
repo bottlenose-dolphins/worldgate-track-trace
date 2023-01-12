@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import PasswordInput from "./PasswordInput";
 import UsernameInput from "./UsernameInput";
 import SignInBackground from "../../img/SignInBackground.png";
@@ -10,13 +10,13 @@ export default function SignIn() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     function handleClick() {
-        navigate('/sign-up');
-      }
+        navigate("/sign-up");
+    }
 
     return (
         <div className='flex flex-row-reverse bg-[center_left_4rem]' style={{
-            backgroundImage: `url(${SignInBackground})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', width: '100vw',
-            height: '100vh'
+            backgroundImage: `url(${SignInBackground})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", width: "100vw",
+            height: "100vh"
         }} >
             <div className='basis-full lg:basis-5/12 p-4 bg-white bg-opacity-50 sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700'>
                 <div className='flex flex-row px-4'>
@@ -24,8 +24,8 @@ export default function SignIn() {
                         Welcome to <img className='inline w-13 h-8 ml-1' src={TrackAndTrace} alt='Track&Trace logo' />
                     </h2>
                     <h2 className='basis-1/2 text-gray-500'>
-                        No account? <a href='Sign Up' className='block font-semibold text-blue-400 hover:underline'></a>
-                        <button onClick={handleClick}>Sign Up</button>
+                        No account?
+                        <button type="button" onClick={handleClick} className='block font-semibold text-blue-400 hover:underline'>Sign Up</button>
                     </h2>
                 </div>
                 <h1 className='font-semibold text-4xl my-5 px-4'>Sign In</h1>
