@@ -13,9 +13,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "oracle://wg:wgdemo*()@202.73.56.175:152
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-# with app.app_context():    
-#     user = db.Table('WG_USER', db.metadata, autoload=True, autoload_with=db.engine)
-# db.Model.metadata.reflect(bind=db.engine,schema='WG')
 
 class User(db.Model):
     __tablename__ = "wg_user"
