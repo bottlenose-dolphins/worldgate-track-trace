@@ -40,7 +40,7 @@ export default function SignUp() {
                     </div>
                     <PasswordField />
                     <div className="flex justify-end">
-                        <RegisterButton handleClick={() => console.log("Button clicked")} />
+                        <RegisterButton />
                     </div>
                     </div>
 
