@@ -7,7 +7,7 @@ export default function PasswordInput({ password, setPassword }) {
         >
             <p>Enter your password</p>
             <input
-                type='text'
+                type='password'
                 id='password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

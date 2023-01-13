@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { signIn } from "src/api/user";
 import PasswordInput from "./PasswordInput";
 import UsernameInput from "./UsernameInput";
 import SignInBackground from "../../img/SignInBackground.png";
@@ -8,9 +9,28 @@ import TrackAndTrace from "../../img/TrackAndTrace.png";
 export default function SignIn() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const [error, setError] = useState("");
     const navigate = useNavigate();
     function handleClick() {
         navigate("/sign-up");
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (username.trim() === "" || password === "") {
+            setError("Error: Empty fields detected");
+            return;
+        }
+        const res = await signIn(username, password);
+        if (res.code === 200) {
+            setError("");
+            // TODO: Redirect to home page/dashboard
+        } else if (res.code === 404) {
+            setError("Account Not Found: Incorrect username/email address");
+        } else {
+            setError(res.message);
+        }
     }
 
     return (
@@ -29,7 +49,7 @@ export default function SignIn() {
                     </h2>
                 </div>
                 <h1 className='font-semibold text-4xl my-5 px-4'>Sign In</h1>
-                <form className='flex flex-col px-4 pt-10 w-full lg:w-3/4'>
+                <form onSubmit={handleSubmit} className='flex flex-col px-4 pt-10 w-full lg:w-3/4'>
                     <div className="mb-6">
                         <UsernameInput username={username} setUsername={setUsername} />
                     </div>
@@ -43,6 +63,7 @@ export default function SignIn() {
                         Sign In
                     </button>
                 </form>
+                <div className='pt-5 text-red-500'>{ error }</div>
             </div>
         </div>
     )

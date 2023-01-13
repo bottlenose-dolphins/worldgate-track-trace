@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.exc import IntegrityError
+from flask_cors import CORS
 
 from os import getenv
 from dotenv import load_dotenv
@@ -14,6 +15,8 @@ import uuid
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -139,7 +142,7 @@ def sign_in():
         if found_user is None:
             return jsonify({
                 "code": 404,
-                "message": "user not found",
+                "message": "User not found",
             }), 404
 
         input_password_hash = hashlib.sha512(
@@ -150,7 +153,7 @@ def sign_in():
         if not verified:
             return jsonify({
                 "code": 401,
-                "message": "wrong password"
+                "message": "Wrong password"
             }), 401
         
         return jsonify({
@@ -161,7 +164,7 @@ def sign_in():
     except Exception as err:
         return jsonify({
             "code": 500,
-            "message": "Failed to login",
+            "message": "Error: Failed to login",
             "data": str(err)
         }), 500
 
