@@ -15,6 +15,8 @@ Initialise python virtual environment. Make sure you're in the backend folder.
 
 ```bash
 python -m venv <venvName>
+
+# activate virtual environment
 source <venvName>/Scripts/activate
 ```
 
@@ -27,6 +29,7 @@ This backend application relies on a remote Oracle server for data persistence. 
 
 ```bash
 # Clone into a .env file
+PYTHONPATH="${PYTHONPATH}:." # DO NOT CHANGE THIS
 SQLALCHEMY_DATABASE_URI=<DB URI>
 ```
 

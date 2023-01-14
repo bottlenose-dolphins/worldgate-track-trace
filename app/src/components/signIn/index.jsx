@@ -26,10 +26,10 @@ export default function SignIn() {
         if (res.code === 200) {
             setError("");
             // TODO: Redirect to home page/dashboard
-        } else if (res.code === 404) {
-            setError("Account Not Found: Incorrect username/email address");
+        } else if (res.code !== 500) {
+            setError("Incorrect username/email address or password");
         } else {
-            setError(res.message);
+            setError(res.message); // if internal server error
         }
     }
 
