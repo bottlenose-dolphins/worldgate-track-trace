@@ -38,7 +38,7 @@ export default function SignIn() {
             backgroundImage: `url(${SignInBackground})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", width: "100vw",
             height: "100vh"
         }} >
-            <div className='basis-full lg:basis-5/12 p-4 bg-white bg-opacity-50 sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700'>
+            <div className='basis-full lg:basis-5/12 p-4 bg-white bg-opacity-50 sm:p-6 md:p-8'>
                 <div className='flex flex-row px-4'>
                     <h2 className='basis-1/2 font-medium text-lg mb-5'>
                         Welcome to <img className='inline w-13 h-8 ml-1' src={TrackAndTrace} alt='Track&Trace logo' />
