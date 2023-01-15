@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  backend_users:
+    container_name: backend_users
+    build:
+      context: services/backend
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    volumes:
+      - backend-users-mount:/app
+
+  web:
+    container_name: web
+    build:
+      context: ./services/frontend
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=development
+    ports:
+      - 3000:3000
+    stdin_open: true
+    tty: true
+    volumes:
+    # https://stackoverflow.com/questions/30043872/docker-compose-node-modules-not-present-in-a-volume-after-npm-install-succeeds
+      - web-app-mount:/app/app
+      - web-app-node-modules-mount:/app/app/node_modules
+    depends_on:
+      - backend_users
+
+  scraper_ymlu:
+    container_name: scraper_ymlu
+    build:
+      context: ./services/scrapers
+      dockerfile: Dockerfile-Ymlu
+    ports:
+      - 8080:8080
+
+  scraper_good:
+    container_name: scraper_good
+    build:
+      context: ./services/scrapers
+      dockerfile: Dockerfile-Goodrich
+    ports:
+      - 5004:5004
+      
+volumes:
+  backend-users-mount:
+  web-app-mount:
+  web-app-node-modules-mount:
+
+
+    

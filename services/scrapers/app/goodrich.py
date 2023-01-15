@@ -7,8 +7,8 @@ from selenium.webdriver.chrome.options import Options
 from flask import Flask, jsonify
 
 # creds
-from creds.goodrich import username
-from creds.goodrich import password
+# from creds.goodrich import username
+# from creds.goodrich import password
 
 app = Flask(__name__)
 
@@ -16,20 +16,24 @@ app = Flask(__name__)
 def ping():
     return("hello")
 
-
+    # run with:
+    # http://127.0.0.1:5004/GOOD/BL/VASSINCMB015609
+    # http://127.0.0.1:5004/GOOD/CTR/VMLU3817377
 @app.route("/GOOD/<string:tracking_type>/<string:tracking_identifier>", methods=['GET'])
 def track(tracking_type, tracking_identifier):
 
     options = Options()
+    #https://stackoverflow.com/questions/53681161/why-puppeteer-needs-no-sandbox-to-launch-chrome-in-cloud-functions
+    #'--no-sandbox' is needed, although it's more of a work around than a solution
+    options.add_argument('--no-sandbox')
     options.add_argument('--headless')
     options.add_argument('--disable-gpu')
+    # options.add_argument('--disable-features=VizDisplayCompositor')
+    # options.add_argument('--disable-dev-shm-usage')
 
-    # init
+    # # init
+    # driver = webdriver.Chrome()
     driver = webdriver.Chrome(options=options)
-
-    # run with:
-    # http://127.0.0.1:5004/GOOD/BL/VASSINCMB015609
-    # http://127.0.0.1:5004/GOOD/CTR/VMLU3817377
 
     # set max waiting time before throwing an exception
     driver.implicitly_wait(5)
@@ -107,4 +111,5 @@ def track(tracking_type, tracking_identifier):
 
 
 if __name__ == '__main__':
-    app.run(port=5004, debug=True)
+    #port can also be determined in docker file through CMD instead
+    app.run(host='0.0.0.0', port=5004, debug=True)

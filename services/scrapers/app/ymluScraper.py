@@ -19,7 +19,10 @@ def ymluScraper(identifier, identifier_type):
     try:
         # Initialise chromedriver in headless mode
         options = Options()
-        options.headless = True
+        #'--no-sandbox' is needed, although it's more of a work around than a solution
+        options.add_argument('--no-sandbox')
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
         options.add_argument("--window-size=1920,1080")
         driver = webdriver.Chrome(options=options)
         

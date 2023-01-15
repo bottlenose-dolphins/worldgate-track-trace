@@ -53,6 +53,7 @@ class User(db.Model):
             "company": self.company
         }
 
+
 def validate_username(username):
     existing_user_username = User.query.filter_by(username=username).first()
     if existing_user_username:
@@ -70,6 +71,10 @@ def is_email(email):
     if(re.fullmatch(regex, email)):
         return True
     return False
+
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("hello")
 
 @app.route("/user/signup", methods=['POST'])
 def sign_up():
@@ -169,4 +174,5 @@ def sign_in():
         }), 500
 
 if __name__ == "__main__":
-    app.run(debug=True) # debug for DEV environment only
+    #port can also be determined in docker file through CMD instead
+    app.run(host='0.0.0.0', port=5001, debug=True) # debug for DEV environment only
