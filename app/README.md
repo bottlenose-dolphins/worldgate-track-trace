@@ -1,5 +1,34 @@
-# worldgate-track-trace
-Worldgate Track&amp;Trace system
+# Frontend for worldgate-track-trace
+
+This is the application root for the frontend system of Worldgate Track&amp;Trace system
+
+### Set-up Local Directories
+
+Clone this repository or download the files to local directory.
+Open a terminal session and navigate to this application root (`.../worldgate-track-trace/app`)
+
+```bash
+cd /path/to/worldgate-track-trace/app
+```
+
+### Provide Environment Variables
+
+This frontend application relies on the accompanying backend server for computation logic and data. We need to provide it the following information. Edit the backend server URL in `.env.example` using any text editor (`vi .env.example`).
+
+1. Replace `<>` fields with the respective information (backend server URL)
+2. Rename `.env.example` to `.env`
+
+**Note: `.env` is automatically ignored by git`**
+```bash
+# Clone into a .env file
+REACT_APP_API_BASE_ENDPOINT=<fill in URL>
+```
+
+### Install Dependencies
+
+```bash
+npm install
+```
 
 # Getting Started with Create React App
 
