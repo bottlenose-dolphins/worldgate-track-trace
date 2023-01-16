@@ -112,4 +112,4 @@ def track(tracking_type, tracking_identifier):
 
 if __name__ == '__main__':
     #port can also be determined in docker file through CMD instead
-    app.run(host='0.0.0.0', port=5004, debug=True)
+    app.run(host='0.0.0.0', port=8081, debug=True)

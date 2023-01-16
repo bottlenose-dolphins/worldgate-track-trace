@@ -175,4 +175,4 @@ def sign_in():
 
 if __name__ == "__main__":
     #port can also be determined in docker file through CMD instead
-    app.run(host='0.0.0.0', port=5001, debug=True) # debug for DEV environment only
+    app.run(host='0.0.0.0', port=5000, debug=True) # debug for DEV environment only

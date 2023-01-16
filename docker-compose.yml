@@ -4,7 +4,7 @@ services:
   backend_users:
     container_name: backend_users
     build:
-      context: services/backend
+      context: ./services/backend
       dockerfile: Dockerfile
     ports:
       - 5000:5000
@@ -43,7 +43,7 @@ services:
       context: ./services/scrapers
       dockerfile: Dockerfile-Goodrich
     ports:
-      - 5004:5004
+      - 8081:8081
       
 volumes:
   backend-users-mount:
