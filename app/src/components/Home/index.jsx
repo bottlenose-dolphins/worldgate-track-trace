@@ -15,9 +15,9 @@ export default function Home() {
     <div>
          <Navigation />
    
-    <div className='flex bg-white-to-light-blue gradient container mt-5'>
-      <div className='w-1/2 mx-5'>
-        <h1 className='text-8xl font-bold'>Keeping track of your shipment just got easier!</h1>
+    <div className='flex  flex-col w-full  space-y-4 md:flex-row md:space-x-4 md:space-y-0  bg-white-to-light-blue gradient container mt-5 '>
+      <div className=' md:w-1/2 lg:w-1/2  mx-5'>
+        <h1 className=' sm:text-3xl md:text-8xl lg:text-8xl font-bold '>Keeping track of your shipment just got easier!</h1>
         <p className='text-lg mt-5'>Worldgate introduces <span className='font-bold'>Track and Trace</span>,<br/> for <span className='font-bold'>all</span> your shipment needs.</p>
         <div className='flex'>
           <Link to='/signup'>
@@ -28,7 +28,7 @@ export default function Home() {
           </Link>
         </div>
       </div>
-      <div className='w-1/2'>
+      <div className='  md:w-1/2 lg:w-1/2 mx-5  '>
         <img src={Container} alt='' className="h-5/6" />
       </div>
     </div>
