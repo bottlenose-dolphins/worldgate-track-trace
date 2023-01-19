@@ -11,6 +11,8 @@ import hashlib
 import re
 import shortuuid
 import uuid
+import datetime
+import jwt
 
 load_dotenv()
 
@@ -155,10 +157,19 @@ def sign_in():
                 "code": 401,
                 "message": "Wrong password"
             }), 401
+
+        jwt_token = jwt.encode(
+            { "username": found_user.username, "email": found_user.email, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
+            getenv("JWT_SECRET", default="secret_local_testing_only"),
+            algorithm="HS256",
+            headers={"kid": getenv(
+                "JWT_KEY", default="kidOnly4localTes1ing")},
+        )
         
         return jsonify({
             "code": 200,
             "message": "login success",
+            "data": jwt_token.decode("utf-8")
         }), 200
 
     except Exception as err:
@@ -167,6 +178,20 @@ def sign_in():
             "message": "Error: Failed to login",
             "data": str(err)
         }), 500
+
+def decode_jwt(request):
+    """
+    Helper function to decode JWT token for email
+    """
+    header = request.headers.get('Authorization')
+    auth_token = header.split(' ')[-1]
+    # TODO: Verify signature
+    json_payload = jwt.decode(auth_token, options={"verify_signature": False})
+    email = json_payload['email']
+    return {
+        "email":email
+    }
+
 
 if __name__ == "__main__":
     app.run(debug=True) # debug for DEV environment only
