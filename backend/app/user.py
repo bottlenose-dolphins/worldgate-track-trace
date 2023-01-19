@@ -159,17 +159,15 @@ def sign_in():
             }), 401
 
         jwt_token = jwt.encode(
-            { "username": found_user.username, "email": found_user.email, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
+            { "user_id": found_user.wguser_id, "username": found_user.username, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
             getenv("JWT_SECRET", default="secret_local_testing_only"),
             algorithm="HS256",
-            headers={"kid": getenv(
-                "JWT_KEY", default="kidOnly4localTes1ing")},
         )
         
         return jsonify({
             "code": 200,
             "message": "login success",
-            "data": jwt_token.decode("utf-8")
+            "data": jwt_token
         }), 200
 
     except Exception as err:
@@ -181,16 +179,31 @@ def sign_in():
 
 def decode_jwt(request):
     """
-    Helper function to decode JWT token for email
+    Helper function to decode JWT token for username
     """
     header = request.headers.get('Authorization')
     auth_token = header.split(' ')[-1]
-    # TODO: Verify signature
-    json_payload = jwt.decode(auth_token, options={"verify_signature": False})
-    email = json_payload['email']
+    json_payload = jwt.decode(auth_token, getenv("JWT_SECRET", default="secret_local_testing_only"), algorithms=["HS256"])
+    username = json_payload['username']
     return {
-        "email":email
+        "username": username
     }
+
+@app.route("/user/jwt_test", methods=['GET'])
+def jwt_test():
+    try:
+        username_payload = decode_jwt(request)
+    except Exception as err:
+        return jsonify({
+            "code":403,
+            "message":"User is not authenticated.",
+            "data": str(err)
+        }), 403
+    return jsonify({
+        "code": 200,
+        "message": "login success",
+        "data": username_payload
+    }), 200
 
 
 if __name__ == "__main__":
