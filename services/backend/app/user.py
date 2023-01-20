@@ -16,7 +16,6 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
-
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -175,4 +174,4 @@ def sign_in():
 
 if __name__ == "__main__":
     #port can also be determined in docker file through CMD instead
-    app.run(host='0.0.0.0', port=5000, debug=True) # debug for DEV environment only
+    app.run(host='0.0.0.0', port=5002, debug=True) # debug for DEV environment only

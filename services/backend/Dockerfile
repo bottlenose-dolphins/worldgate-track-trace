@@ -9,10 +9,8 @@ COPY . .
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
-# ENV SQLALCHEMY_DATABASE_URI=<DB URI>
-ENV PYTHONPATH="${PYTHONPATH}:."
 
-EXPOSE 5000
+EXPOSE 5002
 
 # start the server
 CMD [ "python", "./app/user.py" ]
