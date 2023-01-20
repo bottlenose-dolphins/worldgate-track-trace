@@ -22,6 +22,7 @@ RUN wget ${URLBASE}/chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb \
 # copying the neccessary script
 COPY requirements.txt .
 COPY ./app/goodrich.py .
+COPY ./creds/creds_goodrich.py .
 
 # upgrade pip and install requirements
 RUN pip install --upgrade pip
