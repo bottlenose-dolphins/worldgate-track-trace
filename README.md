@@ -3,7 +3,7 @@
 ### Backend: Provide Database Connection String
 
 This backend application relies on a remote Oracle server for data persistence.
-Add db Connection String in ```docker-compose.yml```:
+Add db Connection String in ```docker-compose.yml``` (without quotes):
 
 ```
 ...

@@ -7,8 +7,8 @@ from selenium.webdriver.chrome.options import Options
 from flask import Flask, jsonify
 
 # creds
-from creds_goodrich import username
-from creds_goodrich import password
+from creds.creds_goodrich import username
+from creds.creds_goodrich import password
 
 app = Flask(__name__)
 
