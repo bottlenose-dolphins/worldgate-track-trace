@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import time
 
-identifier = "GAOU6627318"
+identifier = "SINC69412601"
 
 try:
 
@@ -24,10 +24,6 @@ try:
     driver.get('https://ecomm.one-line.com/one-ecom/manage-shipment/cargo-tracking?ctrack-field=' + identifier + '&trakNoParam=' + identifier)
 
     time.sleep(3)
-
-    # pop-up present when querying for status in the page so need to click "Skip"
-
-    driver.find_element(By.XPATH, '//*[@id="headlessui-popover-panel-28"]/div/div[2]/div[3]/button[1]').click()
 
     # Inline Frame present so need to change to this so you can extract values
 
