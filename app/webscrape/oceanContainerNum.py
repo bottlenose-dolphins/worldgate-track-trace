@@ -2,59 +2,113 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import time
+from flask import Flask, jsonify
 
-identifier = "SINC69412601"
+app = Flask(__name__)
 
-try:
+@app.route('/ONE/<identifier>')
 
-    # headless mode will run the webscraping in the background and lesser RAM will be utilised --> Much more efficient process
+def oneScraper(identifier):
 
-    options = Options()
+    try:
 
-    options.headless = True
+        # headless mode will run the webscraping in the background and lesser RAM will be utilised --> Much more efficient process
 
-    options.add_argument("--window-size=1920,1080")
+        options = Options()
 
-    driver = webdriver.Chrome(options=options)
+        options.headless = True
 
-    driver.maximize_window()
+        options.add_argument("--window-size=1920,1080")
 
-    # Can interchange identifier with Container/BL Number as the process is similar
+        driver = webdriver.Chrome(options=options)
 
-    driver.get('https://ecomm.one-line.com/one-ecom/manage-shipment/cargo-tracking?ctrack-field=' + identifier + '&trakNoParam=' + identifier)
+        driver.maximize_window()
 
-    time.sleep(3)
+        # Can interchange identifier with Container/BL Number as the process is similar
 
-    # Inline Frame present so need to change to this so you can extract values
-
-    driver.switch_to.frame("IframeCurrentEcom")
-
-    status = driver.find_element(By.XPATH, '//*[@id="1"]/td[9]').text
-
-    #clicking the Container Number will show us more details like Port of Destination and ETA
-
-    driver.find_element(By.XPATH, '//*[@id="1"]/td[4]/a').click()
-
-    time.sleep(10)
-
-    expectedArrivalTime = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[5]').text
-
-    destinationPort = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[4]').text
-
-    vesselName = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[1]').text
-
-
-finally:
-
-    if status == None:
-
-        print("No Status Found")
-
-    else:
+        driver.get('https://ecomm.one-line.com/one-ecom/manage-shipment/cargo-tracking?ctrack-field=' + identifier + '&trakNoParam=' + identifier)
 
         time.sleep(3)
 
-        print("Status of your query : " + status + ". It is travelling on " + vesselName + " and it will reach " + destinationPort + " at " + expectedArrivalTime[8:])
+        # Inline Frame present so need to change to this so you can extract values
 
-        print("Webscraping Complete")
+        driver.switch_to.frame("IframeCurrentEcom")
+
+        status = driver.find_element(By.XPATH, '//*[@id="1"]/td[9]').text
+
+        #clicking the Container Number will show us more details like Port of Destination and ETA
+
+        driver.find_element(By.XPATH, '//*[@id="1"]/td[4]/a').click()
+
+        time.sleep(10)
+
+        expectedArrivalTime = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[5]').text
+
+        destinationPort = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[4]').text
+
+        vesselName = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[1]').text
+
+        if status != None:
+
+            time.sleep(3)
+
+            return jsonify(
+
+                {
+
+                    "code": 200,
+
+                    "data":{
+
+                        "status": status,
+
+                        "vessel_name": vesselName,
+
+                        "port_of_discharge": destinationPort,
+
+                        "time_of_arrival": expectedArrivalTime[8:]
+
+                    }
+
+                }
+
+            )
+        
+        else:
+
+            return jsonify(
+
+                {
+
+                    "code": 200,
+
+                    "data":{
+
+                        "message" : "No Status Found"
+
+                    }
+
+                }
+
+            )
+
+    except Exception as e:
+
+        return jsonify(
+
+            {
+
+                "code": 500,
+
+                "message": str(e)
+
+            }
+
+        ), 500
+
+if __name__ == '__main__':
+
+    app.run(host='0.0.0.0', port=8081, debug=True)
+
+
 
