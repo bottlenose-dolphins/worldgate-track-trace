@@ -69,7 +69,7 @@ services:
   #   environment:
   #     SWAGGER_JSON: doc/openapi.yml
 
-volumes:
-  backend-users-mount:
-  web-app-mount:
-  web-app-node-modules-mount:
+# volumes:
+#   backend-users-mount:
+#   web-app-mount:
+#   web-app-node-modules-mount:
