@@ -3,6 +3,27 @@ FROM python:3.11
 #cx-Oracle fails to install via alpine (smaller image)
 # FROM python:3.12.0a4-alpine3.17
 
+# oracle installation 
+
+WORKDIR    /opt/oracle
+
+RUN        apt-get update && apt-get install -y libaio1 wget unzip \
+
+            #for ARM
+            && wget https://download.oracle.com/otn_software/linux/instantclient/191000/instantclient-basiclite-linux.arm64-19.10.0.0.0dbru.zip \
+            && unzip instantclient-basiclite-linux.arm64-19.10.0.0.0dbru.zip \
+            && rm -f instantclient-basiclite-linux.arm64-19.10.0.0.0dbru.zip \
+
+            #for X86
+            # && wget https://download.oracle.com/otn_software/linux/instantclient/219000/instantclient-basiclite-linux.x64-21.9.0.0.0dbru.zip \
+            # && unzip instantclient-basiclite-linux.x64-21.9.0.0.0dbru.zip \
+            # && rm -f instantclient-basiclite-linux.x64-21.9.0.0.0dbru.zip \
+
+            && cd /opt/oracle/instantclient* \
+            && rm -f *jdbc* *occi* *mysql* *README *jar uidrvci genezi adrci \
+            && echo /opt/oracle/instantclient* > /etc/ld.so.conf.d/oracle-instantclient.conf \
+            && ldconfig
+
 WORKDIR /app
 COPY . .
 
