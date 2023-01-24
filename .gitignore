@@ -1,5 +1,3 @@
 
 backend/backend/pyvenv.cfg
 backend/app/__pycache__/user.cpython-310.pyc
-backend/.env-example
-app/.env-example
