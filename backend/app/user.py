@@ -13,7 +13,7 @@ import re
 import shortuuid
 import uuid
 
-cx_Oracle.init_oracle_client(lib_dir=r"D:\oracle\instantclient_21_8") # point this to your local installation of the oracle DB files
+# cx_Oracle.init_oracle_client(lib_dir=r"D:\oracle\instantclient_21_8") point this to your local installation of the oracle DB files
 
 load_dotenv()
 
