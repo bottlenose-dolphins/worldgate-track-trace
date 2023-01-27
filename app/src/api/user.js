@@ -16,7 +16,7 @@ export const signIn = async(username, password) => {
     }
 }
 
-//email: <str:email>, name: <str:name>, password: <str:password> , phone: <int:phone>, company: <str:company>
+// email: <str:email>, name: <str:name>, password: <str:password> , phone: <int:phone>, company: <str:company>
 export const signUp = async(username, email, password, phone, company) => {
     try {
         const res = await axios.post(`${USER_ENDPOINT}/signup`, {

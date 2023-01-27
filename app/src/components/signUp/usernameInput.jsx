@@ -7,7 +7,7 @@ export default function UsernameInput({ username, setUsername }) {
           htmlFor='usernameField'
           className='block mb-2 text-md font-medium text-black space-y-2'
       >
-          User name
+          Username
           <input
               type='text'
               id='usernameField'

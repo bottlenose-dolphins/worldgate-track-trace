@@ -32,17 +32,18 @@ export default function SignUp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (company.trim() === "" || email.trim() === "" || username.trim() === "" || phone.trim()==="" || password === "") { //AC 1
+        if (company.trim() === "" || email.trim() === "" || username.trim() === "" || phone.trim()==="" || password === "") { // AC 1
             setError("Error: Empty fields detected");
             return;
         }
+        // eslint-disable-next-line 
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!re.test(String(email).toLowerCase())){ //AC 2
+        if (!re.test(String(email).toLowerCase())){ // AC 2
             setError("Error: Email not in the right format");
             return;
         }
 
-        if (password.length < 8){ //AC 4
+        if (password.length < 8){ // AC 4
             setError("Error: Password length too short");
             return;
         }
