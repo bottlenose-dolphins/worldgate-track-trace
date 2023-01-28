@@ -1,9 +1,12 @@
+from datetime import datetime, timedelta, timezone
+
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.exc import IntegrityError
 from flask_cors import CORS
-
+from flask_jwt_extended import JWTManager, get_jwt, get_jwt_identity, jwt_required
+from flask_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies
 from os import getenv
 from dotenv import load_dotenv
 
@@ -11,17 +14,20 @@ import hashlib
 import re
 import shortuuid
 import uuid
-import datetime
-import jwt
 
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, origins="http://localhost:3000", supports_credentials=True, expose_headers="Set-Cookie")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['JWT_SECRET_KEY'] = getenv('JWT_SECRET', default='secret_local_testing_only')
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=0.5)
+# app.config['JWT_COOKIE_SECURE'] = True # for prod
 
+jwt = JWTManager(app)
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -158,17 +164,16 @@ def sign_in():
                 "message": "Wrong password"
             }), 401
 
-        jwt_token = jwt.encode(
-            { "user_id": found_user.wguser_id, "username": found_user.username, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
-            getenv("JWT_SECRET", default="secret_local_testing_only"),
-            algorithm="HS256",
-        )
+        # access token stored in httpOnly cookie, 
+        # double submit token stored in regular cookie
+        access_token = create_access_token(identity=found_user.username)
         
-        return jsonify({
+        response = jsonify({
             "code": 200,
             "message": "login success",
-            "data": jwt_token
-        }), 200
+        })
+        set_access_cookies(response, access_token)
+        return response
 
     except Exception as err:
         return jsonify({
@@ -177,33 +182,57 @@ def sign_in():
             "data": str(err)
         }), 500
 
-def decode_jwt(request):
-    """
-    Helper function to decode JWT token for username
-    """
-    header = request.headers.get('Authorization')
-    auth_token = header.split(' ')[-1]
-    json_payload = jwt.decode(auth_token, getenv("JWT_SECRET", default="secret_local_testing_only"), algorithms=["HS256"])
-    username = json_payload['username']
-    return {
-        "username": username
-    }
+@app.route("/user/logout", methods=["POST"])
+def logout():
+    response = jsonify({"msg": "logout successful"})
+    unset_jwt_cookies(response)
+    return response
 
-@app.route("/user/jwt_test", methods=['GET'])
-def jwt_test():
+# Using an `after_request` callback, we refresh any token that is within 15 minutes of expiring.
+@app.after_request
+def refresh_expiring_jwt(response):
     try:
-        username_payload = decode_jwt(request)
-    except Exception as err:
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(timezone.utc)
+        target_timestamp = datetime.timestamp(now + timedelta(minutes=15))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            set_access_cookies(response, access_token)
+        return response
+    except (RuntimeError, KeyError):
+        # Case where there is not a valid JWT. Just return the original response
+        return response
+
+@app.route("/user/test_decode", methods=['GET']) # for testing purposes
+def test_decode_jwt(): # example
+    try:
+        res = verify_jwt_csrf_validity()
+        username = res["data"]
+        return username
+    except AssertionError:
         return jsonify({
-            "code":403,
-            "message":"User is not authenticated.",
-            "data": str(err)
-        }), 403
-    return jsonify({
-        "code": 200,
-        "message": "login success",
-        "data": username_payload
-    }), 200
+            "code": 401,
+            "message": "Invalid token - Unauthorized",
+        }), 401
+
+# To be put at the start of ALL protected endpoints, inside a try-except block. Verifies valid JWT and double submit token in request header
+# If verification passes, dictionary returned where key "data" points to value of username.
+# If verification fails, an AssertionError is raised which needs to be catched in your API endpoint.
+@jwt_required()
+def verify_jwt_csrf_validity():
+    # decode jwt to extract the csrf
+    csrf_in_jwt = get_jwt()["csrf"]
+    # get csrf token in header
+    csrf_in_header = request.headers.get('X-CSRF-TOKEN').split(' ')[-1]
+    # compare both csrfs
+    if csrf_in_jwt != csrf_in_header:
+        raise AssertionError("Invalid JWT or Double submit token - Unauthorized")
+    else:
+        return {
+            "code": 200,
+            "message": "valid jwt and csrf",
+            "data": get_jwt_identity() # username
+        }
 
 
 if __name__ == "__main__":

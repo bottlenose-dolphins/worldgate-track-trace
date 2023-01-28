@@ -31,6 +31,7 @@ This backend application relies on a remote Oracle server for data persistence. 
 # Clone into a .env file
 PYTHONPATH="${PYTHONPATH}:." # DO NOT CHANGE THIS
 SQLALCHEMY_DATABASE_URI=<DB URI>
+JWT_SECRET=<JWT_SECRET_KEY>
 ```
 
 ### Install Dependencies

@@ -6,6 +6,8 @@ export const signIn = async(username, password) => {
         const res = await axios.post(`${USER_ENDPOINT}/signin`, {
             "username": username,
             "password": password
+        }, {
+            withCredentials: true
         });
         if (res) {
             return res.data;
