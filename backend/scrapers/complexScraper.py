@@ -40,6 +40,7 @@ def scrape():
             #     "identifier_type": "bl",
             #     "direction": "export"
             # }
+            # returns QCOU 502267
 
             # {
             #     "shipping_line": "Yang Ming",
@@ -47,6 +48,7 @@ def scrape():
             #     "identifier_type": "bl",
             #     "direction": "import"
             # }
+            # returns CBKKSIN04450
         
             # Retrieve shipping line's prefix
             # shipping_line = data["shipping_line"]
@@ -66,6 +68,7 @@ def scrape():
                             "identifier_type": "bl"
                         }
                     )
+                return master_bl
             
             # Invoke scraper microservice
             # shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
