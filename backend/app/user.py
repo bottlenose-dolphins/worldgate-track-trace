@@ -182,9 +182,9 @@ def sign_in():
             "data": str(err)
         }), 500
 
-@app.route("/user/logout", methods=["POST"])
-def logout():
-    response = jsonify({"msg": "logout successful"})
+@app.route("/user/signout", methods=["POST"])
+def sign_out():
+    response = jsonify({"msg": "sign out successful"})
     unset_jwt_cookies(response)
     return response
 
@@ -217,7 +217,7 @@ def test_decode_jwt(): # example
 
 # To be put at the start of ALL protected endpoints, inside a try-except block. Verifies valid JWT and double submit token in request header
 # If verification passes, dictionary returned where key "data" points to value of username.
-# If verification fails, an AssertionError is raised which needs to be catched in your API endpoint.
+# If verification fails, an AssertionError is raised which needs to be caught in your API endpoint.
 @jwt_required()
 def verify_jwt_csrf_validity():
     # decode jwt to extract the csrf
