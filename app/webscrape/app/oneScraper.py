@@ -16,7 +16,13 @@ def oneScraper(identifier):
 
         options = Options()
 
-        options.headless = True
+        # options.headless = True
+
+        options.add_argument('--no-sandbox')
+
+        options.add_argument('--headless')
+
+        options.add_argument('--disable-gpu')
 
         options.add_argument("--window-size=1920,1080")
 
@@ -40,7 +46,7 @@ def oneScraper(identifier):
 
         driver.find_element(By.XPATH, '//*[@id="1"]/td[4]/a').click()
 
-        time.sleep(10)
+        time.sleep(3)
 
         expectedArrivalTime = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[5]').text
 
@@ -108,7 +114,7 @@ def oneScraper(identifier):
 
 if __name__ == '__main__':
 
-    app.run(host='0.0.0.0', port=8081, debug=True)
+    app.run(host='0.0.0.0', port=8084, debug=True)
 
 
 
