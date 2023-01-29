@@ -89,4 +89,4 @@ def track(tracking_type, tracking_identifier):
 
 
 if __name__ == '__main__':
-    app.run(port=5004, debug=True)
+    app.run(port=8082, debug=True)

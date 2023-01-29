@@ -1,2 +1,0 @@
-selenium >=4.2.0
-flask >=2.2.1
