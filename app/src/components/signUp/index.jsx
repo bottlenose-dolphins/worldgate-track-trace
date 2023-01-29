@@ -48,14 +48,14 @@ export default function SignUp() {
             return;
         }
 
-        const res = await signUp(email, username, password, phone, company);
+        const res = await signUp(username, email, password, phone, company);
         if (res.code === 201) {
             toggleModal();
             setError("");
             console.log("success");
             // TODO: Redirect to home page/dashboard
         } else if (res.code !== 500) {
-            setError("User already exists in the system");
+            setError("Sorry! Username already taken. Please choose another username");
         } else {
             setError(res.message); // if internal server error
         }
@@ -66,7 +66,7 @@ export default function SignUp() {
             backgroundImage: `url(${SignUpBackground})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", width: "100vw",
             height: "100vh"
         }} >
-            <RegisterModal isOpen={modalIsOpen} toggleModal={toggleModal} />
+            <RegisterModal isOpen={modalIsOpen} toggleModal={toggleModal} handleClick={handleClick} />
             <div className='basis-full lg:basis-4/12 p-4 bg-white bg-opacity-50 sm:p-6 md:p-8 mr-40'>
                 <div className='flex flex-row px-4'>
                     <h2 className='basis-1/2 font-medium text-lg mb-5'>
@@ -88,11 +88,10 @@ export default function SignUp() {
                     </div>
                     <PasswordField password={password} setPassword={setPassword} />
                     <div className="flex justify-end">
-                        <RegisterButton />
+                    <div className='pt-5 text-red-500 mx-auto'>{ error }</div><RegisterButton />
                     </div>
                 </div>
                 </form>
-                <div className='pt-5 text-red-500'>{ error }</div>
             </div>
         </div>
     )

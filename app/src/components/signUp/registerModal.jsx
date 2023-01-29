@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 import modalImg from "../../img/RegisterModalImg.png";
+import { useNavigate } from "react-router-dom";
 
-function RegisterModal({ isOpen, toggleModal }) {
+
+function RegisterModal({ isOpen, toggleModal, handleClick }) {
 
   return (
     <Modal
@@ -19,7 +21,7 @@ function RegisterModal({ isOpen, toggleModal }) {
         <button
           type="button"
           className="bg-green-600 hover:bg-green-500 text-white font-medium px-8 py-2 rounded-lg"
-          onClick={toggleModal}
+          onClick={handleClick}
         >
           Continue to Sign in
         </button>

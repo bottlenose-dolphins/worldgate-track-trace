@@ -19,6 +19,3 @@ export default function PhoneInput({ phone, setPhone }) {
       </label>
   )
 }
-
-// singaporePhoneNumberRegex = /^[0-9]{8}$/;
-// setIsValid(singaporePhoneNumberRegex.test(newPhoneNumber));
