@@ -31,6 +31,7 @@ This backend application relies on a remote Oracle server for data persistence. 
 # Clone into a .env file
 PYTHONPATH="${PYTHONPATH}:." # DO NOT CHANGE THIS
 SQLALCHEMY_DATABASE_URI=<DB URI>
+JWT_SECRET=<JWT_SECRET_KEY>
 ```
 
 ### Install Dependencies
@@ -48,3 +49,19 @@ NOTE: each time you pip install a new library/package that is utilised in commit
 ```bash
 pip freeze > requirements.txt
 ```
+
+### Authentication Notes
+
+#### BE:
+In `user.py`:
+1. Sign In endpoint: Returns response with 2 cookies, `access_token_cookie` (containing the JWT) and `csrf_access_token` (containing the double-submit token)
+2. `refresh_expiring_jwt` function, called after every request to refresh near-expiry access tokens
+3. `verify_jwt_csrf_validity` function to be called at start of ALL PROTECTED BE API ENDPOINTS. This function also extracts username of jwt owner. For now, it returns a Python dictionary (to be refactored to return a JSON response if microservice architecture dictates so)
+
+#### FE:
+For all Axios requests to protected BE API endpoints: 
+1. `withCredentials` must be set to `true`. This is to ensure cookies are attached to the request and sent to the backend.
+2. Include `X-CSRF-TOKEN` header, pointing to value of `csrf_access_token`. (See`src/api/config.js` for usage example )
+
+In `src/api/config.js`:
+`getCookie` function to extract csrf_access_token from cookie, to be attached in X-CSRF-TOKEN header for every request to a protected BE API endpoint.
