@@ -17,8 +17,8 @@ def ping():
     return("hello")
 
     # run with:
-    # http://127.0.0.1:5004/GOOD/BL/VASSINCMB015609
-    # http://127.0.0.1:5004/GOOD/CTR/VMLU3817377
+    # http://127.0.0.1:8081/GOOD/BL/VASSINCMB015609
+    # http://127.0.0.1:8081/GOOD/CTR/VMLU3817377
 @app.route("/GOOD/<string:tracking_type>/<string:tracking_identifier>", methods=['GET'])
 def track(tracking_type, tracking_identifier):
 
@@ -28,8 +28,8 @@ def track(tracking_type, tracking_identifier):
     options.add_argument('--no-sandbox')
     options.add_argument('--headless')
     options.add_argument('--disable-gpu')
-    # options.add_argument('--disable-features=VizDisplayCompositor')
-    # options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--disable-features=VizDisplayCompositor')
+    options.add_argument('--disable-dev-shm-usage')
 
     # # init
     # driver = webdriver.Chrome()
