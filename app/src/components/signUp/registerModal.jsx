@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import Modal from "react-modal";
 import modalImg from "../../img/RegisterModalImg.png";
-import { useNavigate } from "react-router-dom";
-
 
 function RegisterModal({ isOpen, toggleModal, handleClick }) {
 

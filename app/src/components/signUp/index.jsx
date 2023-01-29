@@ -13,7 +13,8 @@ import TrackAndTrace from "../../img/TrackAndTrace.png";
 
 export default function SignUp() {
     const navigate = useNavigate();
-    function handleClick() {
+
+    const handleClick = () => {
         navigate("/sign-in");
     }
 
