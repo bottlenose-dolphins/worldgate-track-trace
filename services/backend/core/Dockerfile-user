@@ -5,6 +5,7 @@ FROM python:3.11
 
 # oracle installation 
 
+RUN mkdir app
 WORKDIR    /opt/oracle
 
 RUN        apt-get update && apt-get install -y libaio1 wget unzip \
@@ -34,4 +35,4 @@ ENV TZ="Asia/Singapore"
 EXPOSE 5002
 
 # start the server
-CMD [ "python", "./app/user.py" ]
+CMD [ "python", "user.py" ]

@@ -1,11 +1,11 @@
 version: "3.8"
 
 services:
-  backend_users:
-    container_name: backend_users
+  core_users:
+    container_name: core_users
     build:
-      context: ./services/backend
-      dockerfile: Dockerfile
+      context: ./services/backend/core
+      dockerfile: Dockerfile-user
     environment:
       - SQLALCHEMY_DATABASE_URI=
     ports:
@@ -33,7 +33,7 @@ services:
   scraper_ymlu:
     container_name: scraper_ymlu
     build:
-      context: ./services/scrapers
+      context: ./services/backend/scrapers
       dockerfile: Dockerfile-Ymlu
     ports:
       - 8080:8080
@@ -41,7 +41,7 @@ services:
   scraper_good:
     container_name: scraper_good
     build:
-      context: ./services/scrapers
+      context: ./services/backend/scrapers
       dockerfile: Dockerfile-Goodrich
     ports:
       - 8081:8081

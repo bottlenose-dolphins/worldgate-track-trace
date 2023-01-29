@@ -19,16 +19,15 @@ RUN wget ${URLBASE}/chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb \
 && apt-get install -y ./chromium-chromedriver_${VERSION}_${ARCH}.deb \
 && rm -rf /var/lib/apt/lists/*
 
-# copying the neccessary script
+WORKDIR /app
+# copying the neccessary scri[]
 COPY requirements.txt .
-COPY ./app/goodrich.py .
-RUN mkdir creds 
-COPY ./creds/creds_goodrich.py ./creds
+COPY ymluScraper.py .
 
 # upgrade pip and install requirements
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-EXPOSE 8081
+EXPOSE 8080
 
-CMD [ "python", "goodrich.py" ]
+CMD [ "python", "ymluScraper.py" ]

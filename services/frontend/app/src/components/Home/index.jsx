@@ -20,7 +20,7 @@ export default function Home() {
         <h1 className=' sm:text-3xl md:text-8xl lg:text-8xl font-bold '>Keeping track of your shipment just got easier!</h1>
         <p className='text-lg mt-5'>Worldgate introduces <span className='font-bold'>Track and Trace</span>,<br/> for <span className='font-bold'>all</span> your shipment needs.</p>
         <div className='flex'>
-          <Link to='/signup'>
+          <Link to='/sign-up'>
             <button type="button" onClick={handleClick} className=' mx-5  mt-2 bg-blue-500 text-white py-2 px-4 rounded-md'>Sign Up</button>
           </Link>
           <Link to='/about'>
