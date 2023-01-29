@@ -6,9 +6,9 @@ from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-@app.route('/ONE/<identifier>')
+@app.route('/ONE/<string:tracking_type>/<string:identifier>')
 
-def oneScraper(identifier):
+def oneScraper(tracking_type,identifier):
 
     try:
 
@@ -32,71 +32,77 @@ def oneScraper(identifier):
 
         # Can interchange identifier with Container/BL Number as the process is similar
 
-        driver.get('https://ecomm.one-line.com/one-ecom/manage-shipment/cargo-tracking?ctrack-field=' + identifier + '&trakNoParam=' + identifier)
+        if tracking_type == "BL":
 
-        time.sleep(3)
-
-        # Inline Frame present so need to change to this so you can extract values
-
-        driver.switch_to.frame("IframeCurrentEcom")
-
-        status = driver.find_element(By.XPATH, '//*[@id="1"]/td[9]').text
-
-        #clicking the Container Number will show us more details like Port of Destination and ETA
-
-        driver.find_element(By.XPATH, '//*[@id="1"]/td[4]/a').click()
-
-        time.sleep(3)
-
-        expectedArrivalTime = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[5]').text
-
-        destinationPort = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[4]').text
-
-        vesselName = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[1]').text
-
-        if status != None:
-
-            time.sleep(3)
-
-            return jsonify(
-
-                {
-
-                    "code": 200,
-
-                    "data":{
-
-                        "status": status,
-
-                        "vessel_name": vesselName,
-
-                        "port_of_discharge": destinationPort,
-
-                        "time_of_arrival": expectedArrivalTime[8:]
-
-                    }
-
-                }
-
-            )
+            identifier = identifier[4:]
         
         else:
 
-            return jsonify(
+            driver.get('https://ecomm.one-line.com/one-ecom/manage-shipment/cargo-tracking?ctrack-field=' + identifier + '&trakNoParam=' + identifier)
 
-                {
+            time.sleep(3)
 
-                    "code": 200,
+            # Inline Frame present so need to change to this so you can extract values
 
-                    "data":{
+            driver.switch_to.frame("IframeCurrentEcom")
 
-                        "message" : "No Status Found"
+            status = driver.find_element(By.XPATH, '//*[@id="1"]/td[9]').text
+
+            #clicking the Container Number will show us more details like Port of Destination and ETA
+
+            driver.find_element(By.XPATH, '//*[@id="1"]/td[4]/a').click()
+
+            time.sleep(3)
+
+            expectedArrivalTime = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[5]').text
+
+            destinationPort = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[4]').text
+
+            vesselName = driver.find_element(By.XPATH, '//*[@id="sailing"]/tbody/tr/td[1]').text
+
+            if status != None:
+
+                time.sleep(3)
+
+                return jsonify(
+
+                    {
+
+                        "code": 200,
+
+                        "data":{
+
+                            "status": status,
+
+                            "vessel_name": vesselName,
+
+                            "port_of_discharge": destinationPort,
+
+                            "time_of_arrival": expectedArrivalTime[8:]
+
+                        }
 
                     }
 
-                }
+                )
+            
+            else:
 
-            )
+                return jsonify(
+
+                    {
+
+                        "code": 200,
+
+                        "data":{
+
+                            "message" : "No Status Found"
+
+                        }
+
+                    }
+
+                )
 
     except Exception as e:
 
