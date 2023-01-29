@@ -149,7 +149,7 @@ def get_export_master_bl(house_bl):
             "house_bl": house_bl
         }
     
-    response = invoke_http(import_url + "export/export_ref_n", method='POST', json=data)
+    response = invoke_http(export_url + "export/export_ref_n", method='POST', json=data)
     export_ref_n = response["data"]["export_ref_n"]
 
     # Invoke export_shipment microservice
