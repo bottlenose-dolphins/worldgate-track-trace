@@ -7,6 +7,8 @@ from sqlalchemy.exc import IntegrityError
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, get_jwt, get_jwt_identity, jwt_required
 from flask_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies
+import cx_Oracle
+
 from os import getenv
 from dotenv import load_dotenv
 
@@ -14,6 +16,8 @@ import hashlib
 import re
 import shortuuid
 import uuid
+
+# cx_Oracle.init_oracle_client(lib_dir=r"D:\oracle\instantclient_21_8") #point this to your local installation of the oracle DB files
 
 load_dotenv()
 
