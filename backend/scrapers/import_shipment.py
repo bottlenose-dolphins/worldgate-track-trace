@@ -18,7 +18,7 @@ db = SQLAlchemy(app)
 class ImportShipment(db.Model):
     __tablename__ = "import_ref"
 
-    import_ref_n = db.Column(db.Integer, nullable=False)
+    import_ref_n = db.Column(db.Integer, primary_key=True, nullable=False)
     eta = db.Column(db.Date, nullable=False)
     ocean_bl = db.Column(db.String, nullable=False)
 

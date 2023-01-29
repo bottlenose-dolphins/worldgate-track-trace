@@ -18,7 +18,7 @@ db = SQLAlchemy(app)
 class Export(db.Model):
     __tablename__ = "export"
     
-    export_ref_n = db.Column(db.Integer, nullable=False)
+    export_ref_n = db.Column(db.Integer, primary_key=True, nullable=False)
     cust_id = db.Column(db.String, nullable=False)
     hbl_n = db.Column(db.String, nullable=False)
 

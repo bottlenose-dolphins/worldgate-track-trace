@@ -18,7 +18,7 @@ db = SQLAlchemy(app)
 class Prefix(db.Model):
     __tablename__ = "bl_mapping"
 
-    shipping_acronym = db.Column(db.String, nullable=False)
+    shipping_acronym = db.Column(db.String, primary_key=True, nullable=False)
     shipping_fullform = db.Column(db.String, nullable=False)
 
     def __init__(self, shipping_acronym, shipping_fullform):
@@ -45,7 +45,7 @@ def retrieve_prefix():
     shipping_line = data["shipping_line"]
     if prefix_exists(shipping_line):
         prefix = Prefix.query.filter_by(shipping_fullform=shipping_line).first().shipping_acronym
-        
+
         if prefix:
             return jsonify(
                 {

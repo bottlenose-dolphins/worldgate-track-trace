@@ -18,7 +18,7 @@ db = SQLAlchemy(app)
 class Import(db.Model):
     __tablename__ = "import"
     
-    import_ref_n = db.Column(db.Integer, nullable=False)
+    import_ref_n = db.Column(db.Integer, primary_key=True, nullable=False)
     cust_id = db.Column(db.String, nullable=False)
     hbl_n = db.Column(db.String, nullable=False)
 

@@ -18,7 +18,7 @@ db = SQLAlchemy(app)
 class ExportShipment(db.Model):
     __tablename__ = "export_ref"
 
-    export_ref_n = db.Column(db.Integer, nullable=False)
+    export_ref_n = db.Column(db.Integer, primary_key=True, nullable=False)
     eta = db.Column(db.Date, nullable=False)
     ocean_bl = db.Column(db.String, nullable=False)
     port_disc_id = db.Column(db.String, nullable=False)
