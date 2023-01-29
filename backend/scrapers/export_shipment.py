@@ -86,12 +86,13 @@ def get_master_bl():
         }
     ), 500
 
-# Update latest shipment information
+# Update latest shipment information (BL)
 @app.route("/export_shipment/update", methods=['POST'])
 def update_shipment():
     data = request.get_json()
     eta = data["arrival_date"]
     port_of_discharge = data["port_of_discharge"]
+    timestamp = data["timestamp"] # TODO: update timestamp in EXPORT_REF table (currently unable to edit the table)
     vessel_name = data["vessel_name"]
     master_bl = data["master_bl"]
 
@@ -115,7 +116,41 @@ def update_shipment():
     return jsonify(
         {
             "code": 500,
-            "message": "Failed to update shipment information"
+            "message": "Failed to update shipment information (BL)"
+        }
+    ), 500
+
+# Update latest shipment information (CONTAINER)
+@app.route("/export_shipment/update_cont", methods=['POST'])
+def update_shipment_cont():
+    data = request.get_json()
+    export_ref_n = data["export_ref_n"]
+    eta = data["arrival_date"]
+    port_of_discharge = data["port_of_discharge"]
+    timestamp = data["timestamp"] # TODO: update timestamp in EXPORT_REF table (currently unable to edit the table)
+    vessel_name = data["vessel_name"]
+
+    shipment = ExportShipment.query.filter_by(export_ref_n=export_ref_n).first()
+
+    if shipment:
+        shipment.eta = eta
+        shipment.port_disc_id = port_of_discharge
+        db.session.commit()
+
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "eta": eta,
+                    "port_disc_id": port_of_discharge
+                    }
+            }
+        ), 200
+
+    return jsonify(
+        {
+            "code": 500,
+            "message": "Failed to update shipment information (CONTAINER)"
         }
     ), 500
 

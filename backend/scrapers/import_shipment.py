@@ -83,11 +83,12 @@ def get_master_bl():
         }
     ), 500
 
-# Update latest shipment information
+# Update latest shipment information (BL)
 @app.route("/import_shipment/update", methods=['POST'])
 def update_shipment():
     data = request.get_json()
     eta = data["arrival_date"]
+    timestamp = data["timestamp"] # TODO: update timestamp in IMPORT_REF table (currently unable to edit the table)
     vessel_name = data["vessel_name"]
     master_bl = data["master_bl"]
 
@@ -109,7 +110,41 @@ def update_shipment():
     return jsonify(
         {
             "code": 500,
-            "message": "Failed to update shipment information"
+            "message": "Failed to update shipment information (BL)"
+        }
+    ), 500
+
+# Update latest shipment information (CONTAINER)
+@app.route("/import_shipment/update_cont", methods=['POST'])
+def update_shipment_cont():
+    data = request.get_json()
+    import_ref_n = data["import_ref_n"]
+    eta = data["arrival_date"]
+    port_of_discharge = data["port_of_discharge"]
+    timestamp = data["timestamp"] # TODO: update timestamp in IMPORT_REF table (currently unable to edit the table)
+    vessel_name = data["vessel_name"]
+
+    shipment = ImportShipment.query.filter_by(import_ref_n=import_ref_n).first()
+
+    if shipment:
+        shipment.eta = eta
+        shipment.port_disc_id = port_of_discharge
+        db.session.commit()
+
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "eta": eta,
+                    "port_disc_id": port_of_discharge
+                    }
+            }
+        ), 200
+
+    return jsonify(
+        {
+            "code": 500,
+            "message": "Failed to update shipment information (CONTAINER)"
         }
     ), 500
 

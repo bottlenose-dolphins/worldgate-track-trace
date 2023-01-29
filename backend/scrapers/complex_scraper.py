@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask_cors import CORS
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
@@ -20,12 +21,19 @@ import_shipment_url = "http://localhost:8083/"
 export_shipment_url = "http://localhost:8084/"
 import_url = "http://localhost:8085/"
 export_url = "http://localhost:8086/"
+import_cont_url = "http://localhost:8087/"
+export_cont_url = "http://localhost:8088/"
 
 @app.route('/scrape', methods=['POST'])
 def scrape():
     if request.is_json:
         try:
             data = request.get_json()
+            shipping_line = data["shipping_line"]
+            identifier = data["identifier"]
+            identifier_type = data["identifier_type"]
+            direction = data["direction"]
+
             print("\nReceived details in JSON:", data)
             # {
             #    "shipping_line": "Yang Ming",
@@ -51,40 +59,42 @@ def scrape():
             # returns CBKKSIN04450
         
             # Retrieve shipping line's prefix
-            # shipping_line = data["shipping_line"]
-            # prefix = check_prefix(shipping_line)
-            # prefix = "ymlu"
+            prefix = check_prefix(shipping_line)
+            prefix = "ymlu"
 
             # Retrieve Master BL from House BL
-            direction = data["direction"]
-            if data["identifier_type"] == "bl":
+            if identifier_type == "bl":
                 if direction == "import":
-                    master_bl = get_import_master_bl(data["identifier"])
+                    master_bl = get_import_master_bl(identifier)
                 elif direction == "export":
-                    master_bl = get_export_master_bl(data["identifier"])
+                    master_bl = get_export_master_bl(identifier)
                 data = {
                             "identifier": master_bl,
                             "identifier_type": "bl"
                         }
-                return master_bl
             
             # Invoke scraper microservice
-            # shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
+            shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
             
-            # arrival_date = shipment_info["data"]["arrival_date"]
-            # port_of_discharge = shipment_info["data"]["port_of_discharge"]
-            # vessel_name = shipment_info["data"]["vessel_name"]
+            if shipment_info:
+                timestamp = datetime.now()
+                arrival_date = shipment_info["data"]["arrival_date"]
+                port_of_discharge = shipment_info["data"]["port_of_discharge"]
+                vessel_name = shipment_info["data"]["vessel_name"]
 
-            # Update DB with latest shipment information
-            # update_shipment_info(master_bl, arrival_date, port_of_discharge, vessel_name, direction)
-            
-            # return jsonify(shipment_info), 200
+                # Update DB with latest shipment information
+                if identifier_type == "bl":
+                    update_shipment_info_bl(master_bl, arrival_date, port_of_discharge, vessel_name, direction, timestamp)
+                elif identifier_type == "ctr":
+                    update_shipment_info_cont(identifier, arrival_date, port_of_discharge, vessel_name, direction, timestamp)
+                
+                return jsonify(shipment_info), 200
 
         except Exception as e:
             return jsonify(
             {
                 "code": 500,
-                "message": str(e)
+                "message": "Failed to scrape for shipment information!"
             }
         ), 500
 
@@ -106,20 +116,62 @@ def check_prefix(shipping_line):
         prefix = response["data"]["prefix"]
         return prefix
 
-# Update F2K with latest shipment information
-def update_shipment_info(master_bl, arrival_date, port_of_discharge, vessel_name, direction):
+# Update F2K with latest shipment information (BL)
+def update_shipment_info_bl(master_bl, arrival_date, port_of_discharge, vessel_name, direction, timestamp):
     data = {
             "master_bl": master_bl,
             "arrival_date": arrival_date,
             "port_of_discharge": port_of_discharge,
-            "vessel_name": vessel_name
+            "vessel_name": vessel_name,
+            "timestamp": timestamp
         }
 
-    # Select import_shipment or export_shipment microservice based on port_of_discharge
+    # Select import_shipment or export_shipment microservice
     if direction == "import":
         response = invoke_http(import_shipment_url + "import_shipment/update", method='POST', json=data)
     elif direction == "export":
         response = invoke_http(export_shipment_url + "export_shipment/update", method='POST', json=data)
+    return response
+
+# Update F2K with latest shipment information (CONTAINER)
+def update_shipment_info_cont(container_number, arrival_date, port_of_discharge, vessel_name, direction, timestamp):
+    data = {
+        "container_number": container_number
+    }
+
+    # Select import or export
+    if direction == "import":
+        # Invoke import_ref microservice
+        response = invoke_http(import_cont_url + "import_cont/import_ref_n", method='POST', json=data)
+        import_ref_n = response["data"]["import_ref_n"]
+
+        data = {
+            "import_ref_n": import_ref_n,
+            "arrival_date": arrival_date,
+            "port_of_discharge": port_of_discharge,
+            "vessel_name": vessel_name,
+            "timestamp": timestamp
+        }
+
+        # Invoke import_ref microservice
+        response = invoke_http(import_shipment_url + "import_shipment/update_cont", method='POST', json=data)
+
+    elif direction == "export":
+        # Invoke export_cont microservice
+        response = invoke_http(export_cont_url + "export_cont/export_ref_n", method='POST', json=data)
+        export_ref_n = response["data"]["export_ref_n"]
+
+        data = {
+            "export_ref_n": export_ref_n,
+            "arrival_date": arrival_date,
+            "port_of_discharge": port_of_discharge,
+            "vessel_name": vessel_name,
+            "timestamp": timestamp
+        }
+
+        # Invoke export_ref microservice
+        response = invoke_http(export_shipment_url + "export_shipment/update_cont", method='POST', json=data)
+        
     return response
 
 # Retrieve Master B/L by House B/L (IMPORT)
