@@ -35,7 +35,7 @@ class Export(db.Model):
         }
 
 # Retrieve EXPORT_REF_N by House B/L
-@app.route("/export/export_ref_n")
+@app.route("/export/export_ref_n", methods=['POST'])
 def get_export_ref_n():
     data = request.get_json()
     house_bl = data["house_bl"]

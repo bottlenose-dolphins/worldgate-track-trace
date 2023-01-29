@@ -35,7 +35,7 @@ class Import(db.Model):
         }
 
 # Retrieve IMPORT_REF_N by House B/L
-@app.route("/import/import_ref_n")
+@app.route("/import/import_ref_n", methods=['POST'])
 def get_import_ref_n():
     data = request.get_json()
     house_bl = data["house_bl"]

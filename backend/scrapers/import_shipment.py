@@ -35,7 +35,7 @@ class ImportShipment(db.Model):
         }
 
 # Retrieve shipment information by Master B/L
-@app.route("/import_shipment/retrieve")
+@app.route("/import_shipment/retrieve", methods=['POST'])
 def retrieve_shipment():
     data = request.get_json()
     master_bl = data["master_bl"]
@@ -60,7 +60,7 @@ def retrieve_shipment():
     ), 500
 
 # Retrieve Master B/L by IMPORT_REF_N
-@app.route("/import_shipment/bl")
+@app.route("/import_shipment/bl", methods=['POST'])
 def get_master_bl():
     data = request.get_json()
     import_ref_n = data["import_ref_n"]
@@ -84,7 +84,7 @@ def get_master_bl():
     ), 500
 
 # Update latest shipment information
-@app.route("/import_shipment/update")
+@app.route("/import_shipment/update", methods=['POST'])
 def update_shipment():
     data = request.get_json()
     eta = data["arrival_date"]

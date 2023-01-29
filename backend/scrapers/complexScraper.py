@@ -62,12 +62,10 @@ def scrape():
                     master_bl = get_import_master_bl(data["identifier"])
                 elif direction == "export":
                     master_bl = get_export_master_bl(data["identifier"])
-                data = jsonify(
-                        {
+                data = {
                             "identifier": master_bl,
                             "identifier_type": "bl"
                         }
-                    )
                 return master_bl
             
             # Invoke scraper microservice
@@ -99,11 +97,10 @@ def scrape():
 
 # Retrieve prefix for respective shipping line
 def check_prefix(shipping_line):
-    data = jsonify(
-        {
+    data = {
             "shipping_line": shipping_line
         }
-    )
+    
     response = invoke_http(prefix_url + "prefix/retrieve", method='POST', json=data)
     if response["data"]["code"] == 200:
         prefix = response["data"]["prefix"]
@@ -111,14 +108,13 @@ def check_prefix(shipping_line):
 
 # Update F2K with latest shipment information
 def update_shipment_info(master_bl, arrival_date, port_of_discharge, vessel_name, direction):
-    data = jsonify(
-        {
+    data = {
             "master_bl": master_bl,
             "arrival_date": arrival_date,
             "port_of_discharge": port_of_discharge,
             "vessel_name": vessel_name
         }
-    )
+
     # Select import_shipment or export_shipment microservice based on port_of_discharge
     if direction == "import":
         response = invoke_http(import_shipment_url + "import_shipment/update", method='POST', json=data)
@@ -129,20 +125,18 @@ def update_shipment_info(master_bl, arrival_date, port_of_discharge, vessel_name
 # Retrieve Master B/L by House B/L (IMPORT)
 def get_import_master_bl(house_bl):
     # Invoke import microservice
-    data = jsonify(
-        {
+    data = {
             "house_bl": house_bl
         }
-    )
+    
     response = invoke_http(import_url + "import/import_ref_n", method='POST', json=data)
     import_ref_n = response["data"]["import_ref_n"]
 
     # Invoke import_shipment microservice
-    data = jsonify(
-        {
+    data = {
             "import_ref_n": import_ref_n
         }
-    )
+    
     response = invoke_http(import_shipment_url + "import_shipment/bl", method='POST', json=data)
     master_bl = response["data"]["master_bl"]
     
@@ -151,20 +145,18 @@ def get_import_master_bl(house_bl):
 # Retrieve Master B/L by House B/L (EXPORT)
 def get_export_master_bl(house_bl):
     # Invoke export microservice
-    data = jsonify(
-        {
+    data = {
             "house_bl": house_bl
         }
-    )
-    response = invoke_http(import_url + "import/export_ref_n", method='POST', json=data)
+    
+    response = invoke_http(import_url + "export/export_ref_n", method='POST', json=data)
     export_ref_n = response["data"]["export_ref_n"]
 
     # Invoke export_shipment microservice
-    data = jsonify(
-        {
+    data = {
             "export_ref_n": export_ref_n
         }
-    )
+    
     response = invoke_http(export_shipment_url + "export_shipment/bl", method='POST', json=data)
     master_bl = response["data"]["master_bl"]
     
