@@ -1,0 +1,7 @@
+/env
+/venv
+.env
+.venv
+/backend/Include
+/backend/Lib
+/backend/Scripts
