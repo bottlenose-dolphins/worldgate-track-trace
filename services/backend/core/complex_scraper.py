@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask_cors import CORS
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
@@ -78,16 +77,15 @@ def scrape():
             shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
             
             if shipment_info:
-                timestamp = datetime.now()
                 arrival_date = shipment_info["data"]["arrival_date"]
                 port_of_discharge = shipment_info["data"]["port_of_discharge"]
                 vessel_name = shipment_info["data"]["vessel_name"]
 
                 # Update DB with latest shipment information
                 if identifier_type == "bl":
-                    update_shipment_info_bl(master_bl, arrival_date, port_of_discharge, vessel_name, direction, timestamp)
+                    update_shipment_info_bl(master_bl, arrival_date, port_of_discharge, vessel_name, direction)
                 elif identifier_type == "ctr":
-                    update_shipment_info_cont(identifier, arrival_date, port_of_discharge, vessel_name, direction, timestamp)
+                    update_shipment_info_cont(identifier, arrival_date, port_of_discharge, vessel_name, direction)
                 
                 return jsonify(shipment_info), 200
 
@@ -118,13 +116,12 @@ def check_prefix(shipping_line):
         return prefix
 
 # Update F2K with latest shipment information (BL)
-def update_shipment_info_bl(master_bl, arrival_date, port_of_discharge, vessel_name, direction, timestamp):
+def update_shipment_info_bl(master_bl, arrival_date, port_of_discharge, vessel_name, direction):
     data = {
             "master_bl": master_bl,
             "arrival_date": arrival_date,
             "port_of_discharge": port_of_discharge,
-            "vessel_name": vessel_name,
-            "timestamp": timestamp
+            "vessel_name": vessel_name
         }
 
     # Select import_shipment or export_shipment microservice
@@ -135,7 +132,7 @@ def update_shipment_info_bl(master_bl, arrival_date, port_of_discharge, vessel_n
     return response
 
 # Update F2K with latest shipment information (CONTAINER)
-def update_shipment_info_cont(container_number, arrival_date, port_of_discharge, vessel_name, direction, timestamp):
+def update_shipment_info_cont(container_number, arrival_date, port_of_discharge, vessel_name, direction):
     data = {
         "container_number": container_number
     }
@@ -150,8 +147,7 @@ def update_shipment_info_cont(container_number, arrival_date, port_of_discharge,
             "import_ref_n": import_ref_n,
             "arrival_date": arrival_date,
             "port_of_discharge": port_of_discharge,
-            "vessel_name": vessel_name,
-            "timestamp": timestamp
+            "vessel_name": vessel_name
         }
 
         # Invoke import_ref microservice
@@ -166,8 +162,7 @@ def update_shipment_info_cont(container_number, arrival_date, port_of_discharge,
             "export_ref_n": export_ref_n,
             "arrival_date": arrival_date,
             "port_of_discharge": port_of_discharge,
-            "vessel_name": vessel_name,
-            "timestamp": timestamp
+            "vessel_name": vessel_name
         }
 
         # Invoke export_ref microservice

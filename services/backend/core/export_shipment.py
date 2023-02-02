@@ -93,7 +93,6 @@ def update_shipment():
     data = request.get_json()
     eta = datetime.strptime(data["arrival_date"], '%Y/%m/%d')
     port_of_discharge = data["port_of_discharge"]
-    timestamp = data["timestamp"] # TODO: update timestamp in EXPORT_REF table (currently unable to edit the table)
     vessel_name = data["vessel_name"]
     master_bl = data["master_bl"]
 
@@ -128,7 +127,6 @@ def update_shipment_cont():
     export_ref_n = data["export_ref_n"]
     eta = datetime.strptime(data["arrival_date"], '%Y/%m/%d')
     port_of_discharge = data["port_of_discharge"]
-    timestamp = data["timestamp"] # TODO: update timestamp in EXPORT_REF table (currently unable to edit the table)
     vessel_name = data["vessel_name"]
 
     shipment = ExportShipment.query.filter_by(export_ref_n=export_ref_n).first()
