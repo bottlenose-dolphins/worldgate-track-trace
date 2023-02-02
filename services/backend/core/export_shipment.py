@@ -90,7 +90,7 @@ def get_master_bl():
 @app.route("/export_shipment/update", methods=['POST'])
 def update_shipment():
     data = request.get_json()
-    eta = data["arrival_date"]
+    eta = datetime.strptime(data["arrival_date"], '%Y/%m/%d')
     port_of_discharge = data["port_of_discharge"]
     timestamp = data["timestamp"] # TODO: update timestamp in EXPORT_REF table (currently unable to edit the table)
     vessel_name = data["vessel_name"]
@@ -125,7 +125,7 @@ def update_shipment():
 def update_shipment_cont():
     data = request.get_json()
     export_ref_n = data["export_ref_n"]
-    eta = data["arrival_date"]
+    eta = datetime.strptime(data["arrival_date"], '%Y/%m/%d')
     port_of_discharge = data["port_of_discharge"]
     timestamp = data["timestamp"] # TODO: update timestamp in EXPORT_REF table (currently unable to edit the table)
     vessel_name = data["vessel_name"]
