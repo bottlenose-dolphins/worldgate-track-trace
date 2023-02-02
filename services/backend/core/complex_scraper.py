@@ -33,7 +33,7 @@ def scrape():
             identifier = data["identifier"]
             identifier_type = data["identifier_type"]
             direction = data["direction"]
-            prefix = data["identifier"][:4]
+            prefix = data["identifier"][:4].lower()
 
             print("\nReceived details in JSON:", data)
             # {
@@ -66,7 +66,7 @@ def scrape():
                 elif direction == "export":
                     master_bl = get_export_master_bl(identifier)            
                 # Retrieve shipping line's prefix
-                prefix = master_bl[:4]
+                prefix = master_bl[:4].lower()
                 data = {
                             "identifier": master_bl,
                             "identifier_type": "bl"
