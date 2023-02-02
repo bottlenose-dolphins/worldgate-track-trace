@@ -54,7 +54,7 @@ def ymluScraper():
             driver.find_element(By.XPATH, '//*[@id="gvCargoTracking_Row_0"]/div/table/tbody/tr[1]/td/div/a').click()
 
         # Scrape shipment information
-        arrival_date = driver.find_element(By.ID, "ContentPlaceHolder1_rptBLNo_rptRoutingSchedule_0_lblDateTime_1").text
+        arrival_date = driver.find_element(By.ID, "ContentPlaceHolder1_rptBLNo_rptRoutingSchedule_0_lblDateTime_1").text[:10]
         port_of_discharge = driver.find_element(By.ID, "ContentPlaceHolder1_rptBLNo_gvBasicInformation_0_lblDischarge_0").text
         vessel_name = driver.find_element(By.XPATH, "//a[@title='Click here to view vessel schedule']").text
 
