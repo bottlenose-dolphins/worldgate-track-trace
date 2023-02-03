@@ -214,9 +214,8 @@ def refresh_expiring_jwt(response):
         return response
 
 """
-To be put at the start of ALL protected endpoints, inside a try-except block. Verifies valid JWT and double submit token in request header
-If verification passes, dictionary returned where key "data" points to value of username.
-If verification fails, an AssertionError is raised which needs to be caught in your API endpoint.
+To be called before ALL protected endpoints. Verifies valid JWT and double submit token in request header
+Returns username and wguser_id of user.
 """
 @app.route("/user/verify", methods=['GET'])
 @jwt_required()
