@@ -175,7 +175,8 @@ def sign_in():
 
         # access token stored in httpOnly cookie, 
         # double submit token stored in regular cookie
-        access_token = create_access_token(identity=found_user.username)
+        additional_claims = {"username": found_user.username}
+        access_token = create_access_token(identity=found_user.wguser_id, additional_claims=additional_claims)
         
         response = jsonify({
             "code": 200,
@@ -212,37 +213,36 @@ def refresh_expiring_jwt(response):
         # Case where there is not a valid JWT. Just return the original response
         return response
 
-@app.route("/user/test_decode", methods=['GET']) # for testing purposes
-def test_decode_jwt(): # example
-    try:
-        res = verify_jwt_csrf_validity()
-        username = res["data"]
-        return username
-    except AssertionError:
-        return jsonify({
-            "code": 401,
-            "message": "Invalid token - Unauthorized",
-        }), 401
-
-# To be put at the start of ALL protected endpoints, inside a try-except block. Verifies valid JWT and double submit token in request header
-# If verification passes, dictionary returned where key "data" points to value of username.
-# If verification fails, an AssertionError is raised which needs to be caught in your API endpoint.
+"""
+To be called before ALL protected endpoints. Verifies valid JWT and double submit token in request header
+Returns username and wguser_id of user.
+"""
+@app.route("/user/verify", methods=['GET'])
 @jwt_required()
 def verify_jwt_csrf_validity():
     # decode jwt to extract the csrf
     csrf_in_jwt = get_jwt()["csrf"]
+    if csrf_in_jwt is None or request.headers.get('X-CSRF-TOKEN') is None: # no cookie or request header
+        return jsonify({
+            "code": 500,
+            "message": "Token Not Found - Request Unauthorised"
+        }), 500
     # get csrf token in header
     csrf_in_header = request.headers.get('X-CSRF-TOKEN').split(' ')[-1]
     # compare both csrfs
     if csrf_in_jwt != csrf_in_header:
-        raise AssertionError("Invalid JWT or Double submit token - Unauthorized")
+        return jsonify({
+            "code": 500,
+            "message": "Invalid Token - Request Unauthorised"
+        }), 500
     else:
-        return {
+        claims = get_jwt()
+        return jsonify({
             "code": 200,
-            "message": "valid jwt and csrf",
-            "data": get_jwt_identity() # username
-        }
-
+            "message": "Valid Request",
+            "userId": get_jwt_identity(),
+            "username": claims["username"]
+        })
 
 if __name__ == "__main__":
     #port can also be determined in docker file through CMD instead
