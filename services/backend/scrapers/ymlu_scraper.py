@@ -1,28 +1,32 @@
+from flask_cors import CORS
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import time
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # CTR Test
 # identifier = "YMLU3434431"
-# identifier_type = "CTR"
+# identifier_type = "ctr"
 
 # BL Test
 # identifier = "YMLUI450439005"
-# identifier_type = "BL"
+# identifier_type = "bl"
 
-@app.route('/YMLU/<identifier_type>/<identifier>')
-def ymluScraper(identifier, identifier_type):
+@app.route('/ymlu', methods=['POST'])
+def ymluScraper():
     try:
+        # Retrieve BL/Container information
+        data = request.get_json()
+        identifier = data["identifier"]
+        identifier_type = data["identifier_type"]
+
         # Initialise chromedriver in headless mode
         options = Options()
-        #'--no-sandbox' is needed, although it's more of a work around than a solution
-        options.add_argument('--no-sandbox')
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
+        options.headless = True
         options.add_argument("--window-size=1920,1080")
         driver = webdriver.Chrome(options=options)
         
@@ -30,14 +34,14 @@ def ymluScraper(identifier, identifier_type):
         time.sleep(2)
         
         # Check if identifier is a Container Number or B/L numberon
-        if identifier_type == "BL":
+        if identifier_type == "bl":
             driver.find_element(By.ID, "ContentPlaceHolder1_rdolType_1").click()
 
             # Click on Track button to begin tracking
             driver.find_element(By.ID, "ContentPlaceHolder1_btnTrack").click()
             time.sleep(2)
 
-        elif identifier_type == "CTR":
+        elif identifier_type == "ctr":
             # Click on Track button to begin tracking
             driver.find_element(By.ID, "ContentPlaceHolder1_btnTrack").click()
             time.sleep(2)
@@ -50,7 +54,7 @@ def ymluScraper(identifier, identifier_type):
             driver.find_element(By.XPATH, '//*[@id="gvCargoTracking_Row_0"]/div/table/tbody/tr[1]/td/div/a').click()
 
         # Scrape shipment information
-        arrival_date = driver.find_element(By.ID, "ContentPlaceHolder1_rptBLNo_rptRoutingSchedule_0_lblDateTime_1").text
+        arrival_date = driver.find_element(By.ID, "ContentPlaceHolder1_rptBLNo_rptRoutingSchedule_0_lblDateTime_1").text[:10]
         port_of_discharge = driver.find_element(By.ID, "ContentPlaceHolder1_rptBLNo_gvBasicInformation_0_lblDischarge_0").text
         vessel_name = driver.find_element(By.XPATH, "//a[@title='Click here to view vessel schedule']").text
 
@@ -75,5 +79,5 @@ def ymluScraper(identifier, identifier_type):
         ), 500
         
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(port=8080, debug=True)
     
