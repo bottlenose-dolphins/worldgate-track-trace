@@ -2,13 +2,24 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import time
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-@app.route('/ONE/<string:tracking_type>/<string:identifier>')
+# @app.route('/ONE/<string:tracking_type>/<string:identifier>')
+@app.route("/ONE", methods=['POST'])
 
-def oneScraper(tracking_type,identifier):
+def oneScraper():
+
+    # JSON Sample Request
+
+    # {
+
+    #     "tracking_type": "BL",
+
+    #     "identifier": "ONEYSINC72210300"
+
+    # }
 
     try:
 
@@ -31,6 +42,12 @@ def oneScraper(tracking_type,identifier):
         driver.maximize_window()
 
         # remove ONEY prefix from BL Number
+
+        data = request.get_json()
+
+        tracking_type = data["tracking_type"]
+
+        identifier = data["identifier"]
 
         if tracking_type == "BL":
 
@@ -106,17 +123,24 @@ def oneScraper(tracking_type,identifier):
 
     except Exception as e:
 
-        return jsonify(
+        # return jsonify(
 
-            {
+        #     {
 
-                "code": 500,
+        #         "code": 500,
 
-                "message": str(e)
+        #         "message": str(e)
 
-            }
+        #     }
 
-        ), 500
+        # ), 500
+
+        if e == "Message: no such element: Unable to locate element: " :
+
+            output = oneScraper()
+
+            return output
+
 
 if __name__ == '__main__':
 
@@ -125,8 +149,8 @@ if __name__ == '__main__':
 
 # TESTING URL
 
-# http://192.168.1.118:8084/ONE/BL/ONEYSINC72210300
-# http://192.168.1.118:8084/ONE/BL/ONEYSINC69412601
-# http://192.168.1.118:8084/ONE/CTR/GAOU6627318
-# http://192.168.1.118:8084/ONE/CTR/TCNU7130634
+# http://192.168.1.118:8083/ONE/BL/ONEYSINC72210300
+# http://192.168.1.118:8083/ONE/BL/ONEYSINC69412601
+# http://192.168.1.118:8083/ONE/CTR/GAOU6627318
+# http://192.168.1.118:8083/ONE/CTR/TCNU7130634
 
