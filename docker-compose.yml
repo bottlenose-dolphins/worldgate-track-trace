@@ -28,7 +28,7 @@ services:
     #   - web-app-mount:/app/app
     #   - web-app-node-modules-mount:/app/app/node_modules
     depends_on:
-      - backend_users
+      - core_users
 
   scraper_ymlu:
     container_name: scraper_ymlu
