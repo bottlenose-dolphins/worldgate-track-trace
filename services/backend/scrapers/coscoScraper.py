@@ -8,7 +8,7 @@ import time
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-# prefix: COAU, COSU, CCLU
+# prefix: COAU, COSU, PASU, CCLU # container can come from other shipping lines??? Then where to route?
 @app.route("/cosco", methods=["POST"])
 def coscoScraper():
     try:
@@ -39,13 +39,21 @@ def coscoScraper():
 
         if identifier_type == "bl":
             arrival_datetime = driver.find_element(By.XPATH, "//*[@class='ivu-c-detailPart']/div[4]/div[4]/p").text.strip('"').strip()
-            print("ARRIVAL DATETIME IS: " + arrival_datetime)
             vessel_name = driver.find_element(By.XPATH, "//*[@class='ivu-table-row']/td[1]/div[1]/a[1]").text
-            print("VESSEL NAME IS: " + vessel_name)
             port_of_discharge = driver.find_element(By.XPATH, "//*[@class='ivu-c-detailPart']/div[3]/div[4]/p").text.strip('"').strip()
-            print("PORT OF DISCHARGE IS: " + port_of_discharge)
+       
+        elif identifier_type == "ctr":
+            arrival_datetime = driver.find_element(By.XPATH, "//*[@class='singleCNTRHead ivu-row']/div[2]//*[@class='date']").text.strip()
+            vessel_name = "" # cannot get vessel name when searching by ctr number
+            driver.find_element(By.CLASS_NAME, 'toggleCNTRMovingHistory').click()
+            port_of_discharge = driver.find_element(By.XPATH, "//div[div[p[contains(., 'Discharged at Last POD')]]]/div[p[contains(.,'Location')]]/p[@class='value']").text.strip()
 
-            arrival_date = arrival_datetime.split()[0]
+            # Extras (may use later)
+            latest_status = driver.find_element(By.XPATH, "//div[p[contains(., 'Latest Status')]]/p[@class='value']").text.strip()
+            latest_status_date = driver.find_element(By.XPATH, "//div[div[p[contains(., 'Latest Status')]]]/div/p[@class='data']").text.strip()
+            latest_status_location = driver.find_element(By.XPATH, "//div[div[p[contains(., 'Latest Status')]]]/div[p[contains(.,'Location')]]/p[@class='value']").text.strip()
+
+        arrival_date = arrival_datetime.split()[0]
 
         return jsonify(
                 {
