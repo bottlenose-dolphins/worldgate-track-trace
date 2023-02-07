@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import TrackingHistory from "./TrackingHistory";
 
 export default function BLStatus() {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -7,7 +8,17 @@ export default function BLStatus() {
   const [selectedvalue, setSelectedValue] = useState(null);
   const [secondselectedvalue, setSecondSelectedValue] = useState(null);
   const [billOfLadingNumber, setBillOfLadingNumber] = useState("");
+  const [error, setError] = useState("");
   const [displaytext, setDisplay] = useState("");
+  const [data, setData] = useState("");
+  const handleBlur = () => {
+    const pattern = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
+    if (!billOfLadingNumber) {
+      setError("The field cannot be empty");
+    } else if (!pattern.test(billOfLadingNumber)) {
+      setError("The value should be alphanumeric ");
+    }
+  };
   const handleTrackShipment = () => {
     const requestBody = {
     "shipping_line": "Yang Ming",
@@ -25,7 +36,8 @@ export default function BLStatus() {
   });
   }
 return(
-  <div className="flex flex-col mt-20">
+  <div className="bg-gradient-to-r from-white-200 to-cyan-400">
+  <div className="flex flex-col mt-20 " >
   <h1 className="text-6xl font-bold mb-20 ml-20">Track Your Shipment</h1>
   <div className="flex w-full mt-6">
     <div className="flex w-1/2 rounded-lg overflow-hidden ml-20 ">
@@ -83,8 +95,10 @@ return(
       type="text" id="blno" placeholder="Enter BL/Container No ..."
       className="mt-2 border border-gray-300 rounded-lg p-2"
       value={billOfLadingNumber}
-      onChange={(e) => setBillOfLadingNumber(e.target.value)}
+      onBlur={handleBlur}
+      onChange={(e) =>{ setBillOfLadingNumber(e.target.value);setError("")}}
     />
+      {error && <div className="text-red-500">{error}</div>}
  
   
         <button type="button"
@@ -95,7 +109,9 @@ return(
         </button>
   </div>
 </div>
-        
+<TrackingHistory/>
+
+</div>
 )
 
 
