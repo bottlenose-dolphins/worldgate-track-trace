@@ -8,7 +8,7 @@ import time
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-# prefix: COAU, COSU, PASU, CCLU # container can come from other shipping lines??? Then where to route?
+# prefix: COAU, COSU, PASU, CCLU, OOCL
 @app.route("/cosco", methods=["POST"])
 def coscoScraper():
     try:
@@ -78,4 +78,4 @@ def coscoScraper():
         driver.close()
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8079, debug=True) # TODO: CHANGE PORT???
+    app.run(host='0.0.0.0', port=8079, debug=True)
