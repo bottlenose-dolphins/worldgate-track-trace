@@ -1,64 +1,99 @@
-import { CCard, CCardBody, CCardImage, CCardText, CCardTitle } from "@coreui/react";
-import ship from "../../img/ship.jpeg";
-import lod from "../../img/lod.png";
-import status from  "../../img/status.png";
+import { useState } from "react";
+import axios from "axios";
 
 export default function BLStatus() {
-
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [secondSelectedOption, setSecondSelectedOption] = useState(null);
+  const [selectedvalue, setSelectedValue] = useState(null);
+  const [secondselectedvalue, setSecondSelectedValue] = useState(null);
+  const [billOfLadingNumber, setBillOfLadingNumber] = useState("");
+  const [displaytext, setDisplay] = useState("");
+  const handleTrackShipment = () => {
+    const requestBody = {
+    "shipping_line": "Yang Ming",
+    "identifier": billOfLadingNumber,
+    "identifier_type": selectedvalue,
+    "direction": secondselectedvalue,
+    };
+   axios
+  .post("http://localhost:8081/scrape", requestBody)
+  .then((response) => {
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+  }
 return(
-   <div className="container">
-
-    <form className=" flex items-center mt-20 ml-80" >   
-<div className="relative w-80 ">
-   
-    <label htmlFor="simple-search" className="font-bold text-2xl" >
-    Search BL/Container Status
-<input type="text" id="simple-search" className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" required/>
-</label></div>
-<button type="submit" className=" p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5">
-    <svg className="w-8 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path  strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg><span>TRACK</span>
-    <span className="sr-only">Search</span>
-</button>
-</form>
-<br/>
-  <hr/>
-  
-        <div className="grid grid-flow-row-dense grid-cols-3 grid-rows-3  ml-80 mt-40">
-
+  <div className="flex flex-col mt-20">
+  <h1 className="text-6xl font-bold mb-20 ml-20">Track Your Shipment</h1>
+  <div className="flex w-full mt-6">
+    <div className="flex w-1/2 rounded-lg overflow-hidden ml-20 ">
+      <button type="button"
+        className={`w-1/2 py-2 text-center ${
+          selectedOption === "Option 1"
+            ? "bg-cyan-300 "
+            : "bg-white text-black" 
+        } border-2 border-blue-500/100 rounded-full`}
+        onClick={() =>{setSelectedOption("Option 1");setSelectedValue("bl");setDisplay("Bill of Lading Number (BL)")}}
+      >
+        BL No.
+      </button>
+      
+      <button type="button"
+        className={`w-1/2 py-2 text-center ${
+          selectedOption === "Option 2"
+            ? "bg-cyan-300	 "
+            : "bg-white text-black"
+        } border-2 border-blue-500/100 rounded-full`}
+        onClick={() => {setSelectedOption("Option 2");setSelectedValue("ctr");setDisplay("Container Number (CNo)")}}
+        
+      >
+       
+        Container No.
+      </button>
+     
+    </div>
+    <div className="flex justify-between w-1/2 rounded-lg overflow-hidden ml-40">
+      <button type="button"
+        className={`w-1/2 py-2 text-center ${
+          secondSelectedOption === "Option 3"
+            ? "bg-cyan-300 "
+            : "bg-white text-black"
+        } border-2 border-blue-500/100 rounded-full` }
+        onClick={() => {setSecondSelectedOption("Option 3");setSecondSelectedValue("import");}}
+      >
+        Import
+      </button>
+      <button type="button"
+        className={`w-1/2 py-2 text-center ${
+          secondSelectedOption === "Option 4"
+            ? "bg-cyan-300 "
+            : "bg-white text-black"
+        } border-2 border-blue-500/100 rounded-full`}
+        onClick={() => {setSecondSelectedOption("Option 4");setSecondSelectedValue("export")}}
+      >
+        Export
+      </button>
+    </div>
+  </div>
+  <div className="flex flex-col w-80 mt-6 ml-20">
+    <h4 className="text-stone-500"><i>{displaytext}</i></h4>
+    <input
+      type="text" id="blno" placeholder="Enter BL/Container No ..."
+      className="mt-2 border border-gray-300 rounded-lg p-2"
+      value={billOfLadingNumber}
+      onChange={(e) => setBillOfLadingNumber(e.target.value)}
+    />
  
-        <CCard style={{ width: "15rem" }}  className="border  " color="primary">
-  <CCardImage orientation="top"  src={ship}  />
-  <CCardTitle className="font-bold text-center">Vessel Name</CCardTitle>
-  <CCardBody>
-    <CCardText className="text-center"> Maersk </CCardText>
-  </CCardBody>
-</CCard>
-
-
-        <CCard style={{ width: "15rem" }} className="border">
-  <CCardImage orientation="top"  src={lod} />
-  <CCardTitle className="font-bold text-center">Load of Discharge</CCardTitle>
-  <CCardBody>
-    <CCardText className="text-center"> India </CCardText>
-  </CCardBody>
-</CCard>
-
-
-
-        <CCard style={{ width: "15rem" }} className="border">
-  <CCardImage orientation="top"  src={status} />
-  <CCardTitle className="font-bold text-center">Shipment Status</CCardTitle>
-  <CCardBody>
-    <CCardText className="text-center"> Delivered </CCardText>
-    <CCardText className="text-center"><span className="font-bold bg-[#22c55e]"> Arrival Day: 22/11/2022</span> </CCardText>
-  </CCardBody>
-</CCard>
-
- 
   
-
-</div>
-
+        <button type="button"
+          className="px-4 py-2 rounded mt-5 bg-blue-500 text-white"
+          onClick={handleTrackShipment}
+        >
+          Track Shipment
+        </button>
+  </div>
 </div>
         
 )
