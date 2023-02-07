@@ -1,24 +1,18 @@
+
 import { useState } from "react";
 import axios from "axios";
-import TrackingHistory from "./TrackingHistory";
+import TrackingHistoryTable from "./TrackingHistory";
 
 export default function BLStatus() {
+
   const [selectedOption, setSelectedOption] = useState(null);
   const [secondSelectedOption, setSecondSelectedOption] = useState(null);
   const [selectedvalue, setSelectedValue] = useState(null);
   const [secondselectedvalue, setSecondSelectedValue] = useState(null);
   const [billOfLadingNumber, setBillOfLadingNumber] = useState("");
-  const [error, setError] = useState("");
   const [displaytext, setDisplay] = useState("");
-  const [data, setData] = useState("");
-  const handleBlur = () => {
-    const pattern = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
-    if (!billOfLadingNumber) {
-      setError("The field cannot be empty");
-    } else if (!pattern.test(billOfLadingNumber)) {
-      setError("The value should be alphanumeric ");
-    }
-  };
+  const [error, setError] = useState("");
+  const pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d_-]*$/;
   const handleTrackShipment = () => {
     const requestBody = {
     "shipping_line": "Yang Ming",
@@ -35,12 +29,21 @@ export default function BLStatus() {
     console.error(error);
   });
   }
+  const handleBlur = () => {
+    if (!billOfLadingNumber) {
+      setError("The field cannot be empty");
+    } else if (!pattern.test(billOfLadingNumber)) {
+      setError("The value should be alphanumeric with exception of _ and -");
+    }
+  };
+
 return(
-  <div className="bg-gradient-to-r from-white-200 to-cyan-400">
-  <div className="flex flex-col mt-20 " >
+<div>
+
+  <div className="flex flex-col mt-20">
   <h1 className="text-6xl font-bold mb-20 ml-20">Track Your Shipment</h1>
   <div className="flex w-full mt-6">
-    <div className="flex w-1/2 rounded-lg overflow-hidden ml-20 ">
+    <div className="flex w-1/4 rounded-lg overflow-hidden ml-20 ">
       <button type="button"
         className={`w-1/2 py-2 text-center ${
           selectedOption === "Option 1"
@@ -66,7 +69,7 @@ return(
       </button>
      
     </div>
-    <div className="flex justify-between w-1/2 rounded-lg overflow-hidden ml-40">
+    <div className="flex justify-between w-1/4 rounded-lg overflow-hidden ml-40">
       <button type="button"
         className={`w-1/2 py-2 text-center ${
           secondSelectedOption === "Option 3"
@@ -94,25 +97,25 @@ return(
     <input
       type="text" id="blno" placeholder="Enter BL/Container No ..."
       className="mt-2 border border-gray-300 rounded-lg p-2"
-      value={billOfLadingNumber}
-      onBlur={handleBlur}
-      onChange={(e) =>{ setBillOfLadingNumber(e.target.value);setError("")}}
+      value={billOfLadingNumber} onBlur={handleBlur} 
+      onChange={(e) => {setBillOfLadingNumber(e.target.value);setError("")}}
     />
-      {error && <div className="text-red-500">{error}</div>}
  
   
+ {error && <div className="text-red-500">{error}</div>}
+
+
         <button type="button"
           className="px-4 py-2 rounded mt-5 bg-blue-500 text-white"
-          onClick={handleTrackShipment}
+          onClick={handleTrackShipment} 
         >
           Track Shipment
         </button>
+
   </div>
-</div>
-<TrackingHistory/>
+  </div>
 
-</div>
+        <TrackingHistoryTable/>
+        </div>
 )
-
-
-}
+      }

@@ -3,13 +3,13 @@ import React from "react";
 function TrackingHistoryTable() {
   return (
     <div className="mt-5">
-      <p className="ml-5">
+      <p className="ml-20">
         BL Number: <b/>
   
       </p>
-    <div className="font-medium text-lg italic p-5">Tracking History</div>
+    <div className="font-medium text-lg italic p-5  text-center" >Tracking History</div>
 
-    <div className="bg-black text-white rounded-lg overflow-hidden">
+    <div className="bg-black text-white rounded-lg overflow-hidden ml-4">
       <table className="w-full text-left table-collapse">
         <thead>
           <tr className="text-white">
