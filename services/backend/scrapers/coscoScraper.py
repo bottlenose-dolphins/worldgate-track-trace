@@ -8,6 +8,14 @@ import time
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+# CTR Test
+# identifier = "OOLU4299134"
+# identifier_type = "ctr"
+
+# BL Test
+# identifier = "COAU7242927890"
+# identifier_type = "bl"
+
 # prefix: COAU, COSU, PASU, CCLU, OOCL
 @app.route("/cosco", methods=["POST"])
 def coscoScraper():
@@ -37,6 +45,10 @@ def coscoScraper():
         driver.find_element(By.CLASS_NAME, 'btnSearch').click()
         time.sleep(2)
 
+        arrival_datetime = None
+        port_of_discharge = None
+        vessel_name = None
+
         if identifier_type == "bl":
             arrival_datetime = driver.find_element(By.XPATH, "//*[@class='ivu-c-detailPart']/div[4]/div[4]/p").text.strip('"').strip()
             vessel_name = driver.find_element(By.XPATH, "//*[@class='ivu-table-row']/td[1]/div[1]/a[1]").text
@@ -44,7 +56,7 @@ def coscoScraper():
        
         elif identifier_type == "ctr":
             arrival_datetime = driver.find_element(By.XPATH, "//*[@class='singleCNTRHead ivu-row']/div[2]//*[@class='date']").text.strip()
-            vessel_name = "" # cannot get vessel name when searching by ctr number
+            # cannot get vessel name when searching by ctr number
             driver.find_element(By.CLASS_NAME, 'toggleCNTRMovingHistory').click()
             port_of_discharge = driver.find_element(By.XPATH, "//div[div[p[contains(., 'Discharged at Last POD')]]]/div[p[contains(.,'Location')]]/p[@class='value']").text.strip()
 
@@ -53,7 +65,9 @@ def coscoScraper():
             latest_status_date = driver.find_element(By.XPATH, "//div[div[p[contains(., 'Latest Status')]]]/div/p[@class='data']").text.strip()
             latest_status_location = driver.find_element(By.XPATH, "//div[div[p[contains(., 'Latest Status')]]]/div[p[contains(.,'Location')]]/p[@class='value']").text.strip()
 
-        arrival_date = arrival_datetime.split()[0]
+        arrival_date = None
+        if arrival_datetime is not None:
+            arrival_date = arrival_datetime.split()[0]
 
         return jsonify(
                 {
