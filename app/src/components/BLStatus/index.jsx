@@ -8,27 +8,46 @@ export default function BLStatus() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [secondSelectedOption, setSecondSelectedOption] = useState(null);
   const [selectedvalue, setSelectedValue] = useState(null);
+  const [trackingHistory, setTrackingHistory] = useState([]);
   const [secondselectedvalue, setSecondSelectedValue] = useState(null);
   const [billOfLadingNumber, setBillOfLadingNumber] = useState("");
   const [displaytext, setDisplay] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d_-]*$/;
-  const handleTrackShipment = () => {
-    const requestBody = {
-    "shipping_line": "Yang Ming",
-    "identifier": billOfLadingNumber,
-    "identifier_type": selectedvalue,
-    "direction": secondselectedvalue,
-    };
-   axios
-  .post("http://localhost:8081/scrape", requestBody)
-  .then((response) => {
-    console.log(response.data);
-  })
-  .catch((error) => {
-    console.error(error);
-  });
-  }
+  const handleTrackShipment = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const requestBody = {
+        shipping_line: "Yang Ming",
+        identifier: billOfLadingNumber,
+        identifier_type: selectedvalue,
+        direction: secondselectedvalue,
+      };
+      
+      const response = await fetch('http://localhost:8081/scrape', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+      });
+      
+      if (response.status !== 200) {
+        throw new Error('No status found');
+      }
+      
+      const data = await response.json();
+      setTrackingHistory([...trackingHistory, data]);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleBlur = () => {
     if (!billOfLadingNumber) {
       setError("The field cannot be empty");
@@ -114,8 +133,43 @@ return(
 
   </div>
   </div>
+  {loading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
+      {trackingHistory.length > 0 && (
+        <div>
+        <div className="font-medium text-lg italic p-5  text-center" >Tracking History</div>
 
-        <TrackingHistoryTable/>
+      <div className="bg-black text-white rounded-lg overflow-hidden ml-4">
+
+<table className="w-full text-left table-collapse">
+<thead>
+          <tr className="text-white">
+            <th className="p-4 border-b-2 border-gray-800">Date</th>
+            <th className="p-4 border-b-2 border-gray-800">Port of Discharge</th>
+            <th className="p-4 border-b-2 border-gray-800">Date of Arrival</th>
+            <th className="p-4 border-b-2 border-gray-800">Vessel Name</th>
+            <th className="p-4 border-b-2 border-gray-800">Status</th>
+          </tr>
+        </thead>
+          <tbody>
+            {trackingHistory.map(item => (
+              <tr>
+                <td className="p-4 border-b border-gray-800"> {item.shipping_line}</td>
+                <td className="p-4 border-b border-gray-800"> {item.shipping_line}</td>
+
+                <td className="p-4 border-b border-gray-800"> {item.shipping_line}</td>
+
+                <td className="p-4 border-b border-gray-800"> {item.shipping_line}</td>
+
+                <td className="p-4 border-b border-gray-800"> {item.shipping_line}</td>
+
+              </tr>
+            ))}
+          </tbody>
+       </table>
+       </div>
+       </div>
+       )}
         </div>
 )
       }
