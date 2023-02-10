@@ -62,10 +62,8 @@ def get_export_ref_n():
     ), 500
 
 # Retrieve EXPORT_REF_N using WGUSER_ID
-@app.route("/export/export_ref_n/wguser_id", methods=['POST'])
-def get_export_ref_n_using_cust_id():
-    data = request.get_json()
-    wguser_id = data["wguser_id"]
+@app.route("/export/export_ref_n/<string:wguser_id>", methods=['GET'])
+def get_export_ref_n_using_wguser_id(wguser_id):
     export_ref_n = Export.query.filter_by(wguser_id=wguser_id).first().export_ref_n
 
     if export_ref_n:
@@ -87,5 +85,9 @@ def get_export_ref_n_using_cust_id():
         }
     ), 500
 
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("is this shit working?")
+
 if __name__ == "__main__":
-    app.run(port=8086, debug=True)
+    app.run(host='0.0.0.0', port=8086, debug=True)

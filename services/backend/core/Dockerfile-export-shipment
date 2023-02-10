@@ -1,3 +1,5 @@
+# for export.py
+
 FROM python:3.11
 
 #cx-Oracle fails to install via alpine (smaller image)
@@ -5,7 +7,6 @@ FROM python:3.11
 
 # oracle installation 
 
-ENV SQLALCHEMY_DATABASE_URI = oracle://
 RUN mkdir app
 WORKDIR    /opt/oracle
 
@@ -28,14 +29,17 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
             && ldconfig
 
 WORKDIR /app
-COPY export.py .
+COPY requirements.txt .
+COPY export_shipment.py .
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
+ENV SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
 
 
-EXPOSE 8086
+
+EXPOSE 8084
 
 # start the server
-CMD [ "python", "export.py" ]
+CMD [ "python", "export_shipment.py" ]
