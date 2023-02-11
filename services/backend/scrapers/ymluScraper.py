@@ -14,6 +14,10 @@ app = Flask(__name__)
 # identifier = "YMLUI450439005"
 # identifier_type = "BL"
 
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("hello")
+
 @app.route('/YMLU/<identifier_type>/<identifier>')
 def ymluScraper(identifier, identifier_type):
     try:
@@ -75,5 +79,5 @@ def ymluScraper(identifier, identifier_type):
         ), 500
         
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(debug=True)
     

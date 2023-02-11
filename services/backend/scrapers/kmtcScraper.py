@@ -10,12 +10,17 @@ from flask import Flask, jsonify
 
 app = Flask(__name__)
 
+@app.route("/ping", methods=['GET'])
+def ping():
+    return("hello")
+
 @app.route("/KMTC/<string:tracking_type>/<string:tracking_identifier>", methods=['GET'])
 def track(tracking_type, tracking_identifier):
 
     options = Options()
     options.add_argument('--headless')
     options.add_argument('--disable-gpu')
+    options.add_argument('--no-sandbox')
 
     # init
     driver = webdriver.Chrome(options=options)
@@ -89,4 +94,4 @@ def track(tracking_type, tracking_identifier):
 
 
 if __name__ == '__main__':
-    app.run(port=8082, debug=True)
+    app.run(debug=True)

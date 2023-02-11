@@ -8,6 +8,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager, get_jwt, get_jwt_identity, jwt_required
 from flask_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies
 import cx_Oracle
+import obtainIp
 
 from os import getenv
 from dotenv import load_dotenv
@@ -245,5 +246,4 @@ def verify_jwt_csrf_validity():
 
 
 if __name__ == "__main__":
-    #port can also be determined in docker file through CMD instead
-    app.run(host='0.0.0.0', port=5002, debug=True) # debug for DEV environment only
+    app.run(debug=True)
