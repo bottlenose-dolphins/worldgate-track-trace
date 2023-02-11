@@ -13,6 +13,14 @@ username = getenv("CORDELIA_USERNAME", "")
 password = getenv("CORDELIA_PASSWORD", "")
 app = Flask(__name__)
 
+# CTR Test
+# tracking_identifier = "CSYU4021495"
+# tracking_type = "CTR"
+
+# BL Test
+# tracking_identifier = "CSE23NSAPKG000274"
+# tracking_type = "BL"
+
 @app.route("/CCSL/<string:tracking_type>/<string:tracking_identifier>", methods=['GET'])
 def track(tracking_type, tracking_identifier):
 
