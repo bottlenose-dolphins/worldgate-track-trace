@@ -8,7 +8,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager, get_jwt, get_jwt_identity, jwt_required
 from flask_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies
 import cx_Oracle
-import obtainIp
+from obtainIp import obtainIP
 
 from os import getenv
 from dotenv import load_dotenv
@@ -88,6 +88,11 @@ def is_email(email):
 @app.route("/ping", methods=['GET'])
 def health_check():
     return("hello")
+
+@app.route("/testRoute", methods=['GET'])
+def testRoute():
+    return obtainIP("scraper_ymlu_service")
+    
 
 @app.route("/user/signup", methods=['POST'])
 def sign_up():

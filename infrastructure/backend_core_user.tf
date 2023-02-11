@@ -8,7 +8,7 @@ resource "aws_ecs_task_definition" "tracktrace_core_user" {
     [
         {
         "name": "tracktrace_core_user",
-        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_user_v1.1_ARM",
+        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_user_v2.0_ARM",
         "essential": true,
         "portMappings": [
             {
@@ -21,6 +21,9 @@ resource "aws_ecs_task_definition" "tracktrace_core_user" {
         "runtimePlatform": {
         "operatingSystemFamily": "LINUX",
         "cpuArchitecture": "ARM64"
+        },
+        "overrides": { 
+            "taskRoleArn": "arn:aws:iam::283879969377:role/trackTraceServiceDiscovery"
         },
         "logConfiguration": {
           "logDriver": "awslogs",
@@ -37,6 +40,7 @@ resource "aws_ecs_task_definition" "tracktrace_core_user" {
         cpu_architecture = "ARM64"
         operating_system_family = "LINUX"
     }
+    task_role_arn         = "arn:aws:iam::283879969377:role/trackTraceServiceDiscovery"
     requires_compatibilities = ["FARGATE"] # Stating that we are using ECS Fargate
     network_mode             = "awsvpc"    # Using awsvpc as our network mode as this is required for Fargate
     memory                   = 1024         # Specifying the memory our container requires
