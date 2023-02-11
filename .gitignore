@@ -1,3 +1,5 @@
-
-backend/backend/pyvenv.cfg
+*.env
+**/__pycache__/
+venv/
+backend/pyvenv.cfg
 backend/app/__pycache__/user.cpython-310.pyc

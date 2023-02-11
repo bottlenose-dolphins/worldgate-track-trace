@@ -1,19 +1,16 @@
-
+from flask import Flask, jsonify
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-#server related
-# server related
-from flask import Flask, jsonify
-
 import time
 
-username = ""
-password = ""
+from os import getenv
+from dotenv import load_dotenv
+
+load_dotenv()
+
+username = getenv("CORDELIA_USERNAME", "")
+password = getenv("CORDELIA_PASSWORD", "")
 app = Flask(__name__)
 
 @app.route("/CCSL/<string:tracking_type>/<string:tracking_identifier>", methods=['GET'])
