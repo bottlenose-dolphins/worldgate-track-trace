@@ -5,5 +5,5 @@ import HomePage from "./Home";
 
 export { SignInPage };
 export { SignUpPage };
-export {BLStatusPage};
+export { BLStatusPage };
 export { HomePage };
