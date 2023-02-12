@@ -12,8 +12,8 @@ resource "aws_ecs_task_definition" "tracktrace_core_user" {
         "essential": true,
         "portMappings": [
             {
-            "containerPort": 5002,
-            "hostPort": 5002
+            "containerPort": 80,
+            "hostPort": 80
             }
         ],
         "memory": 1024,
