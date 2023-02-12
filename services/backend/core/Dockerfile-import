@@ -1,4 +1,4 @@
-# for export.py
+# for import.py
 
 FROM python:3.11
 

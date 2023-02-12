@@ -154,4 +154,4 @@ def update_shipment_cont():
     ), 500
 
 if __name__ == "__main__":
-    app.run(port=8084, debug=True)
+    app.run(host='0.0.0.0', port=8084, debug=True)

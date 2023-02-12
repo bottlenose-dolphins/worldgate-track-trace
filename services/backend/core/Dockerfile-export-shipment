@@ -1,4 +1,4 @@
-# for export.py
+# for export_shipment.py
 
 FROM python:3.11
 
