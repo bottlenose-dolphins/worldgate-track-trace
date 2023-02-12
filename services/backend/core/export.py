@@ -87,7 +87,7 @@ def get_export_ref_n_using_wguser_id(wguser_id):
 
 @app.route("/ping", methods=['GET'])
 def health_check():
-    return("is this shit working?")
+    return("Hi")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8086, debug=True)
