@@ -34,10 +34,10 @@ RUN mv user.py app.py
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
-ENV SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
+ENV SQLALCHEMY_DATABASE_URI=<DB_URI>
 
 EXPOSE 5002
 
 # start the server
 # CMD [ "python", "user.py" ]
-CMD [ "python", "-m" , "flask", "run",  "--port=5002"]
+CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5002"]
