@@ -67,19 +67,30 @@ def getExportContainerNum():
 
 @app.route("/getImportContainerNum", methods=['POST'])
 def getImportContainerNum():
+    print("helloooooo")
     data = request.get_json()
     wguser_id = data['wguser_id']
+    print(wguser_id)
 
     # url = "http://localhost:8085"
 
-    import_ref_num_response = invoke_http(IMPORT_URL + "/import/import_ref_n/" + str(wguser_id), method='GET')
+    # import_ref_num_response = invoke_http(IMPORT_URL + "/import/import_ref_n/" + str(wguser_id), method='GET')
+    data = {
+                "wguser_id" : "HMuAqcsAFtnJGfrM84VqL7"
+            }
+
+    import_ref_num_response = invoke_http("http://127.0.0.1:8085/import/import_ref_n/HMuAqcsAFtnJGfrM84VqL7", method="POST", json=data)
     # url = IMPORT_URL + "/import/import_ref_n/" + str(wguser_id)
     # requests.get(url)
-    import_ref_num_response = json.dumps(import_ref_num_response)
+    import_ref_num_response_dumped = json.dumps(import_ref_num_response)
     # parsed_import_ref_num = json.loads(import_ref_num_response)
     # import_ref_n = import_ref_num_response[0][0]
 
-    # if import_ref_n == None:
+    print(import_ref_num_response_dumped)
+
+    print("byebyebye")
+
+    # if import_ref_num_response == None:
     #     return jsonify(
     #     {
     #         "code": 500,
@@ -99,7 +110,7 @@ def getImportContainerNum():
     #         }
     #     ),200
     
-    return import_ref_num_response
+    return import_ref_num_response_dumped
 
 
         # if isinstance(parsed_import_ref_num, list):

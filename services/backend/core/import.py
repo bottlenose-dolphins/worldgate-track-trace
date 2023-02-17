@@ -63,8 +63,10 @@ def get_import_ref_n():
     ), 500
 
 # Retrieve IMPORT_REF_N using WGUSER_ID
-@app.route("/import/import_ref_n/<string:wguser_id>", methods=['GET'])
-def get_import_ref_n_using_wguser_id(wguser_id):
+@app.route("/import/import_ref_n/wguser_id", methods=['POST'])
+def get_import_ref_n_using_wguser_id():
+    data = request.get_json()
+    wguser_id = data['wguser_id']
     import_ref_n = Import.query.filter_by(wguser_id=wguser_id).first().import_ref_n
 
     if import_ref_n:

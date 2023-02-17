@@ -1,4 +1,6 @@
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 SUPPORTED_HTTP_METHODS = set([
     "GET", "OPTIONS", "HEAD", "POST", "PUT", "PATCH", "DELETE"
@@ -17,6 +19,12 @@ def invoke_http(url, method='GET', json=None, **kwargs):
 
     try:
         if method.upper() in SUPPORTED_HTTP_METHODS:
+            # session = requests.Session()
+            # retry = Retry(connect=3, backoff_factor=0.5)
+            # adapter = HTTPAdapter(max_retries=retry)
+            # session.mount('http://', adapter)
+            # session.mount('https://', adapter)
+            # # session.get(url)
             r = requests.request(method, url, json = json, **kwargs)
         else:
             raise Exception("HTTP method {} unsupported.".format(method))
