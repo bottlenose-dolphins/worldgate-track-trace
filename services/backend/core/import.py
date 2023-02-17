@@ -74,7 +74,6 @@ def get_import_ref_n_using_wguser_id(wguser_id):
                 "data":
                 {
                     "import_ref_n" : import_ref_n
-
                 }
             }
         ),200

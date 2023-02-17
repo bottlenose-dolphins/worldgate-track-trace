@@ -19,7 +19,7 @@ class ImportCont(db.Model):
     __tablename__ = "import_ref_cont"
     
     import_ref_n = db.Column(db.Integer, primary_key=True, nullable=False)
-    cont_n = db.Column(db.String, nullable=False)
+    cont_n = db.Column(db.String, primary_key=True, nullable=False)
 
     def __init__(self, import_ref_n, cont_n):
         self.import_ref_n = import_ref_n
@@ -60,7 +60,6 @@ def get_import_ref_n():
 def get_cont_num(import_ref_n):
     try:
         container_nums = ImportCont.query.filter_by(import_ref_n = import_ref_n).all()
-        # print(containerList)
         
         if len(container_nums):
             container_numbers = [{"container_num": cont.cont_n} for cont in container_nums]

@@ -19,7 +19,7 @@ class ExportCont(db.Model):
     __tablename__ = "export_ref_cont"
     
     export_ref_n = db.Column(db.Integer, primary_key=True, nullable=False)
-    cont_n = db.Column(db.String, nullable=False)
+    cont_n = db.Column(db.String, primary_key=True, nullable=False)
 
     def __init__(self, export_ref_n, cont_n):
         self.export_ref_n = export_ref_n

@@ -31,6 +31,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
 WORKDIR /app
 COPY requirements.txt .
 COPY viewAllShipments.py .
+COPY invokes.py .
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
