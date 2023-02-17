@@ -79,6 +79,7 @@ def getImportContainerNum():
                 "wguser_id" : "HMuAqcsAFtnJGfrM84VqL7"
             }
 
+    print("**** still in view all shipment: about to invoke_http in invokes.py")
     import_ref_num_response = invoke_http("http://127.0.0.1:8085/import/import_ref_n/HMuAqcsAFtnJGfrM84VqL7", method="POST", json=data)
     # url = IMPORT_URL + "/import/import_ref_n/" + str(wguser_id)
     # requests.get(url)

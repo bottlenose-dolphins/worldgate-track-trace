@@ -14,18 +14,25 @@ def invoke_http(url, method='GET', json=None, **kwargs):
        return: the JSON reply content from the http service if the call succeeds;
             otherwise, return a JSON object with a "code" name-value pair.
     """
+    print("****just invoked invoke_http in invokes.py")
     code = 200
     result = {}
 
     try:
         if method.upper() in SUPPORTED_HTTP_METHODS:
-            # session = requests.Session()
-            # retry = Retry(connect=3, backoff_factor=0.5)
-            # adapter = HTTPAdapter(max_retries=retry)
-            # session.mount('http://', adapter)
-            # session.mount('https://', adapter)
-            # # session.get(url)
+            session = requests.Session()
+            retry = Retry(connect=3, backoff_factor=0.5)
+            adapter = HTTPAdapter(max_retries=retry)
+            session.mount('http://', adapter)
+            session.mount('https://', adapter)
+            response = session.get(url)
+            parsed = response.json()
+            print(parsed)
+
+            print("**** about to make request from invokes.py ****")
             r = requests.request(method, url, json = json, **kwargs)
+            r = requests.post(url, json=json, **kwargs)
+            print("**** requests runs ****")
         else:
             raise Exception("HTTP method {} unsupported.".format(method))
     except Exception as e:
