@@ -1,5 +1,9 @@
 version: "3.8"
 
+networks:
+    tracktrace_test_network:
+        driver: bridge
+
 services:
   # core_users:
     # container_name: core_users
@@ -16,6 +20,8 @@ services:
     build:
       context: ./services/backend/core
       dockerfile: Dockerfile-import
+    networks:
+      - tracktrace_test_network
     environment:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
       - PYTHONUNBUFFERED=1
@@ -27,6 +33,8 @@ services:
     build:
       context: ./services/backend/core
       dockerfile: Dockerfile-import-cont
+    networks:
+      - tracktrace_test_network
     environment:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
       - PYTHONUNBUFFERED=1
@@ -88,6 +96,8 @@ services:
     build:
       context: ./services/backend/core
       dockerfile: Dockerfile-view-all
+    networks:
+      - tracktrace_test_network
     environment:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
       - PYTHONUNBUFFERED=1
@@ -162,4 +172,3 @@ services:
   #     - ./doc:/usr/share/nginx/html/doc
   #   environment:
   #     SWAGGER_JSON: doc/openapi.yml
-
