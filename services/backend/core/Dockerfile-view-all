@@ -40,7 +40,7 @@ ENV SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
 
 
 
-EXPOSE 8089
+EXPOSE 80
 
 # start the server
 CMD [ "python", "-u", "viewAllShipments.py" ]
