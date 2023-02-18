@@ -56,8 +56,10 @@ def get_import_ref_n():
     ), 500
 
 # Retrieve CONT_N from IMPORT_REF_CONT using IMPORT_REF_N (NOT ABLE TO GET ALL VALUES ONLY THE FIRST VALUE RETRIEVED)
-@app.route("/import_cont/<int:import_ref_n>", methods=['GET'])
-def get_cont_num(import_ref_n):
+@app.route("/import_cont/container_num", methods=['POST'])
+def get_cont_num():
+    data = request.get_json()
+    import_ref_n = data["import_ref_n"]
     try:
         container_nums = ImportCont.query.filter_by(import_ref_n = import_ref_n).all()
         

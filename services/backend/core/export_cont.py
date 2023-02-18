@@ -56,10 +56,11 @@ def get_export_ref_n():
     ), 500
 
 # Retrieve CONT_N from EXPORT_REF_CONT using EXPORT_REF_N (NOT ABLE TO GET ALL VALUES ONLY THE FIRST VALUE RETRIEVED)
-@app.route("/export_cont/<int:export_ref_n>", methods=['GET'])
-def get_cont_num(export_ref_n):
+@app.route("/export_cont/container_num", methods=['POST'])
+def get_cont_num():
     try:
-        
+        data = request.get_json()
+        export_ref_n = data["export_ref_n"]
         container_nums = ExportCont.query.filter_by(export_ref_n = export_ref_n).all()
         # print(containerList)
 
