@@ -20,8 +20,8 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 def health_check():
     return("hello")
 
-@app.route('/YMLU/<identifier_type>/<identifier>')
-def ymluScraper(identifier, identifier_type):
+@app.route('/YMLU', methods=['POST'])
+def ymluScraper():
     try:
         # Retrieve BL/Container information
         data = request.get_json()
@@ -30,7 +30,11 @@ def ymluScraper(identifier, identifier_type):
 
         # Initialise chromedriver in headless mode
         options = Options()
-        options.headless = True
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--no-sandbox')
+
+        # init
         options.add_argument("--window-size=1920,1080")
         driver = webdriver.Chrome(options=options)
         
