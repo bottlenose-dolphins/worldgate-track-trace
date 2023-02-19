@@ -29,11 +29,9 @@ def scrape():
     if request.is_json:
         try:
             data = request.get_json()
-            shipping_line = data["shipping_line"]
             identifier = data["identifier"]
             identifier_type = data["identifier_type"]
             direction = data["direction"]
-            prefix = data["identifier"][:4].lower()
 
             print("\nReceived details in JSON:", data)
             # {
@@ -60,17 +58,19 @@ def scrape():
             # returns CBKKSIN04450
 
             # Retrieve Master BL from House BL
+            if direction == "import":
+                master_bl = get_import_master_bl(identifier)
+            elif direction == "export":
+                master_bl = get_export_master_bl(identifier)            
+            
             if identifier_type == "bl":
-                if direction == "import":
-                    master_bl = get_import_master_bl(identifier)
-                elif direction == "export":
-                    master_bl = get_export_master_bl(identifier)            
                 data = {
                             "identifier": master_bl,
                             "identifier_type": "bl"
                         }
-                # Retrieve shipping line's prefix
-                prefix = get_prefix(master_bl)
+            
+            # Retrieve shipping line's prefix
+            prefix = get_prefix(master_bl)
 
             # Invoke scraper microservice
             shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
