@@ -26,7 +26,7 @@ services:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
       - PYTHONUNBUFFERED=1
     ports:
-      - 8085:8085
+      - 5003:5003
   
   core_import_cont:
     container_name: core_import_cont
@@ -39,7 +39,7 @@ services:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
       - PYTHONUNBUFFERED=1
     ports:
-      - 8087:8087
+      - 5004:5004
   
   core_import_shipment:
     container_name: core_import_shipment
@@ -49,7 +49,7 @@ services:
     environment:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
     ports:
-      - 8083:8083
+      - 5005:5005
 
   core_export:
     container_name: core_export
@@ -61,7 +61,7 @@ services:
     environment:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
     ports:
-      - 8086:8086
+      - 5006:5006
 
   core_export_cont:
     container_name: core_export_cont
@@ -73,7 +73,7 @@ services:
     environment:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
     ports:
-      - 8088:8088
+      - 5007:5007
   
   core_export_shipment:
     container_name: core_export_shipment
@@ -83,7 +83,7 @@ services:
     environment:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
     ports:
-      - 8084:8084
+      - 5008:5008
   
   core_complex_scraper:
     container_name: core_complex_scraper
@@ -93,7 +93,7 @@ services:
     environment:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
     ports:
-      - 8081:8081
+      - 5009:5009
   
   core_viewall:
     container_name: core_viewall
@@ -106,7 +106,7 @@ services:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
       - PYTHONUNBUFFERED=1
     ports:
-      - 8089:8089
+      - 5010:5010
   
   core_prefix:
     container_name: core_prefix
@@ -116,7 +116,7 @@ services:
     environment:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
     ports:
-      - 8082:8082
+      - 5011:5011
 
   # web:
   #   container_name: web
