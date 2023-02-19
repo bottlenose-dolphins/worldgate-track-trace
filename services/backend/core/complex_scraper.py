@@ -72,7 +72,7 @@ def scrape():
                             "identifier_type": "bl"
                         }
             
-            prefix = "ymlu"
+            prefix = "YMLU"
 
             # Invoke scraper microservice
             print("***invoking shipment_info***")
