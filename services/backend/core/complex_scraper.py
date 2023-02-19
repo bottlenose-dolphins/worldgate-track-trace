@@ -212,4 +212,5 @@ def get_export_master_bl(house_bl):
     
 if __name__ == '__main__':
     app.run(port=8081, debug=True)
+    # app.run(host='0.0.0.0', debug=True)
     

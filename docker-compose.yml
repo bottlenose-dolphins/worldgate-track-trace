@@ -5,21 +5,21 @@ networks:
         driver: bridge
 
 services:
-  # core_users:
-    # container_name: core_users
-    # build:
-    #   context: ./services/backend/core
-    #   dockerfile: Dockerfile-user
-    # environment:
-    #   - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
-    # ports:
-    #   - 5002:5002
+  core_users:
+    container_name: core_users
+    build:
+      context: ./services/backend/core
+      dockerfile: Dockerfile-user-dev
+    environment:
+      - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
+    ports:
+      - 5002:5002
   
   core_import:
     container_name: core_import
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-import
+      dockerfile: Dockerfile-import-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -32,7 +32,7 @@ services:
     container_name: core_import_cont
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-import-cont
+      dockerfile: Dockerfile-import-cont-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -41,21 +41,21 @@ services:
     ports:
       - 8087:8087
   
-  # core_import_shipment:
-  #   container_name: core_import_shipment
-  #   build:
-  #     context: ./services/backend/core
-  #     dockerfile: Dockerfile-import-shipment
-  #   environment:
-  #     - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
-  #   ports:
-  #     - 8083:8083
+  core_import_shipment:
+    container_name: core_import_shipment
+    build:
+      context: ./services/backend/core
+      dockerfile: Dockerfile-import-shipment-dev
+    environment:
+      - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
+    ports:
+      - 8083:8083
 
   core_export:
     container_name: core_export
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-export
+      dockerfile: Dockerfile-export-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -67,7 +67,7 @@ services:
     container_name: core_export_cont
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-export-cont
+      dockerfile: Dockerfile-export-cont-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -75,31 +75,31 @@ services:
     ports:
       - 8088:8088
   
-  # core_export_shipment:
-  #   container_name: core_export_shipment
-  #   build:
-  #     context: ./services/backend/core
-  #     dockerfile: Dockerfile-export-shipment
-  #   environment:
-  #     - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
-  #   ports:
-  #     - 8084:8084
+  core_export_shipment:
+    container_name: core_export_shipment
+    build:
+      context: ./services/backend/core
+      dockerfile: Dockerfile-export-shipment-dev
+    environment:
+      - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
+    ports:
+      - 8084:8084
   
-  # core_complex_scraper:
-  #   container_name: core_complex_scraper
-  #   build:
-  #     context: ./services/backend/core
-  #     dockerfile: Dockerfile-complex-scraper
-  #   environment:
-  #     - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
-  #   ports:
-  #     - 8081:8081
+  core_complex_scraper:
+    container_name: core_complex_scraper
+    build:
+      context: ./services/backend/core
+      dockerfile: Dockerfile-complex-scraper-dev
+    environment:
+      - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
+    ports:
+      - 8081:8081
   
   core_viewall:
     container_name: core_viewall
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-view-all
+      dockerfile: Dockerfile-view-all-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -108,15 +108,15 @@ services:
     ports:
       - 8089:8089
   
-  # core_prefix:
-  #   container_name: core_prefix
-  #   build:
-  #     context: ./services/backend/core
-  #     dockerfile: Dockerfile-prefix
-  #   environment:
-  #     - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
-  #   ports:
-  #     - 8082:8082
+  core_prefix:
+    container_name: core_prefix
+    build:
+      context: ./services/backend/core
+      dockerfile: Dockerfile-prefix-dev
+    environment:
+      - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
+    ports:
+      - 8082:8082
 
   # web:
   #   container_name: web

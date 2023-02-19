@@ -247,3 +247,4 @@ def verify_jwt_csrf_validity():
 if __name__ == "__main__":
     #port can also be determined in docker file through CMD instead
     app.run(host='0.0.0.0', port=5002, debug=True) # debug for DEV environment only
+    # app.run(host='0.0.0.0', debug=True)
