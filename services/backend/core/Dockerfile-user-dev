@@ -35,6 +35,7 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
 ENV SQLALCHEMY_DATABASE_URI=<DB_URI>
+ENV PYTHONUNBUFFERED=1
 
 EXPOSE 5002
 
