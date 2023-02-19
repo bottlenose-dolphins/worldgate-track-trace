@@ -1,64 +1,22 @@
-/* import { Link , useNavigate} from "react-router-dom";
-import React from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../../img/worldgate.png";
+import TrackAndTrace from "../../img/TrackAndTrace.png";
 
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import logo from "../../img/worldgate.png"; 
-import "./navbar.css";
-
-export default function Navigation() {
-  const navigate = useNavigate();
+export default function NavBar() {
+    const navigate = useNavigate();
     function handleClick() {
         navigate("/sign-up");
     }
-  return (
-<nav>
-      <ul className="list">
-        
-      <li className="items"> <img src={logo} alt='' className="h-15 "/> </li>
-      <li className=""> <span className='text-3xl font-bold -ml-60'>Track&<br/> Trace</span></li>
-
-          <li className="items">Home</li>
-          <li className="items">Services</li>
-          <li className="items">Contact</li>
-        </ul>
-      <button type="button" className="btn">BTN</button>
-    </nav> */
- /*    <nav className='bg-white flex justify-between items-center mt-2'>
-            <img src={logo} alt=''/> 
-            <span className='text-3xl font-bold -ml-60'>Track&<br/> Trace</span>
-      <ul className='flex justify-end -mr-40'>
-        <li className='mx-4 mt-2'><Link to="/" className='mr-4'>Home</Link></li>
-        <li className='mx-4 mt-2'><Link to="/back">Back to Worldgate</Link></li>
-        <li className='mx-4 mt-2'><Link to="/about">About</Link></li>
-       <li > <button type="button" onClick={handleClick}  className='bg-blue-500 text-white py-2 px-4 rounded-md'>Sign Up</button></li>
-      </ul>
-      <hr />
-    </nav> */
- /*  );
-}; */
-import { useState } from "react";
-import { Link , useNavigate} from "react-router-dom";
-import logo from "../../img/worldgate.png"; 
-
-export default function NavBar() {
-  const navigate = useNavigate();
-  function handleClick() {
-      navigate("/sign-up");
-  }
     const [navbar, setNavbar] = useState(false);
 
     return (
         <nav className="w-full bg-light-300 shadow">
-          
-            <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8">
-            <img src={logo} alt=''/> 
-                    <h4 className='text-2xl font-bold inline-block mr-60'>Track & Trace</h4>
+            <div className="flex h-16 justify-between px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                {/* <img width="70" height="70" src={logo} alt='Worldgate Logo' /> */}
+                <img className='inline w-15 h-9 my-2' src={TrackAndTrace} alt='Track&Trace logo' />
                 <div>
                     <div className="flex items-center justify-between py-3 md:py-5 md:block">
-                   
-
                         <div className="md:hidden">
                             <button type="button"
                                 className="p-2 text-gray-700 rounded-md outline-none focus:border-gray-400 focus:border"
@@ -99,28 +57,28 @@ export default function NavBar() {
                 </div>
                 <div>
                     <div
-                        className={`flex-1 justify-self-center pb-3 mt-2 md:block md:pb-0 md:mt-0 ${
-                            navbar ? "block" : "hidden"
-                        }`}
+                        className={`flex-1 justify-self-center pb-3 mt-2 md:block md:pb-0 md:mt-0 ${navbar ? "block" : "hidden"
+                            }`}
                     >
                         <ul className="items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0">
                             <li className="text-black hover:text-indigo-200">
-                            <Link to="/" className='mr-4'>Home</Link>
+                                <Link to="/" className='mr-4'>Home</Link>
                             </li>
                             <li className="text-black hover:text-indigo-200">
-                            <Link to="/back">Back to Worldgate</Link>                           </li>
+                                <Link to="/back">Back to Worldgate</Link>
+                            </li>
                             <li className="text-black hover:text-indigo-200">
-                            <Link to="/about">About</Link>                         </li>
-                          
+                                <Link to="/about">About</Link>
+                            </li>
                         </ul>
 
                         <div className="mt-3 space-y-2 lg:hidden md:hidden">
-                        <button type="button"  onClick={handleClick}  className='bg-blue-500 text-black py-2 px-4 rounded-md'>Sign Up</button>
-                </div>
+                            <button type="button" onClick={handleClick} className='bg-blue-500 text-black py-2 px-4 rounded-md'>Sign Up</button>
+                        </div>
                     </div>
                 </div>
                 <div className="hidden space-x-2 md:inline-block">
-                <button type="button"  onClick={handleClick} className='bg-blue-500 text-black py-2 px-4 rounded-md'>Sign Up</button>
+                    <button type="button" onClick={handleClick} className='bg-blue-500 text-black py-2 px-4 rounded-md'>Sign Up</button>
                 </div>
             </div>
         </nav>
