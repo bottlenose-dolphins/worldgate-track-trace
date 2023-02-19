@@ -22,6 +22,7 @@ import_url = "http://localhost:8085/"
 export_url = "http://localhost:8086/"
 import_cont_url = "http://localhost:8087/"
 export_cont_url = "http://localhost:8088/"
+vendor_mast_url = "http://localhost:8089/"
 
 @app.route('/scrape', methods=['POST'])
 def scrape():
@@ -64,14 +65,12 @@ def scrape():
                     master_bl = get_import_master_bl(identifier)
                 elif direction == "export":
                     master_bl = get_export_master_bl(identifier)            
-                # Retrieve shipping line's prefix
-                prefix = master_bl[:4].lower()
                 data = {
                             "identifier": master_bl,
                             "identifier_type": "bl"
                         }
-            
-            prefix = "ymlu"
+                # Retrieve shipping line's prefix
+                prefix = get_prefix(master_bl)
 
             # Invoke scraper microservice
             shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
@@ -105,15 +104,28 @@ def scrape():
     ), 400
 
 # Retrieve prefix for respective shipping line
-def check_prefix(shipping_line):
+def get_prefix(master_bl):
     data = {
-            "shipping_line": shipping_line
+            "master_bl": master_bl
         }
     
-    response = invoke_http(prefix_url + "prefix/retrieve", method='POST', json=data)
-    if response["data"]["code"] == 200:
-        prefix = response["data"]["prefix"]
-        return prefix
+    # Invoke import_shipment microservice to retrieve cr_agent_id
+    import_ref_res = invoke_http(import_shipment_url + "import_shipment/agent_id", method='POST', json=data)
+    if import_ref_res["data"]["code"] == 200:
+        data = {
+            "vendor_id": import_ref_res["data"]["cr_agent_id"]
+        } 
+
+        vendor_mast_res = invoke_http(vendor_mast_url + "vendor_mast/vendor_name", method='POST', json=data)
+        if vendor_mast_res["data"]["code"] == 200:
+            data = {
+                "vendor_name": vendor_mast_res["data"]["vendor_name"]
+            }
+
+            prefix_res = invoke_http(prefix_url + "prefix/retrieve", method='POST', json=data)
+            if prefix_res["data"]["code"] == 200:
+                prefix = prefix_res["data"]["prefix"]
+                return prefix
 
 # Update F2K with latest shipment information (BL)
 def update_shipment_info_bl(master_bl, arrival_date, port_of_discharge, vessel_name, direction):
