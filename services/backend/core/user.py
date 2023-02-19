@@ -252,3 +252,4 @@ def verify_jwt_csrf_validity():
 
 if __name__ == "__main__":
     app.run(debug=True)
+    # app.run(host='0.0.0.0', port=5002, debug=True) #to work as a local flask app

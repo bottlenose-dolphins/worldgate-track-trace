@@ -95,3 +95,4 @@ def track(tracking_type, tracking_identifier):
 
 if __name__ == '__main__':
     app.run(debug=True)
+    # app.run(host='0.0.0.0', port=8082, debug=True) #to work as a local flask app

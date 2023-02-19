@@ -4,7 +4,7 @@ COPY . .
 WORKDIR /app
 
 # install node modules 
-RUN npm ci
+RUN npm i
 #build app
 RUN npm run build
 

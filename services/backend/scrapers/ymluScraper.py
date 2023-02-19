@@ -80,4 +80,5 @@ def ymluScraper(identifier, identifier_type):
         
 if __name__ == '__main__':
     app.run(debug=True)
+    # app.run(host='0.0.0.0', port=8080, debug=True) #to work as a local flask app
     

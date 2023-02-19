@@ -27,10 +27,10 @@ export const signIn = async(username, password) => {
 // // with service discovery call, call can only be performed in VPC
 // export const signIn = async(username, password) => {
 //     const instances = await serviceDiscovery.discoverInstances({
-//         HealthStatus: "HEALTHY", 
-//         MaxResults: 10, 
-//         NamespaceName: "tracktrace", 
-//         ServiceName: "core_user_service"
+//         "HealthStatus": "HEALTHY", 
+//         "MaxResults": 10, 
+//         "NamespaceName": "tracktrace", 
+//         "ServiceName": "core_user_service"
 //     })
 //     try {
 //         const res = await axios.post(`${instances.Instances[Math.floor(Math.random() * instances.Instances.length)].Attributes.AWS_INSTANCE_IPV4}/signin`,{

@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "tracktrace_test_task2" {
     [
         {
         "name": "tracktrace_test_task2",
-        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:frontend_v1.1_ARM",
+        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:frontend_v1.4_ARM",
         "essential": true,
         "portMappings": [
             {
