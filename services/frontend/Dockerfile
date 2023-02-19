@@ -4,7 +4,7 @@ COPY . .
 WORKDIR /app
 
 # install node modules 
-RUN npm ci
+RUN npm i
 #build app
 RUN npm run build
 
@@ -12,3 +12,6 @@ RUN npm run build
 EXPOSE 3000
 # start app
 CMD ["npm", "start"]
+
+HEALTHCHECK --interval=10s --timeout=3s \
+    CMD curl -f http://localhost/ || exit 1
