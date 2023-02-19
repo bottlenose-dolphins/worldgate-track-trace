@@ -58,16 +58,22 @@ def scrape():
             # returns CBKKSIN04450
 
             # Retrieve Master BL from House BL
-            if direction == "import":
-                master_bl = get_import_master_bl(identifier)
-            elif direction == "export":
-                master_bl = get_export_master_bl(identifier)            
-            
             if identifier_type == "bl":
+                if direction == "import":
+                    master_bl = get_import_master_bl(identifier)
+                elif direction == "export":
+                    master_bl = get_export_master_bl(identifier)            
+
                 data = {
                             "identifier": master_bl,
                             "identifier_type": "bl"
                         }
+            
+            if identifier_type == "ctr":
+                if direction == "import":
+                    master_bl = get_import_master_bl_ctr(identifier)
+                elif direction == "export":
+                    master_bl = get_export_master_bl_ctr(identifier)   
             
             # Retrieve shipping line's prefix
             prefix = get_prefix(master_bl)
@@ -222,6 +228,40 @@ def get_export_master_bl(house_bl):
     
     return master_bl
     
+# Retrieve Master B/L by Container Number (IMPORT)
+def get_import_master_bl_ctr(container_number):
+    data = {
+        "container_number": container_number
+    }
+
+    import_cont_res = invoke_http(import_cont_url + "import_cont/import_ref_n", method='POST', json=data)
+    import_ref_n = import_cont_res["data"]["import_ref_n"]
+
+    data = {
+        "import_ref_n": import_ref_n
+    }
+    
+    import_ref_res = invoke_http(import_shipment_url + "import_shipment/bl", method='POST', json=data)
+    master_bl = import_ref_res["data"]["master_bl"]
+    return master_bl
+
+# Retrieve Master B/L by Container Number (EXPORT)
+def get_export_master_bl_ctr(container_number):
+    data = {
+        "container_number": container_number
+    }
+
+    export_cont_res = invoke_http(export_cont_url + "export_cont/export_ref_n", method='POST', json=data)
+    export_ref_n = export_cont_res["data"]["export_ref_n"]
+
+    data = {
+        "export_ref_n": export_ref_n
+    }
+    
+    export_ref_res = invoke_http(export_shipment_url + "export_shipment/bl", method='POST', json=data)
+    master_bl = export_ref_res["data"]["master_bl"]
+    return master_bl
+
 if __name__ == '__main__':
     app.run(port=8081, debug=True)
     
