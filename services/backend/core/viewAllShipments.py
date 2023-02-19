@@ -21,11 +21,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # Service Classes
-IMPORT_URL = "http://core_import:8085"
-IMPORT_CONT_URL = "http://core_import_cont:8087"
+IMPORT_URL = "http://core_import:5003"
+IMPORT_CONT_URL = "http://core_import_cont:5004"
 
-EXPORT_URL = "http://core_export:8086"
-EXPORT_CONT_URL = "http://core_export_cont:8088"
+EXPORT_URL = "http://core_export:5006"
+EXPORT_CONT_URL = "http://core_export_cont:5007"
 
 
 @app.route("/getExportContainerNum", methods=['POST'])

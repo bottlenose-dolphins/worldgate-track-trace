@@ -10,8 +10,11 @@ services:
     build:
       context: ./services/backend/core
       dockerfile: Dockerfile-user-dev
+    networks:
+      - tracktrace_test_network
     environment:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
+      - PYTHONUNBUFFERED=1
     ports:
       - 5002:5002
   
@@ -46,6 +49,8 @@ services:
     build:
       context: ./services/backend/core
       dockerfile: Dockerfile-import-shipment-dev
+    networks:
+      - tracktrace_test_network
     environment:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
     ports:
@@ -80,6 +85,8 @@ services:
     build:
       context: ./services/backend/core
       dockerfile: Dockerfile-export-shipment-dev
+    networks:
+      - tracktrace_test_network
     environment:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
     ports:
@@ -90,8 +97,11 @@ services:
     build:
       context: ./services/backend/core
       dockerfile: Dockerfile-complex-scraper-dev
+    networks:
+      - tracktrace_test_network
     environment:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
+      - PYTHONUNBUFFERED=1
     ports:
       - 5009:5009
   
@@ -113,6 +123,8 @@ services:
     build:
       context: ./services/backend/core
       dockerfile: Dockerfile-prefix-dev
+    networks:
+      - tracktrace_test_network
     environment:
       - SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
     ports:
@@ -136,13 +148,17 @@ services:
   #   depends_on:
   #     - core_users
 
-  # scraper_ymlu:
-  #   container_name: scraper_ymlu
-  #   build:
-  #     context: ./services/backend/scrapers
-  #     dockerfile: Dockerfile-Ymlu
-  #   ports:
-  #     - 8080:8080
+  scraper_ymlu:
+    container_name: scraper_ymlu
+    build:
+      context: ./services/backend/scrapers
+      dockerfile: Dockerfile-Ymlu
+    networks:
+      - tracktrace_test_network
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - 8080:8080
 
   # scraper_good:
   #   container_name: scraper_good

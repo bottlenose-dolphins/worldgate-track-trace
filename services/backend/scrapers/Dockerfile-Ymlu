@@ -22,7 +22,7 @@ RUN wget ${URLBASE}/chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb \
 WORKDIR /app
 # copying the neccessary scri[]
 COPY requirements.txt .
-COPY ymluScraper.py .
+COPY ymlu_scraper.py .
 
 # upgrade pip and install requirements
 RUN pip install --upgrade pip
@@ -30,4 +30,4 @@ RUN pip install -r requirements.txt
 
 EXPOSE 8080
 
-CMD [ "python", "ymluScraper.py" ]
+CMD [ "python", "ymlu_scraper.py" ]
