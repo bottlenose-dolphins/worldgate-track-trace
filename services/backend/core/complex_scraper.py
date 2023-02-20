@@ -14,16 +14,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# scraper_url = "http://localhost:8080/"
-# prefix_url = "http://localhost:8082/"
-# import_shipment_url = "http://localhost:8083/"
-# export_shipment_url = "http://localhost:8084/"
-# import_url = "http://localhost:8085/"
-# export_url = "http://localhost:8086/"
-# import_cont_url = "http://localhost:8087/"
-# export_cont_url = "http://localhost:8088/"
-# vendor_mast_url = "http://localhost:8089/"
-
 scraper_url = "http://scraper_ymlu:8080/"
 prefix_url = "http://core_prefix:5011/"
 import_shipment_url = "http://core_import_shipment:5005/"
@@ -32,7 +22,7 @@ import_url = "http://core_import:5003/"
 export_url = "http://core_export:5006/"
 import_cont_url = "http://core_import_cont:5004/"
 export_cont_url = "http://core_export_cont:5007/"
-vendor_mast_url = "http://localhost:8089/"
+vendor_mast_url = "http://core_vendor_mast:5012/"
 
 @app.route('/scrape', methods=['POST'])
 def scrape():
@@ -44,32 +34,9 @@ def scrape():
             direction = data["direction"]
 
             print("\nReceived details in JSON:", data)
-            # {
-            #    "shipping_line": "Yang Ming",
-            #    "identifier": "YMLU3434431", <this will be House BL>
-            #    "identifier_type": "ctr",
-            #    "direction": "import"
-            # }  
-
-            # {
-            #     "shipping_line": "Yang Ming",
-            #     "identifier": "CTG-6463",
-            #     "identifier_type": "bl",
-            #     "direction": "export"
-            # }
-            # returns QCOU 502267
-
-            # {
-            #     "shipping_line": "Yang Ming",
-            #     "identifier": "PKGSIN164134",
-            #     "identifier_type": "bl",
-            #     "direction": "import"
-            # }
-            # returns CBKKSIN04450
 
             # Retrieve Master BL from House BL
             if identifier_type == "bl":
-                print("***going here?***")
                 if direction == "import":
                     master_bl = get_import_master_bl(identifier)
                 elif direction == "export":
@@ -90,18 +57,12 @@ def scrape():
             prefix = get_prefix(master_bl)
 
             # Invoke scraper microservice
-            print("***invoking shipment_info***")
             shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
-            print(shipment_info)
             
             if shipment_info:
                 arrival_date = shipment_info["data"]["arrival_date"]
                 port_of_discharge = shipment_info["data"]["port_of_discharge"]
                 vessel_name = shipment_info["data"]["vessel_name"]
-
-                print(arrival_date)
-                print(port_of_discharge)
-                print(vessel_name)
 
                 # Update DB with latest shipment information
                 if identifier_type == "bl":
@@ -131,22 +92,22 @@ def get_prefix(master_bl):
     data = {
             "master_bl": master_bl
         }
-    
+
     # Invoke import_shipment microservice to retrieve cr_agent_id
     import_ref_res = invoke_http(import_shipment_url + "import_shipment/agent_id", method='POST', json=data)
-    if import_ref_res["data"]["code"] == 200:
+    if import_ref_res["code"] == 200:
         data = {
             "vendor_id": import_ref_res["data"]["cr_agent_id"]
         } 
 
-        vendor_mast_res = invoke_http(vendor_mast_url + "vendor_mast/vendor_name", method='POST', json=data)
-        if vendor_mast_res["data"]["code"] == 200:
+        vendor_mast_res = invoke_http(vendor_mast_url + "vendor_mast/vendor_name", method='POST', json=data)        
+        if vendor_mast_res["code"] == 200:
             data = {
                 "vendor_name": vendor_mast_res["data"]["vendor_name"]
             }
-
+            
             prefix_res = invoke_http(prefix_url + "prefix/retrieve", method='POST', json=data)
-            if prefix_res["data"]["code"] == 200:
+            if prefix_res["code"] == 200:
                 prefix = prefix_res["data"]["prefix"]
                 return prefix
 
@@ -250,10 +211,9 @@ def get_import_master_bl_ctr(container_number):
     data = {
         "container_number": container_number
     }
-
+    
     import_cont_res = invoke_http(import_cont_url + "import_cont/import_ref_n", method='POST', json=data)
     import_ref_n = import_cont_res["data"]["import_ref_n"]
-
     data = {
         "import_ref_n": import_ref_n
     }

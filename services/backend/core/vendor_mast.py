@@ -58,4 +58,5 @@ def get_vendor_name():
         ), 404
 
 if __name__ == "__main__":
-    app.run(port=8089, debug=True)
+    app.run(host='0.0.0.0', port=5012, debug=True)
+    # app.run(host='0.0.0.0', debug=True)
