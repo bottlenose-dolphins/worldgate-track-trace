@@ -5,7 +5,6 @@ ARG VERSION=109.0.5414.74-0ubuntu0.18.04.14
 ARG ARCH=arm64
 ARG URLBASE=https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files
 
-RUN mkdir app 
 WORKDIR /chromium
 
 #download and install
@@ -21,16 +20,18 @@ RUN wget ${URLBASE}/chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb \
 && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-# copying the neccessary script
+# copying the neccessary scri[]
 COPY requirements.txt .
-COPY goodrichScraper.py .
-RUN mkdir creds 
-COPY ./creds/creds_goodrich.py ./creds
+COPY ymluScraper.py .
+RUN mv ymluScraper.py app.py
 
 # upgrade pip and install requirements
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-EXPOSE 8081
+ENV PYTHONUNBUFFERED=1
 
-CMD [ "python", "goodrichScraper.py" ]
+EXPOSE 80
+
+CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0",  "--port=80"]
+# CMD ["python", "ymluScraper.py"]

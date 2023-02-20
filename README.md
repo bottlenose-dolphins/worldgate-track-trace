@@ -1,6 +1,27 @@
 # Bottlenose Dolphins' Worldgate Track & Trace System
 
-### Backend: Provide Database Connection String + Installing the correct Oracle Client library 
+### Setting up Cloud Infrastructure: AWS & Terraform
+
+1. Obtain an access key and secret from AWS 
+
+2. Configure AWS cli: https://docs.aws.amazon.com/cli/v1/userguide/install-linux.html: 
+
+      1. run ```aws configure```
+      2. insert access key, secret key, region: ```ap-southeast-1``` & output: ```json```
+
+3. Setting up Terraform 
+
+      1. change into the infrastructure dir
+      2. run ```terraform init```
+      3. run ```terraform plan``` to note the changes
+      4. run ```terraform apply --auto-approve```
+
+4. Taring down Terraform 
+
+      1. run ```terraform-destroy --auto-approve```
+      *Note that ECR fail to destroy error is expected because existing docker images are still stored in ECR
+
+### Development Backend: Provide Database Connection String + Installing the correct Oracle Client library 
 
 This backend application relies on a remote Oracle server for data persistence.
 
@@ -52,7 +73,15 @@ Change ```ARG ARCH``` to ```arm64``` or ```amd64```
 2. ```docker-compose up```
 
 
-### Issues in Docker env:
+### Issues & Workarounds in Docker env:
 
-1. Scrapers may fail occasionally, works on reload --> probably driver / browser related issues
-2. Docker compose issues (upon upgrading to docker buildx with the new buildkit) --> this seems to be due to docker failing to move the build cache to build. When I build each image separately with ```docker build --load``` (load, helps to 'tag' the image, else there will be a warning, btw you may provide filename using ```-f <Dockerfile filename>```), and then running compose, no issues were faced, please let me know if you experience this as well
+1. Scrapers may fail through page crashes --> This is since the mem allocated to the docker container is insufficient. Read more [here](https://www.roelpeters.be/solve-selenium-error-session-deleted-because-of-page-crash/) 
+
+Current Workaround: it is specified in the docker-compose file to allocate additional memory to 2 containers (at the time of writing, kmtc & onescraper), however, when running individual containers, you may do so like this:```docker run -p <host_port>:<container_port> --shm-size=800m <image_tag> ```
+The other 2 scrapers (goodrich, ymlu work most of the time), if it crashes do give a reload.
+
+2. Docker build fails sometimes, notably when```apt-get update```is used, this has been seen & unresolved on windows machines at the time of writing. 
+
+Current Workaround: We will dockerise Images into  ARM64/LINUX as well and push on to ECR whenever possible (This is limited to all non-scraper microservices, though it has not been done)
+
+3. Docker compose issues (upon upgrading to docker buildx with the new buildkit) --> this seems to be due to docker failing to move the build cache to build. When I build each image separately with ```docker build --load``` (load, helps to 'tag' the image, else there will be a warning, btw you may provide filename using ```-f <Dockerfile filename>```), and then running compose, no issues were faced, please let me know if you experience this as well
