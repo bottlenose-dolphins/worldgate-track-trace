@@ -55,7 +55,7 @@ def get_export_ref_n():
         }
     ), 500
 
-# Retrieve CONT_N from EXPORT_REF_CONT using EXPORT_REF_N (NOT ABLE TO GET ALL VALUES ONLY THE FIRST VALUE RETRIEVED)
+# Retrieve CONT_N from EXPORT_REF_CONT using EXPORT_REF_N 
 @app.route("/export_cont/container_num", methods=['POST'])
 def get_cont_num():
     try:

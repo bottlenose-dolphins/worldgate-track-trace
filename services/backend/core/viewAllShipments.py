@@ -1,5 +1,3 @@
-# NOT ABLE TO INSTALL INVOKES ON MY END CAN SOMEONE HELP ME INSTALL AND TRY THIS OUT? all the other 4 services works individually
-
 from flask import Flask, jsonify, request
 import requests
 import json

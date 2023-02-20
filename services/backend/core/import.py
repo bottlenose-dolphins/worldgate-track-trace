@@ -34,7 +34,7 @@ class Import(db.Model):
             "import_ref_n": self.import_ref_n,
             "cust_id": self.cust_id,
             "hbl_n": self.hbl_n,
-            "uguser_id": self.wguser_id
+            "wguser_id": self.wguser_id
 
         }
 
