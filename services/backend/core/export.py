@@ -22,19 +22,23 @@ class Export(db.Model):
     cust_id = db.Column(db.String, nullable=False)
     hbl_n = db.Column(db.String, nullable=False)
     wguser_id = db.Column(db.String, nullable=False)
+    port_del_name = db.Column(db.String, nullable=False)
+    del_to = db.Column(db.Date, nullable=False)
 
-    def __init__(self, export_ref_n, cust_id, hbl_n, wguser_id):
+    def __init__(self, export_ref_n, cust_id, hbl_n, wguser_id, port_del_name, del_to):
         self.export_ref_n = export_ref_n
         self.cust_id = cust_id
         self.hbl_n = hbl_n
         self.wguser_id = wguser_id
+        self.port_del_name = port_del_name
 
     def json(self):
         return {
             "export_ref_n": self.export_ref_n,
             "cust_id": self.cust_id,
             "hbl_n": self.hbl_n,
-            "wguser_id": self.wguser_id
+            "wguser_id": self.wguser_id,
+            "port_del_name": self.port_del_name
         }
 
 # Retrieve EXPORT_REF_N by House B/L
@@ -61,24 +65,35 @@ def get_export_ref_n():
         }
     ), 500
 
-# Retrieve EXPORT_REF_N using WGUSER_ID
+# Retrieve EXPORT_REF_N, PORT_DEL_NAME and DEL_TO using WGUSER_ID and sorted in descending order using DEL_TO
 @app.route("/export/export_ref_n/wguser_id", methods=['POST'])
 def get_export_ref_n_using_wguser_id():
     data = request.get_json()
     wguser_id = data["wguser_id"]
-    export_ref_n = Export.query.filter_by(wguser_id=wguser_id).first().export_ref_n
+    output = Export.query.filter_by(wguser_id=wguser_id).order_by(Export.del_to.desc()).all()
 
-    if export_ref_n:
+    if len(output):
+        result = [
+            {
+                "export_ref_n": a_row.export_ref_n,
+                "destination_port": a_row.port_del_name,
+                "delivery_date": a_row.del_to
+            } 
+                for a_row in output]
+        
+
+
         return jsonify(
             {
                 "code":200,
                 "data":
                 {
-                    "export_ref_n" : export_ref_n
-
+                    "output" : result
                 }
             }
         ),200
+
+
     
     return jsonify(
         {

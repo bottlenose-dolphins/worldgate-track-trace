@@ -1,5 +1,4 @@
-# for complex_scraper.py
-
+#  For export_cont.py
 FROM python:3.11
 
 #cx-Oracle fails to install via alpine (smaller image)
@@ -30,8 +29,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
 
 WORKDIR /app
 COPY requirements.txt .
-COPY complex_scraper.py .
-COPY invokes.py .
+COPY export_cont.py .
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
@@ -43,4 +41,4 @@ ENV SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
 EXPOSE 80
 
 # start the server
-CMD [ "python", "complex_scraper.py" ]
+CMD [ "python", "export_cont.py" ]
