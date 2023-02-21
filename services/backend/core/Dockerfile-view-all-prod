@@ -36,7 +36,7 @@ RUN mv viewAllShipments.py app.py
 #for invoking microservice calls within app
 COPY invokes.py .
 COPY obtainIp.py .
-ENV prod=false
+ENV prod=true
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt

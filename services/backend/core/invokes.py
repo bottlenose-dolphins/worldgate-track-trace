@@ -24,11 +24,12 @@ DEV_IP = {
 "core_export_shipment" : "core_export_shipment:5008",
 "core_complex_scraper" : "core_complex_scraper:5009",
 "core_viewall" : "core_viewall:5010",
-"core_prefix" : "core_prefix:5011"
+"core_prefix" : "core_prefix:5011",
+"core_vendor_mast" : "core_vendor_mast:5012"
 }
 
 
-def invoke_http2(service, route, prod=False, method='GET', json=None, **kwargs):
+def invoke_http2(service, route, prod, method='GET', json=None, **kwargs):
     """A simple wrapper for requests methods.
        url: the url of the http service;
        method: the http method;

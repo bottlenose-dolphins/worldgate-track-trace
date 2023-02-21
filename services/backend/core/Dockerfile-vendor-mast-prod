@@ -30,18 +30,13 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
 
 WORKDIR /app
 COPY requirements.txt .
-COPY complex_scraper.py .
-RUN mv complex_scraper.py app.py
-
-#for invoking microservice calls within app
-COPY invokes.py .
-COPY obtainIp.py .
-ENV prod=true
+COPY vendor_mast.py .
+RUN mv vendor_mast.py app.py
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
-ENV SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
+ENV SQLALCHEMY_DATABASE_URI="<DB_URI>"
 
 
 

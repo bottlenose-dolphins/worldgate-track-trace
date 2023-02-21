@@ -12,6 +12,8 @@ load_dotenv()
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+prod = getenv("prod")
+
 db = SQLAlchemy(app)
 
 scraper_url = "http://scraper_ymlu:8080/"
@@ -57,7 +59,8 @@ def scrape():
             prefix = get_prefix(master_bl)
 
             # Invoke scraper microservice
-            shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
+            # shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
+            shipment_info = invoke_http2("scraper_ymlu", prefix, prod, method="POST", json=data)
             
             if shipment_info:
                 arrival_date = shipment_info["data"]["arrival_date"]
@@ -94,19 +97,22 @@ def get_prefix(master_bl):
         }
 
     # Invoke import_shipment microservice to retrieve cr_agent_id
-    import_ref_res = invoke_http(import_shipment_url + "import_shipment/agent_id", method='POST', json=data)
+    # import_ref_res = invoke_http(import_shipment_url + "import_shipment/agent_id", method='POST', json=data)
+    import_ref_res = invoke_http2("core_import_shipment", "import_shipment/agent_id", method='POST', json=data)
     if import_ref_res["code"] == 200:
         data = {
             "vendor_id": import_ref_res["data"]["cr_agent_id"]
         } 
 
-        vendor_mast_res = invoke_http(vendor_mast_url + "vendor_mast/vendor_name", method='POST', json=data)        
+        # vendor_mast_res = invoke_http(vendor_mast_url + "vendor_mast/vendor_name", method='POST', json=data)
+        vendor_mast_res = invoke_http2("core_vendor_mast", "vendor_mast/vendor_name", prod, method="POST", json=data)        
         if vendor_mast_res["code"] == 200:
             data = {
                 "vendor_name": vendor_mast_res["data"]["vendor_name"]
             }
             
-            prefix_res = invoke_http(prefix_url + "prefix/retrieve", method='POST', json=data)
+            # prefix_res = invoke_http(prefix_url + "prefix/retrieve", method='POST', json=data)
+            prefix_res = invoke_http2("core_prefix" + "prefix/retrieve", prod, method='POST', json=data)
             if prefix_res["code"] == 200:
                 prefix = prefix_res["data"]["prefix"]
                 return prefix
@@ -122,9 +128,11 @@ def update_shipment_info_bl(master_bl, arrival_date, port_of_discharge, vessel_n
 
     # Select import_shipment or export_shipment microservice
     if direction == "import":
-        response = invoke_http(import_shipment_url + "import_shipment/update", method='POST', json=data)
+        # response = invoke_http(import_shipment_url + "import_shipment/update", method='POST', json=data)
+        response = invoke_http2("core_import_shipment" + "import_shipment/update",prod, method='POST', json=data)
     elif direction == "export":
-        response = invoke_http(export_shipment_url + "export_shipment/update", method='POST', json=data)
+        # response = invoke_http(export_shipment_url + "export_shipment/update", method='POST', json=data)
+        response = invoke_http2("core_export_shipment", "export_shipment/update", prod, method='POST', json=data)
     return response
 
 # Update F2K with latest shipment information (CONTAINER)
@@ -136,7 +144,9 @@ def update_shipment_info_cont(container_number, arrival_date, port_of_discharge,
     # Select import or export
     if direction == "import":
         # Invoke import_ref microservice
-        response = invoke_http(import_cont_url + "import_cont/import_ref_n", method='POST', json=data)
+        # response = invoke_http(import_cont_url + "import_cont/import_ref_n", method='POST', json=data)
+        response = invoke_http2("core_import_cont" + "import_cont/import_ref_n", prod, method='POST', json=data)
+        
         import_ref_n = response["data"]["import_ref_n"]
 
         data = {
@@ -147,11 +157,13 @@ def update_shipment_info_cont(container_number, arrival_date, port_of_discharge,
         }
 
         # Invoke import_ref microservice
-        response = invoke_http(import_shipment_url + "import_shipment/update_cont", method='POST', json=data)
+        # response = invoke_http(import_shipment_url + "import_shipment/update_cont", method='POST', json=data)
+        response = invoke_http2("core_import_shipment", "import_shipment/update_cont", prod, method='POST', json=data)
 
     elif direction == "export":
         # Invoke export_cont microservice
-        response = invoke_http(export_cont_url + "export_cont/export_ref_n", method='POST', json=data)
+        # response = invoke_http(export_cont_url + "export_cont/export_ref_n", method='POST', json=data)
+        response = invoke_http2("core_export_cont", "export_cont/export_ref_n", prod, method='POST', json=data)
         export_ref_n = response["data"]["export_ref_n"]
 
         data = {
@@ -162,7 +174,8 @@ def update_shipment_info_cont(container_number, arrival_date, port_of_discharge,
         }
 
         # Invoke export_ref microservice
-        response = invoke_http(export_shipment_url + "export_shipment/update_cont", method='POST', json=data)
+        # response = invoke_http(export_shipment_url + "export_shipment/update_cont", method='POST', json=data)
+        response = invoke_http2("core_export_shipment", "export_shipment/update_cont", prod, method='POST', json=data)
         
     return response
 
@@ -173,7 +186,8 @@ def get_import_master_bl(house_bl):
             "house_bl": house_bl
         }
     
-    response = invoke_http(import_url + "import/import_ref_n", method='POST', json=data)
+    # response = invoke_http(import_url + "import/import_ref_n", method='POST', json=data)
+    response = invoke_http2("core_import","import/import_ref_n", prod, method='POST', json=data)
     import_ref_n = response["data"]["import_ref_n"]
 
     # Invoke import_shipment microservice
@@ -181,7 +195,8 @@ def get_import_master_bl(house_bl):
             "import_ref_n": import_ref_n
         }
     
-    response = invoke_http(import_shipment_url + "import_shipment/bl", method='POST', json=data)
+    # response = invoke_http(import_shipment_url + "import_shipment/bl", method='POST', json=data)
+    response = invoke_http2("core_import_shipment", "import_shipment/bl", prod, method='POST', json=data)
     master_bl = response["data"]["master_bl"]
     
     return master_bl
@@ -193,7 +208,9 @@ def get_export_master_bl(house_bl):
             "house_bl": house_bl
         }
     
-    response = invoke_http(export_url + "export/export_ref_n", method='POST', json=data)
+    # response = invoke_http(export_url + "export/export_ref_n", method='POST', json=data)
+    response = invoke_http2("core_export","export/export_ref_n", prod, method='POST', json=data)
+    export_ref_n = response["data"]["export_ref_n"]
     export_ref_n = response["data"]["export_ref_n"]
 
     # Invoke export_shipment microservice
@@ -201,7 +218,8 @@ def get_export_master_bl(house_bl):
             "export_ref_n": export_ref_n
         }
     
-    response = invoke_http(export_shipment_url + "export_shipment/bl", method='POST', json=data)
+    # response = invoke_http(export_shipment_url + "export_shipment/bl", method='POST', json=data)
+    response = invoke_http2("core_export_shipment", "export_shipment/bl", prod, method='POST', json=data)
     master_bl = response["data"]["master_bl"]
     
     return master_bl
@@ -212,13 +230,15 @@ def get_import_master_bl_ctr(container_number):
         "container_number": container_number
     }
     
-    import_cont_res = invoke_http(import_cont_url + "import_cont/import_ref_n", method='POST', json=data)
+    # import_cont_res = invoke_http(import_cont_url + "import_cont/import_ref_n", method='POST', json=data)
+    import_cont_res = invoke_http2("core_import_cont", "import_cont/import_ref_n", prod, method='POST', json=data)
     import_ref_n = import_cont_res["data"]["import_ref_n"]
     data = {
         "import_ref_n": import_ref_n
     }
     
-    import_ref_res = invoke_http(import_shipment_url + "import_shipment/bl", method='POST', json=data)
+    # import_ref_res = invoke_http(import_shipment_url + "import_shipment/bl", method='POST', json=data)
+    import_ref_res = invoke_http2("core_import_shipment", "import_shipment/bl", prod, method='POST', json=data)
     master_bl = import_ref_res["data"]["master_bl"]
     return master_bl
 
@@ -228,18 +248,20 @@ def get_export_master_bl_ctr(container_number):
         "container_number": container_number
     }
 
-    export_cont_res = invoke_http(export_cont_url + "export_cont/export_ref_n", method='POST', json=data)
+    # export_cont_res = invoke_http(export_cont_url + "export_cont/export_ref_n", method='POST', json=data)
+    export_cont_res = invoke_http2("core_export_cont"+ "export_cont/export_ref_n", prod, method='POST', json=data)
     export_ref_n = export_cont_res["data"]["export_ref_n"]
 
     data = {
         "export_ref_n": export_ref_n
     }
     
-    export_ref_res = invoke_http(export_shipment_url + "export_shipment/bl", method='POST', json=data)
+    # export_ref_res = invoke_http(export_shipment_url + "export_shipment/bl", method='POST', json=data)
+    export_ref_res = invoke_http2("core_export_shipment", "export_shipment/bl", prod, method='POST', json=data)
     master_bl = export_ref_res["data"]["master_bl"]
     return master_bl
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5009, debug=True)
-    # app.run(host='0.0.0.0', debug=True)
+    # app.run(host='0.0.0.0', port=5009, debug=True)
+    app.run(host='0.0.0.0', debug=True)
     
