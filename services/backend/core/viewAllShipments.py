@@ -116,105 +116,116 @@ if __name__ == "__main__":
 
 # [
 #     {
+#         "arrival_date": "Thu, 22 Sep 2022 00:00:00 GMT",
 #         "container_numbers": [
-#             "HLXU5027876",
-#             "HLXU2139717",
-#             "HLCU4187010",
-#             "HLCU2231582",
-#             "HLCU2258177",
-#             "HLXU3075047",
-#             "HLCU2100704"
+#             "APHU6142610",
+#             "APHU6318274",
+#             "APLU9023090",
+#             "FSCU9928083",
+#             "TCKU9278056"
 #         ],
-#         "delivery_date": "Tue, 01 Jun 2021 00:00:00 GMT",
-#         "destination_port": "KARACHI",
-#         "export_ref_n": 17612
+#         "import_destination": "Singapore",
+#         "import_ref_n": 21658,
+#         "type": "import"
 #     },
 #     {
+#         "arrival_date": "Tue, 15 Jun 2004 00:00:00 GMT",
 #         "container_numbers": [
-#             "GESU4205066",
-#             "HDMU6127648",
-#             "TGHU7584650"
+#             "APHU6193752",
+#             "APHU6240999",
+#             "APHU6597013",
+#             "APHU6638299",
+#             "APHU6827522",
+#             "GLDU7211691",
+#             "TRLU5314819",
+#             "TRLU5928484"
 #         ],
-#         "delivery_date": "Sat, 07 Nov 2020 00:00:00 GMT",
-#         "destination_port": "MUMBAI,INDIA",
-#         "export_ref_n": 17625
+#         "import_destination": "Singapore",
+#         "import_ref_n": 21699,
+#         "type": "import"
 #     },
 #     {
+#         "arrival_date": "Tue, 15 Jun 2004 00:00:00 GMT",
 #         "container_numbers": [
-#             "COPU5223250",
-#             "COPU4226315"
+#             "NOSU2485582"
 #         ],
-#         "delivery_date": "Tue, 05 Sep 2017 00:00:00 GMT",
-#         "destination_port": "CHITTAGONG",
-#         "export_ref_n": 17595
+#         "import_destination": "Singapore",
+#         "import_ref_n": 21693,
+#         "type": "import"
 #     },
 #     {
+#         "arrival_date": "Tue, 15 Jun 2004 00:00:00 GMT",
 #         "container_numbers": [
-#             "DNAU2559042",
-#             "DNAU2514140",
-#             "DNAU2517113",
-#             "DNAU2334827",
-#             "DNAU2404837",
-#             "DNAU2528566"
+#             "CRXU9978904",
+#             "FCIU8164504",
+#             "GESU5550914",
+#             "GLDU7458167",
+#             "TOLU1522207",
+#             "TRLU6634020",
+#             "TRLU6841964"
 #         ],
-#         "delivery_date": "Sat, 27 May 2017 00:00:00 GMT",
-#         "destination_port": "HAMBURG",
-#         "export_ref_n": 17648
+#         "import_destination": "Singapore",
+#         "import_ref_n": 21684,
+#         "type": "import"
 #     },
 #     {
+#         "arrival_date": "Tue, 15 Jun 2004 00:00:00 GMT",
 #         "container_numbers": [
-#             "COKU0020043",
-#             "XTRU2060428",
-#             "UXXU2229503"
+#             "APHU6212488",
+#             "APHU6240880",
+#             "APHU6314833",
+#             "APHU6548261",
+#             "APHU6686337",
+#             "APHU6687400",
+#             "FCIU8417900"
 #         ],
-#         "delivery_date": "Sat, 12 Jun 2010 00:00:00 GMT",
-#         "destination_port": "CHIASSO CY",
-#         "export_ref_n": 17581
+#         "import_destination": "Singapore",
+#         "import_ref_n": 21682,
+#         "type": "import"
 #     },
 #     {
+#         "arrival_date": "Tue, 15 Jun 2004 00:00:00 GMT",
 #         "container_numbers": [
-#             "EMCU 3424530",
-#             "IPXU 3371140",
-#             "FSCU 7532318",
-#             "FSCU 7840795"
+#             "BSIU2133191",
+#             "FCIU2261282",
+#             "IPXU3757195",
+#             "YMLU2880505",
+#             "YMLU3018687",
+#             "YMLU3085448"
 #         ],
-#         "delivery_date": "Thu, 19 Nov 2009 00:00:00 GMT",
-#         "destination_port": "BANGKOK PORT, *",
-#         "export_ref_n": 17633
+#         "import_destination": "Singapore",
+#         "import_ref_n": 21678,
+#         "type": "import"
 #     },
 #     {
+#         "arrival_date": "Tue, 15 Jun 2004 00:00:00 GMT",
 #         "container_numbers": [
-#             "REGU4985177",
-#             "REGU4995920",
-#             "REGU4991740",
-#             "REGU4205368",
-#             "TEXU7407574",
-#             "CRXU4483116",
-#             "TEXU7099492",
-#             "REGU4982408"
+#             "REGU4211519"
 #         ],
-#         "delivery_date": "Fri, 23 Sep 2005 00:00:00 GMT",
-#         "destination_port": "CHIASSO CY",
-#         "export_ref_n": 17587
+#         "import_destination": "Singapore",
+#         "import_ref_n": 21673,
+#         "type": "import"
 #     },
 #     {
+#         "arrival_date": "Tue, 15 Jun 2004 00:00:00 GMT",
 #         "container_numbers": [
-#             "YMLU 4947640",
-#             "YMLU 4494327",
-#             "YMLU 4933266"
+#             "TGHU0582887",
+#             "WFHU1213294",
+#             "YMLU2451516",
+#             "YMLU2556950",
+#             "YMLU3008652"
 #         ],
-#         "delivery_date": "Sat, 08 May 1999 00:00:00 GMT",
-#         "destination_port": "NHAVA SHEVA",
-#         "export_ref_n": 17549
+#         "import_destination": "Singapore",
+#         "import_ref_n": 21677,
+#         "type": "import"
 #     },
 #     {
+#         "arrival_date": "Thu, 10 Jun 2004 00:00:00 GMT",
 #         "container_numbers": [
-#             "CLHU3395117",
-#             "ZCSU8202585",
-#             "GLDU7038020"
+#             "KMTU7319847"
 #         ],
-#         "delivery_date": "Mon, 22 Sep 1997 00:00:00 GMT",
-#         "destination_port": "NHAVA SHEVA",
-#         "export_ref_n": 17609
+#         "import_destination": "Singapore",
+#         "import_ref_n": 21696,
+#         "type": "import"
 #     }
 # ]
