@@ -246,7 +246,7 @@ def verify_jwt_csrf_validity():
         return jsonify({
             "code": 200,
             "message": "Valid Request",
-            "userId": get_jwt_identity(),
+            "userId": get_jwt_identity(), #wguserid
             "username": claims["username"]
         })
 

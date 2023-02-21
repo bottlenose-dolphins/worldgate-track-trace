@@ -5,6 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 from invokes import invoke_http
 from flask_cors import CORS
 
+from flask_jwt_extended import JWTManager, get_jwt, get_jwt_identity, jwt_required
+from flask_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies
+
 from os import getenv
 from dotenv import load_dotenv
 
@@ -29,6 +32,7 @@ EXPORT_CONT_URL = "http://core_export_cont:5007"
 @app.route("/getExportContainerNum", methods=['POST'])
 def getExportContainerNum():
 
+    #invoke endpoint and obtain userId --> that is #wguserId
     data = request.get_json()
     wguser_id = data['wguser_id']
 
