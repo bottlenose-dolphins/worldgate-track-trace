@@ -22,71 +22,47 @@ import_url = "http://core_import:5003/"
 export_url = "http://core_export:5006/"
 import_cont_url = "http://core_import_cont:5004/"
 export_cont_url = "http://core_export_cont:5007/"
+vendor_mast_url = "http://core_vendor_mast:5012/"
 
 @app.route('/scrape', methods=['POST'])
 def scrape():
     if request.is_json:
         try:
             data = request.get_json()
-            shipping_line = data["shipping_line"]
             identifier = data["identifier"]
             identifier_type = data["identifier_type"]
             direction = data["direction"]
-            prefix = data["identifier"][:4].lower()
 
             print("\nReceived details in JSON:", data)
-            # {
-            #    "shipping_line": "Yang Ming",
-            #    "identifier": "YMLU3434431", <this will be House BL>
-            #    "identifier_type": "ctr",
-            #    "direction": "import"
-            # }  
-
-            # {
-            #     "shipping_line": "Yang Ming",
-            #     "identifier": "CTG-6463",
-            #     "identifier_type": "bl",
-            #     "direction": "export"
-            # }
-            # returns QCOU 502267
-
-            # {
-            #     "shipping_line": "Yang Ming",
-            #     "identifier": "PKGSIN164134",
-            #     "identifier_type": "bl",
-            #     "direction": "import"
-            # }
-            # returns CBKKSIN04450
 
             # Retrieve Master BL from House BL
             if identifier_type == "bl":
-                print("***going here?***")
                 if direction == "import":
                     master_bl = get_import_master_bl(identifier)
                 elif direction == "export":
                     master_bl = get_export_master_bl(identifier)            
-                # Retrieve shipping line's prefix
-                prefix = master_bl[:4].lower()
+
                 data = {
                             "identifier": master_bl,
                             "identifier_type": "bl"
                         }
             
-            prefix = "YMLU"
+            if identifier_type == "ctr":
+                if direction == "import":
+                    master_bl = get_import_master_bl_ctr(identifier)
+                elif direction == "export":
+                    master_bl = get_export_master_bl_ctr(identifier)   
+            
+            # Retrieve shipping line's prefix
+            prefix = get_prefix(master_bl)
 
             # Invoke scraper microservice
-            print("***invoking shipment_info***")
             shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
-            print(shipment_info)
             
             if shipment_info:
                 arrival_date = shipment_info["data"]["arrival_date"]
                 port_of_discharge = shipment_info["data"]["port_of_discharge"]
                 vessel_name = shipment_info["data"]["vessel_name"]
-
-                print(arrival_date)
-                print(port_of_discharge)
-                print(vessel_name)
 
                 # Update DB with latest shipment information
                 if identifier_type == "bl":
@@ -112,15 +88,28 @@ def scrape():
     ), 400
 
 # Retrieve prefix for respective shipping line
-def check_prefix(shipping_line):
+def get_prefix(master_bl):
     data = {
-            "shipping_line": shipping_line
+            "master_bl": master_bl
         }
-    
-    response = invoke_http(prefix_url + "prefix/retrieve", method='POST', json=data)
-    if response["data"]["code"] == 200:
-        prefix = response["data"]["prefix"]
-        return prefix
+
+    # Invoke import_shipment microservice to retrieve cr_agent_id
+    import_ref_res = invoke_http(import_shipment_url + "import_shipment/agent_id", method='POST', json=data)
+    if import_ref_res["code"] == 200:
+        data = {
+            "vendor_id": import_ref_res["data"]["cr_agent_id"]
+        } 
+
+        vendor_mast_res = invoke_http(vendor_mast_url + "vendor_mast/vendor_name", method='POST', json=data)        
+        if vendor_mast_res["code"] == 200:
+            data = {
+                "vendor_name": vendor_mast_res["data"]["vendor_name"]
+            }
+            
+            prefix_res = invoke_http(prefix_url + "prefix/retrieve", method='POST', json=data)
+            if prefix_res["code"] == 200:
+                prefix = prefix_res["data"]["prefix"]
+                return prefix
 
 # Update F2K with latest shipment information (BL)
 def update_shipment_info_bl(master_bl, arrival_date, port_of_discharge, vessel_name, direction):
@@ -217,6 +206,39 @@ def get_export_master_bl(house_bl):
     
     return master_bl
     
+# Retrieve Master B/L by Container Number (IMPORT)
+def get_import_master_bl_ctr(container_number):
+    data = {
+        "container_number": container_number
+    }
+    
+    import_cont_res = invoke_http(import_cont_url + "import_cont/import_ref_n", method='POST', json=data)
+    import_ref_n = import_cont_res["data"]["import_ref_n"]
+    data = {
+        "import_ref_n": import_ref_n
+    }
+    
+    import_ref_res = invoke_http(import_shipment_url + "import_shipment/bl", method='POST', json=data)
+    master_bl = import_ref_res["data"]["master_bl"]
+    return master_bl
+
+# Retrieve Master B/L by Container Number (EXPORT)
+def get_export_master_bl_ctr(container_number):
+    data = {
+        "container_number": container_number
+    }
+
+    export_cont_res = invoke_http(export_cont_url + "export_cont/export_ref_n", method='POST', json=data)
+    export_ref_n = export_cont_res["data"]["export_ref_n"]
+
+    data = {
+        "export_ref_n": export_ref_n
+    }
+    
+    export_ref_res = invoke_http(export_shipment_url + "export_shipment/bl", method='POST', json=data)
+    master_bl = export_ref_res["data"]["master_bl"]
+    return master_bl
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5009, debug=True)
     # app.run(host='0.0.0.0', debug=True)

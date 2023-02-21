@@ -22,17 +22,20 @@ class ImportShipment(db.Model):
     import_ref_n = db.Column(db.Integer, primary_key=True, nullable=False)
     eta = db.Column(db.Date, nullable=False)
     ocean_bl = db.Column(db.String, nullable=False)
+    cr_agent_id = db.Column(db.String, nullable=False)
 
-    def __init__(self, import_ref_n, eta, ocean_bl):
+    def __init__(self, import_ref_n, eta, ocean_bl, cr_agent_id):
         self.import_ref_n = import_ref_n
         self.eta = eta
         self.ocean_bl = ocean_bl
+        self.cr_agent_id = cr_agent_id
 
     def json(self):
         return {
             "import_ref_n": self.import_ref_n,
             "eta": self.eta,
-            "ocean_bl": self.ocean_bl
+            "ocean_bl": self.ocean_bl,
+            "cr_agent_id": self.cr_agent_id
         }
 
 # Retrieve shipment information by Master B/L
@@ -146,6 +149,33 @@ def update_shipment_cont():
             "message": "Failed to update shipment information (CONTAINER)"
         }
     ), 500
+
+# Retrieve cr_agent_id by ocean_bl
+@app.route("/import_shipment/agent_id", methods=['POST'])
+def get_agent_id():
+    data = request.get_json()
+    master_bl = data["master_bl"]
+    
+    try:
+        cr_agent_id = ImportShipment.query.filter_by(ocean_bl=master_bl).first().cr_agent_id
+
+        if cr_agent_id:
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {
+                        "cr_agent_id": cr_agent_id
+                        }
+                }
+            ), 200
+    
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "Failed to retrieve CR_AGENT_ID"
+            }
+        ), 500
 
 if __name__ == "__main__":
     # app.run(host='0.0.0.0', port=5005, debug=True)
