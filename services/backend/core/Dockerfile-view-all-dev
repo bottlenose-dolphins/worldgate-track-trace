@@ -31,7 +31,12 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
 WORKDIR /app
 COPY requirements.txt .
 COPY viewAllShipments.py .
+RUN mv viewAllShipments.py app.py
+
+#for invoking microservice calls within app
 COPY invokes.py .
+COPY obtainIp.py .
+ENV prod=false
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
@@ -43,4 +48,4 @@ ENV SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
 EXPOSE 5010
 
 # start the server
-CMD [ "python", "-u", "viewAllShipments.py" ]
+CMD [ "python", "-m", "flask", "run", "--host=0.0.0.0",  "--port=5010"]

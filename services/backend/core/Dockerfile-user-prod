@@ -36,6 +36,7 @@ RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
 ENV SQLALCHEMY_DATABASE_URI=<DB_URI>
 ENV PYTHONUNBUFFERED=1
+ENV prod=false
 
 EXPOSE 80
 

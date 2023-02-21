@@ -31,6 +31,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
 WORKDIR /app
 COPY requirements.txt .
 COPY export_shipment.py .
+RUN mv export_shipment.py app.py
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
@@ -42,4 +43,4 @@ ENV SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
 EXPOSE 80
 
 # start the server
-CMD [ "python", "export_shipment.py" ]
+CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=80"]

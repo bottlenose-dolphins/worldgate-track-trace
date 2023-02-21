@@ -1,7 +1,7 @@
 from flask_cors import CORS
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
-from invokes import invoke_http
+from invokes import invoke_http, invoke_http2
 from os import getenv
 from dotenv import load_dotenv
 

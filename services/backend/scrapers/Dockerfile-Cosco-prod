@@ -24,7 +24,7 @@ WORKDIR /app
 # copying the neccessary script
 COPY requirements.txt .
 COPY coscoScraper.py .
-RUN mv coscoScraper app.py
+RUN mv coscoScraper.py app.py
 
 # upgrade pip and install requirements
 RUN pip install --upgrade pip
