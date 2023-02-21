@@ -7,16 +7,6 @@ SUPPORTED_HTTP_METHODS = set([
     "GET", "OPTIONS", "HEAD", "POST", "PUT", "PATCH", "DELETE"
 ])
 
-# scraper_ymlu = "http://scraper_ymlu:8080/"
-
-# core_prefix = "http://core_prefix:5011/"
-# core_import_shipment = "http://core_import_shipment:5005/"
-# core_export_shipment = "http://core_export_shipment:5008/"
-# core_import = "http://core_import:5003/"
-# core_export = "http://core_export:5006/"
-# core_import_cont = "http://core_import_cont:5004/"
-# core_export_cont = "http://core_export_cont:5007/"
-
 DEV_IP = {
 "scraper_ymlu" : "scraper_ymlu:8080",
 "scraper_good": "scraper_good:8081",
@@ -46,17 +36,18 @@ def invoke_http2(service, route, prod=False, method='GET', json=None, **kwargs):
        return: the JSON reply content from the http service if the call succeeds;
             otherwise, return a JSON object with a "code" name-value pair.
     """
-    print("****just invoked invoke_http in invokes.py")
+    print("****just invoked invoke_http method in invokes.py")
     code = 200
     result = {}
 
     try:
+        print("**** starting url resolution in invokes.py")
         if method.upper() in SUPPORTED_HTTP_METHODS:
             match prod:
                 case True:
                     url = "http://" + obtainIP(service) + "/"
                 case False:
-                    url = DEV_IP[service]
+                    url = "http://" + DEV_IP[service] + "/"
                 case _:
                     url = None
                     raise Exception("Prod type was not specified")
