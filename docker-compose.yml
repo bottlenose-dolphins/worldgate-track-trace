@@ -5,6 +5,12 @@ networks:
         driver: bridge
 
 services:
+
+#   ___  __  ____  ____    ____  ____  ____  _  _  __  ___  ____  ____ 
+#  / __)/  \(  _ \(  __)  / ___)(  __)(  _ \/ )( \(  )/ __)(  __)/ ___)
+# ( (__(  O ))   / ) _)   \___ \ ) _)  )   /\ \/ / )(( (__  ) _) \___ \
+#  \___)\__/(__\_)(____)  (____/(____)(__\_) \__/ (__)\___)(____)(____/
+  
   core_users:
     container_name: core_users
     build:
@@ -130,6 +136,11 @@ services:
     ports:
       - 5011:5011
 
+#  ____  ____   __   __ _  ____  ____  __ _  ____ 
+# (  __)(  _ \ /  \ (  ( \(_  _)(  __)(  ( \(    \
+#  ) _)  )   /(  O )/    /  )(   ) _) /    / ) D (
+# (__)  (__\_) \__/ \_)__) (__) (____)\_)__)(____   
+
   web:
     container_name: web
     build:
@@ -149,6 +160,12 @@ services:
     #   - web-app-node-modules-mount:/app/app/node_modules
     depends_on:
       - core_users
+
+
+#     ____   ___  ____   __   ____  ____  ____    ____  ____  ____  _  _  __  ___  ____  ____ 
+# / ___) / __)(  _ \ / _\ (  _ \(  __)(  _ \  / ___)(  __)(  _ \/ )( \(  )/ __)(  __)/ ___)
+# \___ \( (__  )   //    \ ) __/ ) _)  )   /  \___ \ ) _)  )   /\ \/ / )(( (__  ) _) \___ \
+# (____/ \___)(__\_)\_/\_/(__)  (____)(__\_)  (____/(____)(__\_) \__/ (__)\___)(____)(____/   
 
   scraper_ymlu:
     container_name: scraper_ymlu
@@ -173,8 +190,6 @@ services:
       - PYTHONUNBUFFERED=1
     ports:
       - 8081:8081
-  
-
 
   scraper_kmtc:
     container_name: scraper_kmtc
@@ -204,5 +219,33 @@ services:
     ports:
       - 8083:8083
 
+
+  scraper_cord:
+    container_name: scraper_one
+    build:
+      context: ./services/backend/scrapers
+      shm_size: '1gb'
+      dockerfile: Dockerfile-Cordelia-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - PYTHONUNBUFFERED=1
+    shm_size: '1gb'
+    ports:
+      - 8084:8084
+
+  scraper_cosc:
+    container_name: scraper_one
+    build:
+      context: ./services/backend/scrapers
+      shm_size: '1gb'
+      dockerfile: Dockerfile-Cosco-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - PYTHONUNBUFFERED=1
+    shm_size: '1gb'
+    ports:
+      - 8085:8085
 
 

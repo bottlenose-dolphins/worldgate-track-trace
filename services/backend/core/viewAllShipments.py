@@ -16,6 +16,9 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# to include in dockerfile
+prod = getenv('prod')
+
 db = SQLAlchemy(app)
 
 # Service Classes
