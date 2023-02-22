@@ -91,7 +91,7 @@ def health_check():
 
 @app.route("/testRoute", methods=['GET'])
 def testRoute():
-    return obtainIP("scraper_ymlu_service")
+    return obtainIP("scraper_ymlu")
     
 
 @app.route("/user/signup", methods=['POST'])

@@ -6,7 +6,7 @@ resource "aws_service_discovery_private_dns_namespace" "tracktrace" {
 }
 
 resource "aws_service_discovery_service" "frontend" {
-  name = "frontend_service_service"
+  name = "frontend"
   dns_config {
     namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
 
@@ -24,7 +24,7 @@ resource "aws_service_discovery_service" "frontend" {
 }
 
 resource "aws_service_discovery_service" "core_user" {
-  name = "core_user_service"
+  name = "core_user"
   dns_config {
     namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
 
@@ -42,7 +42,7 @@ resource "aws_service_discovery_service" "core_user" {
 }
 
 resource "aws_service_discovery_service" "scraper_ymlu" {
-  name = "scraper_ymlu_service"
+  name = "scraper_ymlu"
   dns_config {
     namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
 
@@ -60,7 +60,7 @@ resource "aws_service_discovery_service" "scraper_ymlu" {
 }
 
 resource "aws_service_discovery_service" "scraper_kmtc" {
-  name = "scraper_kmtc_service"
+  name = "scraper_kmtc"
   dns_config {
     namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
 
@@ -78,7 +78,7 @@ resource "aws_service_discovery_service" "scraper_kmtc" {
 }
 
 resource "aws_service_discovery_service" "scraper_good" {
-  name = "scraper_good_service"
+  name = "scraper_good"
   dns_config {
     namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
 
@@ -96,7 +96,7 @@ resource "aws_service_discovery_service" "scraper_good" {
 }
 
 resource "aws_service_discovery_service" "scraper_one" {
-  name = "scraper_one_service"
+  name = "scraper_one"
   dns_config {
     namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
 

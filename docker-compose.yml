@@ -19,7 +19,7 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      # - SQLALCHEMY_DATABASE_URI=<DB_URI>
       - PYTHONUNBUFFERED=1
     ports:
       - 5002:5002
@@ -32,7 +32,7 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      # - SQLALCHEMY_DATABASE_URI=<DB_URI>
       - PYTHONUNBUFFERED=1
     ports:
       - 5003:5003
@@ -45,7 +45,7 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      # - SQLALCHEMY_DATABASE_URI=<DB_URI>
       - PYTHONUNBUFFERED=1
     ports:
       - 5004:5004
@@ -58,7 +58,8 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      # - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      - PYTHONUNBUFFERED=1
     ports:
       - 5005:5005
 
@@ -70,7 +71,8 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      # - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      - PYTHONUNBUFFERED=1
     ports:
       - 5006:5006
 
@@ -82,7 +84,8 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      # - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      - PYTHONUNBUFFERED=1
     ports:
       - 5007:5007
   
@@ -94,7 +97,8 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      # - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      - PYTHONUNBUFFERED=1
     ports:
       - 5008:5008
   
@@ -106,7 +110,7 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      # - SQLALCHEMY_DATABASE_URI=<DB_URI>
       - PYTHONUNBUFFERED=1
     ports:
       - 5009:5009
@@ -119,7 +123,7 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      # - SQLALCHEMY_DATABASE_URI=<DB_URI>
       - PYTHONUNBUFFERED=1
     ports:
       - 5010:5010
@@ -132,7 +136,8 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      - PYTHONUNBUFFERED=1
+    #   - SQLALCHEMY_DATABASE_URI=<DB_URI>
     ports:
       - 5011:5011
 
@@ -144,7 +149,8 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      - PYTHONUNBUFFERED=1
+    #   - SQLALCHEMY_DATABASE_URI=<DB_URI>
     ports:
       - 5012:5012
 

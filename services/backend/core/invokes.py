@@ -37,7 +37,7 @@ def invoke_http2(service, route, prod, method='GET', json=None, **kwargs):
        return: the JSON reply content from the http service if the call succeeds;
             otherwise, return a JSON object with a "code" name-value pair.
     """
-    print("****just invoked invoke_http method in invokes.py")
+    print("****just invoked invoke_http2 method in invokes.py")
     code = 200
     result = {}
 
