@@ -30,8 +30,10 @@ DEV_IP = {
 
 
 def invoke_http2(service, route, prod, method='GET', json=None, **kwargs):
-    """A simple wrapper for requests methods.
-       url: the url of the http service;
+    """wrapper for requests methods --> handles both docker and aws inter container calls
+       service: service list, can be referenced above,
+       route: e.g. "import/import_test"
+       prod: "1" for aws, "0" for docker
        method: the http method;
        data: the JSON input when needed by the http method;
        return: the JSON reply content from the http service if the call succeeds;
@@ -41,16 +43,26 @@ def invoke_http2(service, route, prod, method='GET', json=None, **kwargs):
     code = 200
     result = {}
 
+    print(service)
+    print(route)
+    print(prod)
+
     try:
         print("**** starting url resolution in invokes.py")
         if method.upper() in SUPPORTED_HTTP_METHODS:
+            print("**** method supported")
             match prod:
-                case True:
+                case "1": #aws service discovery
+                    print("**** prodIP: ")
                     url = "http://" + obtainIP(service) + "/"
-                case False:
+                    print("**** prodIP2: " + url)
+                case "0": #docker environment 
+                    print("**** devIP:")
                     url = "http://" + DEV_IP[service] + "/"
+                    print("**** devIP2:" + url)
                 case _:
                     url = None
+                    print("error")
                     raise Exception("Prod type was not specified")
                 
             print("**** about to make request from invokes.py ****")

@@ -159,25 +159,25 @@ services:
 #  ) _)  )   /(  O )/    /  )(   ) _) /    / ) D (
 # (__)  (__\_) \__/ \_)__) (__) (____)\_)__)(____   
 
-  web:
-    container_name: web
-    build:
-      context: ./services/frontend
-      dockerfile: Dockerfile
-      args:
-        - NODE_ENV=development
-    networks:
-      - tracktrace_test_network
-    ports:
-      - 3000:3000
-    stdin_open: true
-    tty: true
-    # volumes:
-    # # https://stackoverflow.com/questions/30043872/docker-compose-node-modules-not-present-in-a-volume-after-npm-install-succeeds
-    #   - web-app-mount:/app/app
-    #   - web-app-node-modules-mount:/app/app/node_modules
-    depends_on:
-      - core_users
+  # web:
+  #   container_name: web
+  #   build:
+  #     context: ./services/frontend
+  #     dockerfile: Dockerfile
+  #     args:
+  #       - NODE_ENV=development
+  #   networks:
+  #     - tracktrace_test_network
+  #   ports:
+  #     - 3000:3000
+  #   stdin_open: true
+  #   tty: true
+  #   # volumes:
+  #   # # https://stackoverflow.com/questions/30043872/docker-compose-node-modules-not-present-in-a-volume-after-npm-install-succeeds
+  #   #   - web-app-mount:/app/app
+  #   #   - web-app-node-modules-mount:/app/app/node_modules
+  #   depends_on:
+  #     - core_users
 
 
 #     ____   ___  ____   __   ____  ____  ____    ____  ____  ____  _  _  __  ___  ____  ____ 
@@ -197,73 +197,73 @@ services:
     ports:
       - 8080:8080
 
-  scraper_good:
-    container_name: scraper_good
-    build:
-      context: ./services/backend/scrapers
-      dockerfile: Dockerfile-Goodrich-dev
-    networks:
-      - tracktrace_test_network
-    environment:
-      - PYTHONUNBUFFERED=1
-    ports:
-      - 8081:8081
+  # scraper_good:
+  #   container_name: scraper_good
+  #   build:
+  #     context: ./services/backend/scrapers
+  #     dockerfile: Dockerfile-Goodrich-dev
+  #   networks:
+  #     - tracktrace_test_network
+  #   environment:
+  #     - PYTHONUNBUFFERED=1
+  #   ports:
+  #     - 8081:8081
 
-  scraper_kmtc:
-    container_name: scraper_kmtc
-    build:
-      context: ./services/backend/scrapers
-      shm_size: '1gb'
-      dockerfile: Dockerfile-Kmtc-dev
-    shm_size: '1gb'
-    networks:
-      - tracktrace_test_network
-    environment:
-      - PYTHONUNBUFFERED=1
-    ports:
-      - 8082:8082
+  # scraper_kmtc:
+  #   container_name: scraper_kmtc
+  #   build:
+  #     context: ./services/backend/scrapers
+  #     shm_size: '1gb'
+  #     dockerfile: Dockerfile-Kmtc-dev
+  #   shm_size: '1gb'
+  #   networks:
+  #     - tracktrace_test_network
+  #   environment:
+  #     - PYTHONUNBUFFERED=1
+  #   ports:
+  #     - 8082:8082
   
-  scraper_one:
-    container_name: scraper_one
-    build:
-      context: ./services/backend/scrapers
-      shm_size: '1gb'
-      dockerfile: Dockerfile-One-dev
-    networks:
-      - tracktrace_test_network
-    environment:
-      - PYTHONUNBUFFERED=1
-    shm_size: '1gb'
-    ports:
-      - 8083:8083
+  # scraper_one:
+  #   container_name: scraper_one
+  #   build:
+  #     context: ./services/backend/scrapers
+  #     shm_size: '1gb'
+  #     dockerfile: Dockerfile-One-dev
+  #   networks:
+  #     - tracktrace_test_network
+  #   environment:
+  #     - PYTHONUNBUFFERED=1
+  #   shm_size: '1gb'
+  #   ports:
+  #     - 8083:8083
 
 
-  scraper_cord:
-    container_name: scraper_one
-    build:
-      context: ./services/backend/scrapers
-      shm_size: '1gb'
-      dockerfile: Dockerfile-Cordelia-dev
-    networks:
-      - tracktrace_test_network
-    environment:
-      - PYTHONUNBUFFERED=1
-    shm_size: '1gb'
-    ports:
-      - 8084:8084
+  # scraper_cord:
+  #   container_name: scraper_one
+  #   build:
+  #     context: ./services/backend/scrapers
+  #     shm_size: '1gb'
+  #     dockerfile: Dockerfile-Cordelia-dev
+  #   networks:
+  #     - tracktrace_test_network
+  #   environment:
+  #     - PYTHONUNBUFFERED=1
+  #   shm_size: '1gb'
+  #   ports:
+  #     - 8084:8084
 
-  scraper_cosc:
-    container_name: scraper_one
-    build:
-      context: ./services/backend/scrapers
-      shm_size: '1gb'
-      dockerfile: Dockerfile-Cosco-dev
-    networks:
-      - tracktrace_test_network
-    environment:
-      - PYTHONUNBUFFERED=1
-    shm_size: '1gb'
-    ports:
-      - 8085:8085
+  # scraper_cosc:
+  #   container_name: scraper_one
+  #   build:
+  #     context: ./services/backend/scrapers
+  #     shm_size: '1gb'
+  #     dockerfile: Dockerfile-Cosco-dev
+  #   networks:
+  #     - tracktrace_test_network
+  #   environment:
+  #     - PYTHONUNBUFFERED=1
+  #   shm_size: '1gb'
+  #   ports:
+  #     - 8085:8085
 
 

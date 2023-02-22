@@ -30,13 +30,14 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
 
 WORKDIR /app
 COPY requirements.txt .
+ARG CACHEBUST=1
 COPY complex_scraper.py .
 RUN mv complex_scraper.py app.py
 
 #for invoking microservice calls within app
 COPY invokes.py .
 COPY obtainIp.py .
-ENV prod=false
+ENV prod=0
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
