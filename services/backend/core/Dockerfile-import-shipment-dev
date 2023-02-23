@@ -29,6 +29,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
             && ldconfig
 
 WORKDIR /app
+ARG CACHEBUST=2
 COPY requirements.txt .
 COPY import_shipment.py .
 RUN mv import_shipment.py app.py

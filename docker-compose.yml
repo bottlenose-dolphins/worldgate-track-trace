@@ -190,10 +190,12 @@ services:
     build:
       context: ./services/backend/scrapers
       dockerfile: Dockerfile-Ymlu-dev
+      shm_size: '300mb'
     networks:
       - tracktrace_test_network
     environment:
       - PYTHONUNBUFFERED=1
+    shm_size: '300mb'
     ports:
       - 8080:8080
 

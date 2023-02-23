@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 import requests
 import json
 from flask_sqlalchemy import SQLAlchemy
-from invokes import invoke_http
+from invokes import invoke_http, invoke_http2
 from flask_cors import CORS
 
 from os import getenv
@@ -28,6 +28,10 @@ IMPORT_CONT_URL = "http://core_import_cont:5004"
 EXPORT_URL = "http://core_export:5006"
 EXPORT_CONT_URL = "http://core_export_cont:5007"
 
+prod = getenv("prod")
+print("prod type: ", type(prod))
+
+print("********")
 
 @app.route("/getExportContainerNum", methods=['POST'])
 def getExportContainerNum():
@@ -39,7 +43,8 @@ def getExportContainerNum():
                 "wguser_id" : wguser_id
             }
 
-    export_ref_num_response = invoke_http(EXPORT_URL + "/export/export_ref_n/wguser_id", method="POST", json=data)
+    # export_ref_num_response = invoke_http(EXPORT_URL + "/export/export_ref_n/wguser_id", method="POST", json=data)
+    export_ref_num_response = invoke_http2("core_export", "export/export_ref_n/wguser_id", prod, method="POST", json=data)
     export_ref_num_dumped = json.dumps(export_ref_num_response)
     export_ref_num_loads = json.loads(export_ref_num_dumped)
     retrieved_output_from_export = export_ref_num_loads['data']['output']
@@ -51,7 +56,8 @@ def getExportContainerNum():
                     "export_ref_n" : single_export_ref_num
                 }
 
-        container_num_response = invoke_http(EXPORT_CONT_URL + "/export_cont/container_num", method="POST", json=data)
+        # container_num_response = invoke_http(EXPORT_CONT_URL + "/export_cont/container_num", method="POST", json=data)
+        container_num_response = invoke_http2("core_export_cont", "export_cont/container_num", prod, method="POST", json=data)
         container_num_response_dumped = json.dumps(container_num_response)
         container_num_response_loads = json.loads(container_num_response_dumped)
         retrieved_list_containerNum_output = container_num_response_loads['data']['container_nums']
@@ -75,7 +81,8 @@ def getImportContainerNum():
                 "wguser_id" : wguser_id
             }
 
-    import_ref_num_response = invoke_http(IMPORT_URL + "/import/import_ref_n/wguser_id", method="POST", json=data)
+    # import_ref_num_response = invoke_http(IMPORT_URL + "/import/import_ref_n/wguser_id", method="POST", json=data)
+    import_ref_num_response = invoke_http2("core_import", "import/import_ref_n/wguser_id", prod, method="POST", json=data)
     import_ref_num_dumped = json.dumps(import_ref_num_response)
     import_ref_num_response_loads = json.loads(import_ref_num_dumped)
     retrieved_output_from_import = import_ref_num_response_loads['data']['output']
@@ -87,7 +94,8 @@ def getImportContainerNum():
                     "import_ref_n" : single_import_ref_num
                 }
 
-        container_num_response = invoke_http(IMPORT_CONT_URL + "/import_cont/container_num", method="POST", json=data)
+        # container_num_response = invoke_http(IMPORT_CONT_URL + "/import_cont/container_num", method="POST", json=data)
+        container_num_response = invoke_http2("core_import_cont", "import_cont/container_num", prod, method="POST", json=data)
         container_num_response_dumped = json.dumps(container_num_response)
         container_num_response_loads = json.loads(container_num_response_dumped)
         retrieved_list_containerNum_output = container_num_response_loads['data']['container_nums']

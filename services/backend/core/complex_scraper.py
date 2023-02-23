@@ -64,7 +64,7 @@ def scrape():
 
             # Invoke scraper microservice
             # shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
-            shipment_info = invoke_http2("scraper_ymlu", prefix, prod, method="POST", json=data)
+            shipment_info = invoke_http2("scraper_"+ prefix, prefix, prod, method="POST", json=data)
             
             if shipment_info:
                 arrival_date = shipment_info["data"]["arrival_date"]
