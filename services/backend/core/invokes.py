@@ -65,7 +65,8 @@ def invoke_http2(service, route, prod, method='GET', json=None, **kwargs):
                     print("error")
                     raise Exception("Prod type was not specified")
                 
-            print("**** about to make request from invokes.py ****")
+            print("**** about to make request from invokes.py with json**** ", json)
+            
             r = requests.request(method, url+route, json = json, **kwargs)
             # r = requests.post(url, json=json, **kwargs)
             print("**** requests runs ****")

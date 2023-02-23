@@ -43,6 +43,7 @@ def prefix_exists(shipping_line):
 def get_prefix():
     data = request.get_json()
     shipping_line = data["vendor_name"]
+    print("query shipping line: ", shipping_line)
     if prefix_exists(shipping_line):
         prefix = Prefix.query.filter_by(shipping_fullform=shipping_line).first().shipping_acronym
 
