@@ -25,7 +25,8 @@ export default function SignIn() {
         const res = await signIn(username, password);
         if (res.code === 200) {
             setError("");
-            // TODO: Redirect to home page/dashboard
+            localStorage.setItem("username", res.username);
+            navigate("/view-shipments");
         } else if (res.code !== 500) {
             setError("Incorrect username/email address or password");
         } else {
@@ -63,7 +64,7 @@ export default function SignIn() {
                         Sign In
                     </button>
                 </form>
-                <div className='pt-5 text-red-500'>{ error }</div>
+                <div className='pt-5 text-red-500'>{error}</div>
             </div>
         </div>
     )

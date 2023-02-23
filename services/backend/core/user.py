@@ -181,6 +181,7 @@ def sign_in():
         response = jsonify({
             "code": 200,
             "message": "login success",
+            "username": found_user.username
         })
         set_access_cookies(response, access_token)
         return response

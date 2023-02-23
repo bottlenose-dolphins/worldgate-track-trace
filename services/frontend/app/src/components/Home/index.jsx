@@ -1,8 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import React from "react";
 import Container from "../../img/containers.png";
-import Navigation from "../Navigation/Navigation";
-import Navbar from "../../layout/Navbar";
 
 export default function Home() {
   const navigate = useNavigate();
