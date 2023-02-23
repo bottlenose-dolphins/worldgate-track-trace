@@ -55,7 +55,7 @@ def get_import_ref_n():
         }
     ), 500
 
-# Retrieve CONT_N from IMPORT_REF_CONT using IMPORT_REF_N (NOT ABLE TO GET ALL VALUES ONLY THE FIRST VALUE RETRIEVED)
+# Retrieve CONT_N from IMPORT_REF_CONT using IMPORT_REF_N  --> Returns a List which will be appended to the response from import.py function
 @app.route("/import_cont/container_num", methods=['POST'])
 def get_cont_num():
     data = request.get_json()
@@ -64,12 +64,15 @@ def get_cont_num():
         container_nums = ImportCont.query.filter_by(import_ref_n = import_ref_n).all()
         
         if len(container_nums):
-            container_numbers = [{"container_num": cont.cont_n} for cont in container_nums]
+            outputList = []
+            for container_num in container_nums:
+                outputList.append(container_num.cont_n)
+            
             return jsonify(
                 {
                     "code": 200,
                     "data": {
-                        "container_nums": container_numbers
+                        "container_nums": outputList
                     }
                 }
             ), 200
@@ -86,3 +89,29 @@ def get_cont_num():
 if __name__ == "__main__":
     # app.run(host='0.0.0.0', port=5004, debug=True)
     app.run(host='0.0.0.0', debug=True)
+
+# Sample API Endpoint
+
+# http://127.0.0.1:5004/import_cont/container_num
+
+# Sample JSON Request
+
+# {
+#     "import_ref_n" : 21658
+# }
+
+# Sample JSON Response
+
+# {
+#     "code": 200,
+#     "data": {
+#         "container_nums": [
+#             "APHU6142610",
+#             "APHU6318274",
+#             "APLU9023090",
+#             "FSCU9928083",
+#             "TCKU9278056"
+#         ]
+#     }
+# }
+
