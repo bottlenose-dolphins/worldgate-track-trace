@@ -8,9 +8,8 @@ import TrackAndTrace from "../img/TrackAndTrace.png";
 
 export default function Navbar() {
     const [pageNavigation, setPageNavigation] = useState([
-        { name: "Home", href: "/home" },
-        { name: "Back to Worldgate", href: "/worldgate" },
-        { name: "Learn More", href: "/learn-more" },
+        { name: "Home", href: "/" },
+        { name: "Back to Worldgate", href: "https://www.worldgate.com.sg" },
     ]);
 
     const renderDisclosureNavbarItems = pageNavigation.map((item) => (
@@ -18,6 +17,7 @@ export default function Navbar() {
             key={item.name}
             as='a'
             href={item.href}
+            target={item.href.charAt(0) === "/" ? "_self" : "_blank"}
             className="text-gray-500 font-semibold hover:text-gray-700 block px-3 py-2 rounded-md text-base font-medium"
         >
             {item.name}
@@ -25,7 +25,7 @@ export default function Navbar() {
     ));
 
     return (
-        <Disclosure as='nav' className='bg-white '>
+        <Disclosure as='nav' className='bg-white'>
             {({ open }) => (
                 <>
                     <div className='flex h-16 justify-between mx-auto max-w-full px-6 sm:px-6 lg:px-8'>
@@ -75,14 +75,24 @@ function DesktopNavbarItems({ pageNavigation }) {
     const [currentPage, setCurrentPage] = useState("");
 
     const renderNavbarItems = pageNavigation.map((routingItem) => (
-        <Link
-            to={routingItem.href}
-            key={routingItem.name}
-            className="text-gray-500 font-semibold hover:text-gray-700 drop-shadow-2xl shadow-gray-800 px-3 py-2 text-sm font-medium"
-            onClick={() => setCurrentPage(routingItem.href)}
-        >
-            {routingItem.name}
-        </Link>
+        routingItem.href.charAt(0) === "/" ?
+            <Link
+                to={routingItem.href}
+                key={routingItem.name}
+                className="text-gray-500 font-semibold hover:text-gray-700 drop-shadow-2xl shadow-gray-800 px-3 py-2 text-sm font-medium"
+                onClick={() => setCurrentPage(routingItem.href)}
+            >
+                {routingItem.name}
+            </Link> :
+            <a
+                href={routingItem.href}
+                target="_blank"
+                rel="noreferrer"
+                className="text-gray-500 font-semibold hover:text-gray-700 drop-shadow-2xl shadow-gray-800 px-3 py-2 text-sm font-medium"
+
+            >
+                {routingItem.name}
+            </a>
     ));
 
     return (
