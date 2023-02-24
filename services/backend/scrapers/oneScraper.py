@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import time
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -10,7 +10,7 @@ app = Flask(__name__)
 def ping():
     return("hello")
 
-@app.route('/ONE/<string:tracking_type>/<string:identifier>')
+@app.route('/ONE', methods=['POST'])
 
 def oneScraper(tracking_type,identifier):
 
@@ -33,6 +33,12 @@ def oneScraper(tracking_type,identifier):
         driver = webdriver.Chrome(options=options)
 
         driver.maximize_window()
+
+        data = request.get_json()
+
+        tracking_type = data["tracking_type"]
+
+        identifier = data["identifier"]
 
         # remove ONEY prefix from BL Number
 
