@@ -4,8 +4,6 @@
 
 Track&Trace is a multi-environment project, as such, some inconveniences may be experienced at the level you are working at to cater to users of other environments. 
 
-Here are some of these things you may face:
-
 ##### Undockerised Development:
 
 Those working on the backend may have to toggle between these in their ```.py``` files
