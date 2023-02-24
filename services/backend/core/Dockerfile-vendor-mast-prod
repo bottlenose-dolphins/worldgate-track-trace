@@ -29,7 +29,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
             && ldconfig
 
 WORKDIR /app
-ARG CACHEBUST=1
+ARG CACHEBUST=3
 COPY requirements.txt .
 COPY vendor_mast.py .
 RUN mv vendor_mast.py app.py
@@ -37,6 +37,7 @@ RUN mv vendor_mast.py app.py
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
+ENV PYTHONUNBUFFERED=1
 ENV SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
 
 

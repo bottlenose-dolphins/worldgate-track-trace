@@ -29,7 +29,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
             && ldconfig
 
 WORKDIR /app
-ARG CACHEBUST=2
+ARG CACHEBUST=1
 COPY requirements.txt .
 COPY complex_scraper.py .
 RUN mv complex_scraper.py app.py
@@ -42,6 +42,7 @@ ENV prod=0
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
+ENV PYTHONUNBUFFERED=1
 ENV SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
 
 

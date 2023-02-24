@@ -33,6 +33,11 @@ print("prod type: ", type(prod))
 
 print("********")
 
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("viewallshipments")
+
+
 @app.route("/getExportContainerNum", methods=['POST'])
 def getExportContainerNum():
 

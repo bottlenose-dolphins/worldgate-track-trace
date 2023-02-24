@@ -64,6 +64,10 @@ def get_import_ref_n():
         }
     ), 500
 
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("import")
+
 # Retrieve IMPORT_REF_N using WGUSER_ID -> Returning all the IMPORT_REF_N according to WGUSER_ID and sorted by latest to earliest using DELIVERY_D
 @app.route("/import/import_ref_n/wguser_id", methods=['POST'])
 def get_import_ref_n_using_wguser_id():

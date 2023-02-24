@@ -37,6 +37,7 @@ RUN mv export_shipment.py app.py
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
+ENV PYTHONUNBUFFERED=1
 ENV SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
 
 

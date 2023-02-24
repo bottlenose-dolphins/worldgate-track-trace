@@ -115,8 +115,8 @@ services:
     ports:
       - 5009:5009
   
-  core_viewall:
-    container_name: core_viewall
+  core_view_all:
+    container_name: core_view_all
     build:
       context: ./services/backend/core
       dockerfile: Dockerfile-view-all-dev

@@ -31,6 +31,10 @@ class ImportCont(db.Model):
             "cont_n": self.cont_n
         }
 
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("import_cont")
+
 # Retrieve IMPORT_REF_N from IMPORT_REF_CONT by CONT_N
 @app.route("/import_cont/import_ref_n", methods=['POST'])
 def get_import_ref_n():

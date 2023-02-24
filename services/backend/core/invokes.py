@@ -23,7 +23,7 @@ DEV_IP = {
 "core_export_cont" : "core_export_cont:5007",
 "core_export_shipment" : "core_export_shipment:5008",
 "core_complex_scraper" : "core_complex_scraper:5009",
-"core_viewall" : "core_viewall:5010",
+"core_view_all" : "core_view_all:5010",
 "core_prefix" : "core_prefix:5011",
 "core_vendor_mast" : "core_vendor_mast:5012"
 }
@@ -75,8 +75,10 @@ def invoke_http2(service, route, prod, method='GET', json=None, **kwargs):
     except Exception as e:
         code = 500
         if url == None:
+            print("**** URL was not resolved by invokes module" + str(e))
             result = {"code": code, "message": "URL was not resolved by invokes module" + str(e)}         
         else:
+            print("invocation of service fails: " + url + ". " + str(e))
             result = {"code": code, "message": "invocation of service fails: " + url + ". " + str(e)}
     if code not in range(200,300):
         return result
@@ -88,6 +90,7 @@ def invoke_http2(service, route, prod, method='GET', json=None, **kwargs):
         result = r.json() if len(r.content)>0 else ""
     except Exception as e:
         code = 500
+        print("Invalid JSON output from service: " + url + ". " + str(e))
         result = {"code": code, "message": "Invalid JSON output from service: " + url + ". " + str(e)}
 
     return result

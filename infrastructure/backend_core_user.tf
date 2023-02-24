@@ -1,5 +1,5 @@
-resource "aws_cloudwatch_log_group" "tracktrace_core_user" {
-    name = "tracktrace_core_user"
+resource "aws_cloudwatch_log_group" "tracktrace_core_user_log" {
+    name = "tracktrace_core_user_log"
 }
 
 resource "aws_ecs_task_definition" "tracktrace_core_user" {
@@ -16,8 +16,8 @@ resource "aws_ecs_task_definition" "tracktrace_core_user" {
             "hostPort": 80
             }
         ],
-        "memory": 1024,
-        "cpu": 512,
+        "memory": 512,
+        "cpu": 256,
         "runtimePlatform": {
         "operatingSystemFamily": "LINUX",
         "cpuArchitecture": "ARM64"
@@ -28,7 +28,7 @@ resource "aws_ecs_task_definition" "tracktrace_core_user" {
         "logConfiguration": {
           "logDriver": "awslogs",
           "options": {
-            "awslogs-group": "tracktrace_core_user",
+            "awslogs-group": "tracktrace_core_user_log",
             "awslogs-region": "ap-southeast-1",
             "awslogs-stream-prefix": "ecs"
                 }
@@ -43,8 +43,8 @@ resource "aws_ecs_task_definition" "tracktrace_core_user" {
     task_role_arn         = "arn:aws:iam::283879969377:role/trackTraceServiceDiscovery"
     requires_compatibilities = ["FARGATE"] # Stating that we are using ECS Fargate
     network_mode             = "awsvpc"    # Using awsvpc as our network mode as this is required for Fargate
-    memory                   = 1024         # Specifying the memory our container requires
-    cpu                      = 512         # Specifying the CPU our container requires
+    memory                   = 512         # Specifying the memory our container requires
+    cpu                      = 256         # Specifying the CPU our container requires
     execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole2.arn}"
 }
 

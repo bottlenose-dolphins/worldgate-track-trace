@@ -38,6 +38,10 @@ class ImportShipment(db.Model):
             "cr_agent_id": self.cr_agent_id
         }
 
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("import_shipment")
+
 # Retrieve shipment information by Master B/L
 @app.route("/import_shipment/retrieve", methods=['POST'])
 def retrieve_shipment():
