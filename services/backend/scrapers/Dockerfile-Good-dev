@@ -21,6 +21,7 @@ RUN apt-get install -y ./chromium-chromedriver_${VERSION}_${ARCH}.deb
 RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+ARG CACHEBUST=5
 # copying the neccessary script
 COPY requirements.txt .
 COPY goodrichScraper.py .
@@ -34,6 +35,6 @@ RUN pip install -r requirements.txt
 
 ENV PYTHONUNBUFFERED=1
 
-EXPOSE 80
+EXPOSE 8081
 
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0",  "--port=80"]
+CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0",  "--port=8081"]

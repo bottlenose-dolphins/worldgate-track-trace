@@ -21,18 +21,22 @@ RUN apt-get install -y ./chromium-chromedriver_${VERSION}_${ARCH}.deb
 RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+ARG CACHEBUST=5
 # copying the neccessary script
 COPY requirements.txt .
-COPY cordeliaScraper.py .
+COPY goodrichScraper.py .
 RUN mkdir creds 
-COPY ./creds/creds_cordelia.py ./creds
-RUN mv cordeliaScraper.py app.py
+COPY ./creds/creds_goodrich.py ./creds
+RUN mv goodrichScraper.py app.py
 
 # upgrade pip and install requirements
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 ENV PYTHONUNBUFFERED=1
+#there isnt a way to use .env for these (apart from see complex scraper dockerfile, difficult to use script)
+ENV goodUsername=<un>
+ENV goodPassword=<pw>
 
 EXPOSE 80
 

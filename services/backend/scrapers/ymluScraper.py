@@ -18,7 +18,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route("/ping", methods=['GET'])
 def health_check():
-    return("hello")
+    return("ymlu")
 
 @app.route('/ymlu', methods=['POST'])
 def ymluScraper():

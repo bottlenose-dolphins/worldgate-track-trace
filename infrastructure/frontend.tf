@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "tracktrace_test_task2" {
     [
         {
         "name": "tracktrace_test_task2",
-        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:frontend_v1.4_ARM",
+        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:fe4",
         "essential": true,
         "portMappings": [
             {
@@ -35,8 +35,8 @@ resource "aws_ecs_task_definition" "tracktrace_test_task2" {
             "hostPort": 3000
             }
         ],
-        "memory": 512,
-        "cpu": 256,
+        "memory": 1024,
+        "cpu": 512,
         "runtimePlatform": {
         "operatingSystemFamily": "LINUX",
         "cpuArchitecture": "ARM64"
@@ -62,8 +62,8 @@ resource "aws_ecs_task_definition" "tracktrace_test_task2" {
     task_role_arn         = "arn:aws:iam::283879969377:role/trackTraceServiceDiscovery"
     requires_compatibilities = ["FARGATE"] # Stating that we are using ECS Fargate
     network_mode             = "awsvpc"    # Using awsvpc as our network mode as this is required for Fargate
-    memory                   = 512         # Specifying the memory our container requires
-    cpu                      = 256         # Specifying the CPU our container requires
+    memory                   = 1024         # Specifying the memory our container requires
+    cpu                      = 512         # Specifying the CPU our container requires
     execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole2.arn}"
 }
 

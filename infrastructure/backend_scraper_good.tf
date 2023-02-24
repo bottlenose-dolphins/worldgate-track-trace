@@ -8,7 +8,7 @@ resource "aws_ecs_task_definition" "tracktrace_scraper_good" {
     [
         {
         "name": "tracktrace_scraper_good",
-        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper_good_v1.0_ARM",
+        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper_Good",
         "essential": true,
         "portMappings": [
             {

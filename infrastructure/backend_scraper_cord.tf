@@ -1,14 +1,14 @@
-resource "aws_cloudwatch_log_group" "tracktrace_scraper_kmtc_log" {
-    name = "tracktrace_scraper_kmtc_log"
+resource "aws_cloudwatch_log_group" "tracktrace_scraper_cord_log" {
+    name = "tracktrace_scraper_cord_log"
 }
 
-resource "aws_ecs_task_definition" "tracktrace_scraper_kmtc" {
-    family                   = "tracktrace_scraper_kmtc" 
+resource "aws_ecs_task_definition" "tracktrace_scraper_cord" {
+    family                   = "tracktrace_scraper_cord" 
     container_definitions    = <<DEFINITION
     [
         {
-        "name": "tracktrace_scraper_kmtc",
-        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper_Kmtc",
+        "name": "tracktrace_core_user",
+        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper_Cord",
         "essential": true,
         "portMappings": [
             {
@@ -16,8 +16,8 @@ resource "aws_ecs_task_definition" "tracktrace_scraper_kmtc" {
             "hostPort": 80
             }
         ],
-        "memory": 512,
-        "cpu": 256,
+        "memory": 1024,
+        "cpu": 512,
         "runtimePlatform": {
         "operatingSystemFamily": "LINUX",
         "cpuArchitecture": "ARM64"
@@ -25,7 +25,7 @@ resource "aws_ecs_task_definition" "tracktrace_scraper_kmtc" {
         "logConfiguration": {
           "logDriver": "awslogs",
           "options": {
-            "awslogs-group": "tracktrace_scraper_kmtc_log",
+            "awslogs-group": "tracktrace_scraper_cord_log",
             "awslogs-region": "ap-southeast-1",
             "awslogs-stream-prefix": "ecs"
                 }
@@ -39,16 +39,16 @@ resource "aws_ecs_task_definition" "tracktrace_scraper_kmtc" {
     }
     requires_compatibilities = ["FARGATE"] # Stating that we are using ECS Fargate
     network_mode             = "awsvpc"    # Using awsvpc as our network mode as this is required for Fargate
-    memory                   = 512         # Specifying the memory our container requires
-    cpu                      = 256        # Specifying the CPU our container requires
+    memory                   = 1024         # Specifying the memory our container requires
+    cpu                      = 512        # Specifying the CPU our container requires
     execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole2.arn}"
 }
 
 
-resource "aws_ecs_service" "tracktrace_scraper_kmtc_service" {
-    name            = "tracktrace_scraper_kmtc_service"                             # Naming our first service
+resource "aws_ecs_service" "tracktrace_scraper_cord_service" {
+    name            = "tracktrace_scraper_cord_service"                             # Naming our first service
     cluster         = "${aws_ecs_cluster.tracktrace_cluster.id}"             # Referencing our created Cluster
-    task_definition = "${aws_ecs_task_definition.tracktrace_scraper_kmtc.arn}" # Referencing the task our service will spin up
+    task_definition = "${aws_ecs_task_definition.tracktrace_scraper_cord.arn}" # Referencing the task our service will spin up
     launch_type     = "FARGATE"
     desired_count   = 1 # Setting the number of containers we want deployed to 2
 
@@ -58,6 +58,6 @@ resource "aws_ecs_service" "tracktrace_scraper_kmtc_service" {
     }
 
     service_registries {
-    registry_arn = "${aws_service_discovery_service.scraper_kmtc.arn}"
+    registry_arn = "${aws_service_discovery_service.scraper_cord.arn}"
     }
 }

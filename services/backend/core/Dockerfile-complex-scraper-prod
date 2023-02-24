@@ -29,7 +29,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
             && ldconfig
 
 WORKDIR /app
-ARG CACHEBUST=3
+ARG CACHEBUST=5
 COPY requirements.txt .
 COPY complex_scraper.py .
 RUN mv complex_scraper.py app.py
@@ -37,15 +37,19 @@ RUN mv complex_scraper.py app.py
 #for invoking microservice calls within app
 COPY invokes.py .
 COPY obtainIp.py .
+
+#parsed during running of build command 
+ARG db 
+#obtained from arg db
+ENV SQLALCHEMY_DATABASE_URI=${db}
+
+#used to run prod service discovery
 ENV prod=1
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
 ENV PYTHONUNBUFFERED=1
-ENV SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
-
-
 
 EXPOSE 80
 

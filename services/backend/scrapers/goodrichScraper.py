@@ -2,19 +2,20 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from os import getenv
 
 #server related
 from flask import Flask, jsonify
 
-# creds
-from creds.creds_goodrich import username
-from creds.creds_goodrich import password
 
 app = Flask(__name__)
 
+username = getenv("goodUsername")
+password = getenv("goodPassword")
+
 @app.route("/ping", methods=['GET'])
 def ping():
-    return("hello")
+    return("goodrich")
 
     # run with:
     # http://127.0.0.1:8081/GOOD/BL/VASSINCMB015609

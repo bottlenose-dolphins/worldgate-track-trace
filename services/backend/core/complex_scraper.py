@@ -13,6 +13,8 @@ load_dotenv()
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+print(getenv('SQLALCHEMY_DATABASE_URI'))
+
 prod = getenv("prod")
 print("prod type: ", type(prod))
 

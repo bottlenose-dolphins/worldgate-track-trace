@@ -8,7 +8,7 @@ resource "aws_ecs_task_definition" "tracktrace_core_user" {
     [
         {
         "name": "tracktrace_core_user",
-        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_user_v2.0_ARM",
+        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_user",
         "essential": true,
         "portMappings": [
             {

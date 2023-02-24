@@ -1,0 +1,7 @@
+# CLONE, FILL IN AND RENAME AS .env
+
+DB_URI="<DB_URI>"
+goodUsername=<un>
+goodPassword=<pw>
+cordUsername=<un>
+cordPassword=<pw>

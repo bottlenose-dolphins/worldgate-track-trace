@@ -113,6 +113,42 @@ resource "aws_service_discovery_service" "scraper_one" {
   }
 }
 
+resource "aws_service_discovery_service" "scraper_cord" {
+  name = "scraper_cord"
+  dns_config {
+    namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 5
+  }
+}
+
+resource "aws_service_discovery_service" "scraper_cosco" {
+  name = "scraper_cosco"
+  dns_config {
+    namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 5
+  }
+}
+
 resource "aws_service_discovery_service" "core_import" {
   name = "core_import"
   dns_config {
