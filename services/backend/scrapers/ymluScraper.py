@@ -16,7 +16,11 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # identifier = "YMLUI450439005"
 # identifier_type = "bl"
 
-@app.route('/ymlu', methods=['POST'])
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("hello")
+
+@app.route('/YMLU', methods=['POST'])
 def ymluScraper():
     try:
         # Retrieve BL/Container information
@@ -26,7 +30,11 @@ def ymluScraper():
 
         # Initialise chromedriver in headless mode
         options = Options()
-        options.headless = True
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--no-sandbox')
+
+        # init
         options.add_argument("--window-size=1920,1080")
         driver = webdriver.Chrome(options=options)
         
@@ -79,5 +87,6 @@ def ymluScraper():
         ), 500
         
 if __name__ == '__main__':
-    app.run(port=8080, debug=True)
+    app.run(debug=True)
+    # app.run(host='0.0.0.0', port=8080, debug=True) #to work as a local flask app
     

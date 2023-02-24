@@ -12,3 +12,6 @@ RUN npm run build
 EXPOSE 3000
 # start app
 CMD ["npm", "start"]
+
+HEALTHCHECK --interval=10s --timeout=3s \
+    CMD curl -f http://localhost/ || exit 1

@@ -14,14 +14,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-scraper_url = "http://localhost:8080/"
-prefix_url = "http://localhost:8082/"
-import_shipment_url = "http://localhost:8083/"
-export_shipment_url = "http://localhost:8084/"
-import_url = "http://localhost:8085/"
-export_url = "http://localhost:8086/"
-import_cont_url = "http://localhost:8087/"
-export_cont_url = "http://localhost:8088/"
+scraper_url = "http://scraper_ymlu:8080/"
+prefix_url = "http://core_prefix:5011/"
+import_shipment_url = "http://core_import_shipment:5005/"
+export_shipment_url = "http://core_export_shipment:5008/"
+import_url = "http://core_import:5003/"
+export_url = "http://core_export:5006/"
+import_cont_url = "http://core_import_cont:5004/"
+export_cont_url = "http://core_export_cont:5007/"
 
 @app.route('/scrape', methods=['POST'])
 def scrape():
@@ -41,7 +41,7 @@ def scrape():
             #    "identifier_type": "ctr",
             #    "direction": "import"
             # }  
-                 
+
             # {
             #     "shipping_line": "Yang Ming",
             #     "identifier": "CTG-6463",
@@ -60,6 +60,7 @@ def scrape():
 
             # Retrieve Master BL from House BL
             if identifier_type == "bl":
+                print("***going here?***")
                 if direction == "import":
                     master_bl = get_import_master_bl(identifier)
                 elif direction == "export":
@@ -71,15 +72,21 @@ def scrape():
                             "identifier_type": "bl"
                         }
             
-            prefix = "ymlu"
+            prefix = "YMLU"
 
             # Invoke scraper microservice
+            print("***invoking shipment_info***")
             shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
+            print(shipment_info)
             
             if shipment_info:
                 arrival_date = shipment_info["data"]["arrival_date"]
                 port_of_discharge = shipment_info["data"]["port_of_discharge"]
                 vessel_name = shipment_info["data"]["vessel_name"]
+
+                print(arrival_date)
+                print(port_of_discharge)
+                print(vessel_name)
 
                 # Update DB with latest shipment information
                 if identifier_type == "bl":
@@ -93,7 +100,7 @@ def scrape():
             return jsonify(
             {
                 "code": 500,
-                "message": "Failed to scrape for shipment information!"
+                "message": "Failed to scrape for shipment information because " + str(e)
             }
         ), 500
 
@@ -211,5 +218,6 @@ def get_export_master_bl(house_bl):
     return master_bl
     
 if __name__ == '__main__':
-    app.run(port=8081, debug=True)
+    app.run(host='0.0.0.0', port=5009, debug=True)
+    # app.run(host='0.0.0.0', debug=True)
     
