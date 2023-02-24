@@ -103,73 +103,77 @@ if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5003, debug=True)
     # app.run(host='0.0.0.0', debug=True)
 
-# SAMPLE API ENDPOINT
+"""
+SAMPLE API ENDPOINT
 
-# http://127.0.0.1:5003/import/import_ref_n/wguser_id
+http://127.0.0.1:5003/import/import_ref_n/wguser_id
 
-# SAMPLE JSON REQUEST
+SAMPLE JSON REQUEST
 
-# {
-#     "wguser_id" : "HMuAqcsAFtnJGfrM84VqL7"
-# }
+{
+    "wguser_id" : "HMuAqcsAFtnJGfrM84VqL7"
+}
 
-# SAMPLE OUTPUT
+SAMPLE OUTPUT
 
-# {
-#     "code": 200,
-#     "data": {
-#         "output": [
-#             {
-#                 "arrival_date": "Thu, 22 Sep 2022 00:00:00 GMT",
-#                 "import_destination": "Singapore",
-#                 "import_ref_n": 14100
-#             },
-#             {
-#                 "arrival_date": "Sun, 30 Jun 2019 00:00:00 GMT",
-#                 "import_destination": "Singapore",
-#                 "import_ref_n": 14057
-#             },
-#             {
-#                 "arrival_date": "Fri, 02 Nov 2018 00:00:00 GMT",
-#                 "import_destination": "Singapore",
-#                 "import_ref_n": 14019
-#             },
-#             {
-#                 "arrival_date": "Sat, 16 Jul 2016 00:00:00 GMT",
-#                 "import_destination": "Singapore",
-#                 "import_ref_n": 14059
-#             },
-#             {
-#                 "arrival_date": "Fri, 27 Jun 2014 00:00:00 GMT",
-#                 "import_destination": "Singapore",
-#                 "import_ref_n": 14073
-#             },
-#             {
-#                 "arrival_date": "Sat, 26 Jun 2004 00:00:00 GMT",
-#                 "import_destination": "Singapore",
-#                 "import_ref_n": 14238
-#             },
-#             {
-#                 "arrival_date": "Tue, 15 Jun 2004 00:00:00 GMT",
-#                 "import_destination": "Singapore",
-#                 "import_ref_n": 14114
-#             },
-#             {
-#                 "arrival_date": "Tue, 15 Jun 2004 00:00:00 GMT",
-#                 "import_destination": "Singapore",
-#                 "import_ref_n": 14115
-#             },
-#             {
-#                 "arrival_date": "Thu, 10 Jun 2004 00:00:00 GMT",
-#                 "import_destination": "Singapore",
-#                 "import_ref_n": 14069
-#             },
-#             {
-#                 "arrival_date": "Tue, 08 Jun 2004 00:00:00 GMT",
-#                 "import_destination": "Singapore",
-#                 "import_ref_n": 14058
-#             }
-#         ]
-#     }
-# }
+{
+    "code": 200,
+    "data": {
+        "output": [
+            {
+                "arrival_date": "Thu, 22 Sep 2022 00:00:00 GMT",
+                "import_destination": "Singapore",
+                "import_ref_n": 14100
+            },
+            {
+                "arrival_date": "Sun, 30 Jun 2019 00:00:00 GMT",
+                "import_destination": "Singapore",
+                "import_ref_n": 14057
+            },
+            {
+                "arrival_date": "Fri, 02 Nov 2018 00:00:00 GMT",
+                "import_destination": "Singapore",
+                "import_ref_n": 14019
+            },
+            {
+                "arrival_date": "Sat, 16 Jul 2016 00:00:00 GMT",
+                "import_destination": "Singapore",
+                "import_ref_n": 14059
+            },
+            {
+                "arrival_date": "Fri, 27 Jun 2014 00:00:00 GMT",
+                "import_destination": "Singapore",
+                "import_ref_n": 14073
+            },
+            {
+                "arrival_date": "Sat, 26 Jun 2004 00:00:00 GMT",
+                "import_destination": "Singapore",
+                "import_ref_n": 14238
+            },
+            {
+                "arrival_date": "Tue, 15 Jun 2004 00:00:00 GMT",
+                "import_destination": "Singapore",
+                "import_ref_n": 14114
+            },
+            {
+                "arrival_date": "Tue, 15 Jun 2004 00:00:00 GMT",
+                "import_destination": "Singapore",
+                "import_ref_n": 14115
+            },
+            {
+                "arrival_date": "Thu, 10 Jun 2004 00:00:00 GMT",
+                "import_destination": "Singapore",
+                "import_ref_n": 14069
+            },
+            {
+                "arrival_date": "Tue, 08 Jun 2004 00:00:00 GMT",
+                "import_destination": "Singapore",
+                "import_ref_n": 14058
+            }
+        ]
+    }
+}
+"""    
+
+
 
