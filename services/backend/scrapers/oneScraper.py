@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import time
 from flask import Flask, jsonify, request
+import subprocess
 
 app = Flask(__name__)
 
@@ -10,9 +11,9 @@ app = Flask(__name__)
 def ping():
     return("hello")
 
-@app.route('/ONE', methods=['POST'])
+@app.route('/ONE', methods=['POST']) 
 
-def oneScraper(tracking_type,identifier):
+def oneScraper():
 
     try:
 
@@ -116,6 +117,8 @@ def oneScraper(tracking_type,identifier):
 
     except Exception as e:
 
+        restart_microservice()
+
         return jsonify(
 
             {
@@ -127,6 +130,16 @@ def oneScraper(tracking_type,identifier):
             }
 
         ), 500
+
+# will restart the specific docker-compose file 
+
+def restart_microservice():
+
+    subprocess.call(['docker-compose','stop','scraper_one'])
+
+    subprocess.call(['docker-compose', 'rm', '-f', 'scraper_one'])
+
+    subprocess.call(['docker-compose', 'up', '-d', 'scraper_one'])
 
 if __name__ == '__main__':
     app.run(debug=True)
