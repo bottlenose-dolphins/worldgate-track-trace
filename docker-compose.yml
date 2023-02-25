@@ -167,7 +167,7 @@ services:
         - REACT_APP_VIEW_ALL_SHIPMENT_ENDPOINT=${REACT_APP_VIEW_ALL_SHIPMENT_ENDPOINT}
         - REACT_APP_COMPLEX_SCRAPER_ENDPOINT=${REACT_APP_COMPLEX_SCRAPER_ENDPOINT}
     ports:
-      - 80:80
+      - 3000:3000
     stdin_open: true
     tty: true
     # volumes:

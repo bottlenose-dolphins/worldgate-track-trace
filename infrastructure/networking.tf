@@ -87,3 +87,19 @@ resource "aws_lb_listener" "listener_fe_default_subnet" {
         target_group_arn = "${aws_lb_target_group.target_group_fe_default_subnet.arn}" # Referencing our tagrte group
     }
 }
+
+resource "aws_route53_zone" "worldgatetracktrace" {
+  name = "worldgatetracktrace.live"
+}
+
+resource "aws_route53_record" "worldgatetracktrace" {
+  zone_id = aws_route53_zone.worldgatetracktrace.zone_id
+  name    = "worldgatetracktrace.live"
+  type    = "A"
+
+  alias {
+    name                   = aws_alb.application_load_balancer.dns_name
+    zone_id                = aws_alb.application_load_balancer.zone_id
+    evaluate_target_health = true
+  }
+}

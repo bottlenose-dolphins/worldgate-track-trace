@@ -77,7 +77,7 @@ This requires some set up:
 
 4. Taring down Terraform 
 
-      1. run ```terraform-destroy --auto-approve```
+      1. run ```terraform destroy --auto-approve```
       *Note that ECR fail to destroy error is expected because existing docker images are still stored in ECR
 
 
