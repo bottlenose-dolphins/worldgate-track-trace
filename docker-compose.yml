@@ -167,7 +167,7 @@ services:
         - REACT_APP_VIEW_ALL_SHIPMENT_ENDPOINT=${REACT_APP_VIEW_ALL_SHIPMENT_ENDPOINT}
         - REACT_APP_COMPLEX_SCRAPER_ENDPOINT=${REACT_APP_COMPLEX_SCRAPER_ENDPOINT}
     ports:
-      - 3000:3000
+      - 80:80
     stdin_open: true
     tty: true
     # volumes:
@@ -241,7 +241,7 @@ services:
 
 
   scraper_cord:
-    container_name: scraper_one
+    container_name: scraper_cord
     build:
       context: ./services/backend/scrapers
       shm_size: '1gb'
@@ -257,7 +257,7 @@ services:
       - 8084:8084
 
   # scraper_cosc:
-  #   container_name: scraper_one
+  #   container_name: scraper_cosc
   #   build:
   #     context: ./services/backend/scrapers
   #     shm_size: '1gb'
