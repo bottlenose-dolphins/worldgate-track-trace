@@ -160,11 +160,12 @@ services:
       dockerfile: Dockerfile-dev
       args:
         - NODE_ENV=development
+    networks:
+      - tracktrace_test_network
+    environment:
         - REACT_APP_USER_ENDPOINT=${REACT_APP_USER_ENDPOINT}
         - REACT_APP_VIEW_ALL_SHIPMENT_ENDPOINT=${REACT_APP_VIEW_ALL_SHIPMENT_ENDPOINT}
         - REACT_APP_COMPLEX_SCRAPER_ENDPOINT=${REACT_APP_COMPLEX_SCRAPER_ENDPOINT}
-    networks:
-      - tracktrace_test_network
     ports:
       - 3000:3000
     stdin_open: true
