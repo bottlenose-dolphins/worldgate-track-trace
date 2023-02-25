@@ -1,11 +1,11 @@
 FROM node:17-alpine
 
-ARG CACHEBUST=88
+ARG CACHEBUST=5
 COPY . .
 WORKDIR /app
 
 # install node modules 
-RUN npm ci
+RUN npm i
 #build app
 RUN npm run build
 

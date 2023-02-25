@@ -1,7 +1,7 @@
 const { REACT_APP_API_BASE_ENDPOINT } = process.env;
 
 // export const USER_ENDPOINT = `${REACT_APP_API_BASE_ENDPOINT}/user`;
-export const USER_ENDPOINT = "127.0.0.1:5002/user"
+export const USER_ENDPOINT = "http://127.0.0.1:5002/user"
 
 // to extract csrf_access_token, which should then be put into request header ("X-CSRF-TOKEN")
 export function getCookie(name) {
