@@ -66,8 +66,7 @@ function MobileNavbarItems({ open }) {
     return (
         <div className='flex'>
             <div className='mx-2 flex space-x-3 items-center md:hidden'>
-                {
-                    // isUserSignedIn() ? <WelcomeUsername /> : 
+                { 
                     displaySignInButton() ? (<SignInButton />) : ""
                 }
                 <Disclosure.Button className='inline-flex items-center justify-center rounded-md p-2 
@@ -115,7 +114,6 @@ function DesktopNavbarItems({ pageNavigation }) {
                 {renderNavbarItems}
             </div>
             {
-                // isUserSignedIn() ? <WelcomeUsername /> : 
                 displaySignInButton() ? (<SignInButton />) : ""
             }
         </div>
