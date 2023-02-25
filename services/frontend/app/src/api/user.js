@@ -1,5 +1,5 @@
 import axios from "axios";
-import { USER_ENDPOINT } from "./config";
+import { REACT_APP_USER_ENDPOINT } from "./config";
 
 // used for service discovery
 // const { ServiceDiscovery } = require("@aws-sdk/client-servicediscovery")
@@ -9,7 +9,7 @@ import { USER_ENDPOINT } from "./config";
 // original 
 export const signIn = async(username, password) => {
     try { 
-        const res = await axios.post(`${USER_ENDPOINT}/signin`, {
+        const res = await axios.post(`${REACT_APP_USER_ENDPOINT}/signin`, {
             // const res = await axios.post("http://13.212.171.88/signin", {
             "username": username,
             "password": password
@@ -59,7 +59,7 @@ export const signIn = async(username, password) => {
 // email: <str:email>, name: <str:name>, password: <str:password> , phone: <int:phone>, company: <str:company>
 export const signUp = async(username, email, password, phone, company) => {
     try {
-        const res = await axios.post(`${USER_ENDPOINT}/signup`, {
+        const res = await axios.post(`${REACT_APP_USER_ENDPOINT}/signup`, {
             "username": username,
             "email": email,
             "password": password,
