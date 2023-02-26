@@ -20,7 +20,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 def health_check():
     return("hello")
 
-@app.route('/YMLU', methods=['POST'])
+@app.route('/ymlu', methods=['POST'])
 def ymluScraper():
     try:
         # Retrieve BL/Container information

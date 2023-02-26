@@ -130,6 +130,18 @@ services:
     ports:
       - 5011:5011
 
+  core_vendor_mast:
+    container_name: core_vendor_mast
+    build:
+      context: ./services/backend/core
+      dockerfile: Dockerfile-vendor-mast-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+    ports:
+      - 5012:5012
+
   web:
     container_name: web
     build:
