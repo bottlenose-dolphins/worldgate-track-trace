@@ -15,3 +15,39 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.bg-image {
+  background-image: url('../src/img/base.png');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  position: 'relative'
+}
+
+.signup-button {
+  background-color: #217BF4;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  width: 162px;
+  height: 62px;
+  box-shadow: 0px 8px 4px rgba(0, 0, 0, 0.5);
+  padding: 8px 16px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.learn-button {
+  background-color: #F3F3F3;
+  color: #217BF4;
+  font-weight: 1000;
+  font-size: 14px;
+  width: 162px;
+  height: 62px;
+  box-shadow: 0px 8px 4px rgba(0, 0, 0, 0.5);
+  padding: 8px 16px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+}
