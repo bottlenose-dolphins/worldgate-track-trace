@@ -74,7 +74,7 @@ This requires some set up:
       3. run ```terraform init```
       4. Go into ```infrastructure/frontend```
       5. run ```terraform init```
-      6. From root dir, execute ```./terraformdeploy```, you may have to run ```chmod +x terraformdeploy.sh```
+      6. From root dir, execute ```./terraformdeploy.sh```, you may have to run ```chmod +x terraformdeploy.sh```
 
 4. Taring down Terraform 
 

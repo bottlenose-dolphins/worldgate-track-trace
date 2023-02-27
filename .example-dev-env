@@ -6,6 +6,4 @@ goodPassword=<pw>
 cordUsername=<un>
 cordPassword=<pw>
 
-REACT_APP_USER_ENDPOINT="http://127.0.0.1:5002/user"
-REACT_APP_VIEW_ALL_SHIPMENT_ENDPOINT="http://127.0.0.1:5010"
-REACT_APP_COMPLEX_SCRAPER_ENDPOINT="http://127.0.0.1:5009"
+REACT_APP_API_ENDPOINT="127.0.0.1"
