@@ -1,7 +1,6 @@
-// local container solution does not work
-export const { REACT_APP_USER_ENDPOINT } = process.env;
-export const { REACT_APP_VIEW_ALL_SHIPMENT_ENDPOINT } = process.env;
-export const { REACT_APP_COMPLEX_SCRAPER_ENDPOINT } = process.env;
+const { REACT_APP_API_ENDPOINT } = process.env;
+
+export const USER_ENDPOINT = `http://${REACT_APP_API_ENDPOINT}:5002/user`;
 
 // to extract csrf_access_token, which should then be put into request header ("X-CSRF-TOKEN")
 export function getCookie(name) {

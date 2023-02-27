@@ -70,14 +70,16 @@ This requires some set up:
 3. Bring up environment with Terraform 
 
       1. Download Terraform cli
-      2. Change into the infrastructure dir
+      2. Go into ```infrastructure/frontend```
       3. run ```terraform init```
-      4. run ```terraform plan``` to note the changes
-      5. run ```terraform apply --auto-approve``` to confirm changes
+      4. Go into ```infrastructure/frontend```
+      5. run ```terraform init```
+      6. From root dir, execute ```./terraformdeploy```, you may have to run ```chmod +x terraformdeploy.sh```
 
 4. Taring down Terraform 
 
-      1. run ```terraform destroy --auto-approve```
+      1. run ```terraform destroy --auto-approve``` in the ```infrastructure/frontend```
+      2. run ```terraform destroy --auto-approve``` in the ```infrastructure/backend```
       *Note that ECR fail to destroy error is expected because existing docker images are still stored in ECR
 
 

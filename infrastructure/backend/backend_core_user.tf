@@ -61,6 +61,13 @@ resource "aws_ecs_service" "tracktrace_core_user_service" {
     assign_public_ip = true # Providing our containers with public IPs
     }
 
+    load_balancer {
+    target_group_arn = "${aws_lb_target_group.target_group_core_user.arn}" # Referencing our target group
+    container_name   = "${aws_ecs_task_definition.tracktrace_core_user.family}"
+    container_port   = 80 # Specifying the container port
+    }
+
+
     service_registries {
     registry_arn = "${aws_service_discovery_service.core_user.arn}"
     }
