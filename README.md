@@ -2,7 +2,7 @@
 
 ### Environment Overview
 
-Track&Trace is a multi-environment project, as such, some inconveniences may be experienced at the level you are working at to cater to users of other environments. 
+Track&Trace is a multi-environment project, as such, some inconveniences may be experienced at the level you are working at to cater to users of other environments.
 
 ##### Undockerised Development:
 
@@ -19,9 +19,9 @@ if __name__ == '__main__':
 There are 2 dockerfiles for each microservice & also for the frontend . 
 One labelled ```dev```, e.g. ```Dockerfile-dev``` and the other ```prod```. e.g. ```Dockerfile-prod```.
 
-```dev``` dockerfiles are used in creating images, containers used when running in one's local machine
+```dev``` dockerfiles are used in creating images for containers used when running in one's local machine
 
-```prod``` dockerfiles are used in creating images, containers used when running externally
+```prod``` dockerfiles are used in creating images for containers used when running on externally cloud providers
 
 ##### Local Containers:
 
@@ -44,7 +44,7 @@ In addition, comment out irrelevant Oracle Client Library Download in ```./servi
 
 This also needs to be done in ```./services/scrapers/Dockerfile-<Shipping Line>``` by Changing ```ARG ARCH``` to ```arm64``` or ```amd64```
 
-Lastly, run ```docker compose``` in the root dir
+Lastly, run ```docker compose up``` in the root dir
 
 
 
@@ -55,7 +55,7 @@ Add db connection string to ```ENV SQLALCHEMY_DATABASE_URI=<DB URI>```
 
 ##### Hosted Containers:
 
-Track&Trace incorporates Infrastructure As Code through the use of Terraform which deploys the Infrastructure and hosts the relevant docker containers on AWS
+Track&Trace incorporates Infrastructure As Code through the use of Terraform which deploys the cloud Infrastructure required on AWS.
 
 
 This requires some set up:
@@ -80,7 +80,7 @@ This requires some set up:
 
       1. run ```terraform destroy --auto-approve``` in the ```infrastructure/frontend```
       2. run ```terraform destroy --auto-approve``` in the ```infrastructure/backend```
-      *Note that ECR fail to destroy error is expected because existing docker images are still stored in ECR
+      *Note that ECR failing to destroy is expected given that there are existing docker images still stored in our ECR on AWS.
 
 
 ### Issues & Workarounds for Docker:
