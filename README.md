@@ -42,7 +42,7 @@ In addition, comment out irrelevant Oracle Client Library Download in ```./servi
 
 ```
 
-This also needs to be done in ```./services/scrapers/Dockerfile-<Shipping Line>``` by Changing ```ARG ARCH``` to ```arm64``` or ```amd64```
+This also needs to be done in ```./services/backend/scrapers/Dockerfile-<Shipping Line>``` by Changing ```ARG ARCH``` to ```arm64``` or ```amd64```
 
 Lastly, run ```docker compose up``` in the root dir
 
@@ -67,14 +67,30 @@ This requires some set up:
       1. run ```aws configure```
       2. insert access key, secret key, region: ```ap-southeast-1``` & output: ```json```
 
-3. Bring up environment with Terraform 
 
-      1. Download Terraform cli
-      2. Go into ```infrastructure/frontend```
-      3. run ```terraform init```
-      4. Go into ```infrastructure/frontend```
-      5. run ```terraform init```
-      6. From root dir, execute ```./terraformdeploy.sh```, you may have to run ```chmod +x terraformdeploy.sh```
+3. Comment out irrelevant Oracle Client Library Download in ```./services/backend/core/Dockerfile-user-prod```
+
+
+```
+#for ARM64
+&& wget https://download.oracle.com/otn_software/linux/instantclient/191000/instantclient-basiclite-linux.arm64-19.10.0.0.0dbru.zip \
+&& unzip instantclient-basiclite-linux.arm64-19.10.0.0.0dbru.zip \
+&& rm -f instantclient-basiclite-linux.arm64-19.10.0.0.0dbru.zip \
+
+#for X64
+# && wget https://download.oracle.com/otn_software/linux/instantclient/219000/instantclient-basiclite-linux.x64-21.9.0.0.0dbru.zip \
+# && unzip instantclient-basiclite-linux.x64-21.9.0.0.0dbru.zip \
+# && rm -f instantclient-basiclite-linux.x64-21.9.0.0.0dbru.zip \
+
+4. Application & Infrastruture deployment with Terraform & AWS
+
+      1. run ```aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 283879969377.dkr.ecr.ap-southeast-1.amazonaws.com```
+      2. Download Terraform cli
+      3. Go into ```infrastructure/frontend```
+      4. run ```terraform init```
+      5. Go into ```infrastructure/frontend```
+      6. run ```terraform init```
+      7. From root dir, execute ```./terraformdeploy.sh```, you may have to run ```chmod +x terraformdeploy.sh```
 
 4. Taring down Terraform 
 
