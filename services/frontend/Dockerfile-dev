@@ -1,6 +1,6 @@
 FROM node:17-alpine
 
-ARG CACHEBUST=1234
+ARG CACHEBUST=2
 COPY . .
 WORKDIR /app
 
