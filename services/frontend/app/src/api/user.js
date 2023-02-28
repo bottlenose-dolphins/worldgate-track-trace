@@ -56,7 +56,7 @@ export const signOut = async() => {
         if (res) {
             return res.data;
         }
-        throw new Error("No data returned from backend")
+        throw new Error("No data returned from backend");
     } catch (error) {
         return error.response.data;
     }

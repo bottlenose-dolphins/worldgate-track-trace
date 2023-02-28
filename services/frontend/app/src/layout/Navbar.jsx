@@ -164,11 +164,8 @@ function displaySignInButton() {
 function isLandingPage() {
     const currentUrl = document.location.toString().split("/");
     const page = `/${currentUrl[currentUrl.length - 1]}`;
-    console.log(page);
     if (page === "/") {
-        console.log("true");
         return true;
     }
-    console.log("false")
     return false;
 }

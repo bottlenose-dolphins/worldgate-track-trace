@@ -201,9 +201,11 @@ def sign_in():
 
 @app.route("/user/signout", methods=["POST"])
 def sign_out():
-    response = jsonify({"msg": "sign out successful"})
+    response = jsonify({
+        "code": 200,
+        "message": "sign out successful"})
     unset_jwt_cookies(response)
-    return response
+    return response, 200
 
 # Using an `after_request` callback, we refresh any token that is within 15 minutes of expiring.
 @app.after_request
@@ -252,5 +254,5 @@ def verify_jwt_csrf_validity():
         })
 
 if __name__ == "__main__":
-    app.run(debug=True)
-    # app.run(host='0.0.0.0', port=5002, debug=True) #to work as a local flask app
+    # app.run(debug=True)
+    app.run(host='0.0.0.0', port=5002, debug=True) #to work as a local flask app
