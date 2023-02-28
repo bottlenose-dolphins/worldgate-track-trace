@@ -82,6 +82,8 @@ This requires some set up:
 # && unzip instantclient-basiclite-linux.x64-21.9.0.0.0dbru.zip \
 # && rm -f instantclient-basiclite-linux.x64-21.9.0.0.0dbru.zip \
 
+```
+
 4. Application & Infrastruture deployment with Terraform & AWS
 
       1. run ```aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 283879969377.dkr.ecr.ap-southeast-1.amazonaws.com```
@@ -90,13 +92,14 @@ This requires some set up:
       4. run ```terraform init```
       5. Go into ```infrastructure/frontend```
       6. run ```terraform init```
-      7. From root dir, execute ```./terraformdeploy.sh```, you may have to run ```chmod +x terraformdeploy.sh```
+      7. From root dir, execute ```./terraformdeploy.sh```, you may have to run ```chmod +x terraformdeploy.sh``` prior to doing so
 
 4. Taring down Terraform 
 
-      1. run ```terraform destroy --auto-approve``` in the ```infrastructure/frontend```
-      2. run ```terraform destroy --auto-approve``` in the ```infrastructure/backend```
-      *Note that ECR failing to destroy is expected given that there are existing docker images still stored in our ECR on AWS.
+      1. run ```terraform destroy --auto-approve``` from ```infrastructure/frontend```
+      2. run ```terraform destroy --auto-approve```* from ```infrastructure/backend```
+      
+*Note that ECR failing to destroy is expected given that there are existing docker images still stored in our ECR on AWS.
 
 
 ### Issues & Workarounds for Docker:
