@@ -29,6 +29,10 @@ EXPORT_CONT_URL = "http://core_export_cont:5007"
 @app.route("/getExportContainerNum", methods=['POST'])
 def getExportContainerNum():
 
+    # pass the whole request from jeff side to the verify_jwt_csrf_validity function if 500 dont proceed else just proceed
+    # then just retrieve userId from the response 
+
+
     data = request.get_json()
     wguser_id = data['wguser_id']
 
@@ -56,7 +60,7 @@ def getExportContainerNum():
         if retrieved_list_containerNum_output:
             retrieved_tuple_containerNum_output = tuple(retrieved_list_containerNum_output)
             a_record["container_numbers"] = retrieved_tuple_containerNum_output
-            a_record["type"] = "Export"
+            # a_record["type"] = "Export"
 
     return retrieved_output_from_export
 
@@ -92,7 +96,7 @@ def getImportContainerNum():
         if retrieved_list_containerNum_output:
             retrieved_tuple_containerNum_output = tuple(retrieved_list_containerNum_output)
             a_record["container_numbers"] = retrieved_tuple_containerNum_output
-            a_record["type"] = "Import"
+            # a_record["type"] = "Import"
 
     return retrieved_output_from_import
 

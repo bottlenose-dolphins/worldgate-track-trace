@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from datetime import datetime
 
 from os import getenv
 from dotenv import load_dotenv
@@ -73,14 +74,21 @@ def get_import_ref_n_using_wguser_id():
 
     if len(output):
         result = [
-            {
-                "import_ref_n": a_row.import_ref_n,
-                "import_destination": "Singapore",
-                "arrival_date": a_row.delivery_d
-            }
+                {
+                    "import_ref_n": a_row.import_ref_n,
+                    "import_destination": "Singapore",
+                    "arrival_date": str(a_row.delivery_d),
+                    "type": "Import"
+                }
         for a_row in output]
-        # sorted_result = sorted(result, key=lambda x: x.delivery_)
-    
+
+        for a_record in result:
+            date_str = a_record["arrival_date"]
+            dt_obj = datetime.strptime(date_str, '%Y-%m-%d')
+            formatted_date_str = dt_obj.strftime('%d/%m/%Y')
+            a_record["arrival_date"] = formatted_date_str
+
+            
         return jsonify(
             {
                 "code":200,

@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from datetime import datetime
 
 from os import getenv
 from dotenv import load_dotenv
@@ -74,12 +75,20 @@ def get_export_ref_n_using_wguser_id():
 
     if len(output):
         result = [
-            {
-                "export_ref_n": a_row.export_ref_n,
-                "destination_port": a_row.port_del_name,
-                "delivery_date": a_row.del_to
-            } 
-                for a_row in output]
+                {
+                    "export_ref_n": a_row.export_ref_n,
+                    "export_destination": a_row.port_del_name,
+                    "delivery_date": str(a_row.del_to),
+                    "type": "Export"
+                }
+        for a_row in output]
+
+        for a_record in result:
+            date_str = a_record["delivery_date"]
+            dt_obj = datetime.strptime(date_str, '%Y-%m-%d')
+            formatted_date_str = dt_obj.strftime('%d/%m/%Y')
+            a_record["delivery_date"] = formatted_date_str
+
         
 
 
