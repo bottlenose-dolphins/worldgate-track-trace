@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-import { Disclosure } from "@headlessui/react";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon, BellIcon } from "@heroicons/react/24/outline";
 
+import { signOut } from "src/api/user";
 import TrackAndTrace from "../img/TrackAndTrace.png";
 
 export default function NavbarUser({ username }) {
@@ -109,12 +111,35 @@ function DesktopNavbarItems({ pageNavigation }) {
 }
 
 function WelcomeUsername({ username }) {
+    const navigate = useNavigate();
+
+    const handleSignOut = async (e) => {
+        e.preventDefault();
+        const res = await signOut();
+        if (res.code === 200) {
+            localStorage.removeItem("username");
+            navigate("/");
+            toast.success("Sign Out successful");
+        } else {
+            toast.error(
+                "An unknown error occurred - please try again.",
+            );
+        }
+    }
+
     return (
-        <div className="items-center">
-            <div className="text-sm">Welcome,</div>
-            <div className="font-bold text-lg">
-                {username}
-            </div>
-        </div>
+        <Menu as="div" className="relative">
+            <Menu.Button className="hover:text-gray-500">
+                <div className="text-sm">Welcome,</div>
+                <div className="font-bold text-lg">{username}</div>
+            </Menu.Button>
+            <Menu.Items className="absolute right-0 mt-1 w-40 divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="px-1 py-1">
+                    <Menu.Item>
+                        <button type="button" onClick={handleSignOut} className="group flex w-full items-center rounded-md px-2 py-2 text-sm text-gray-500 hover:text-black">Sign Out</button>
+                    </Menu.Item>
+                </div>
+            </Menu.Items>
+        </Menu>
     )
 }
