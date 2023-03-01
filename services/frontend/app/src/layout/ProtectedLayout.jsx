@@ -20,8 +20,10 @@ export default function ProtectedLayout({ redirectPath = "/sign-in" }) {
     return (
         <>
             <NavbarUser username={username} />
-            <SideBar />
-            <Outlet />
+            <div className="flex">
+                <SideBar />
+                <Outlet />
+            </div>
         </>
     );
 }

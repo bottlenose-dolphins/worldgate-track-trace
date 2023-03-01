@@ -1,8 +1,45 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { ChevronDoubleRightIcon } from "@heroicons/react/24/outline";
+
+import search from "../img/search.png";
+import vessel from "../img/vessel.png";
 
 export default function SideBar() {
+    const [open, setOpen] = useState(false);
+
+    const pageNavigation = [
+        {
+            icon: vessel,
+            name: "My Shipments",
+            href: "/view-shipments"
+        },
+        {
+            icon: search,
+            name: "Track",
+            href: "/blstatus" // TODO: Need Rohan to rename this path
+        },
+    ]
+
+    const renderSideBarItems = pageNavigation.map((routingItem) => (
+        <Link
+            to={routingItem.href}
+            key={routingItem.name}
+            className="flex items-center text-black ml-3 gap-x-2 px-2 py-4 hover:underline text-lg font-medium"
+        >
+            <img className="h-5 w-5 hover:scale-125" src={routingItem.icon} alt="" />
+            <span className={`${!open && "hidden"} origin-left duration-100`}>{routingItem.name}</span>
+        </Link>
+    ));
+
     return (
-        <aside>
-            side bar goes here
+        <aside className={`${open ? "w-48" : "w-16"} duration-200 h-screen bg-white border-r border-gray-300 relative`}>
+            <div className="flex flex-col pt-5 justify-center">
+                {renderSideBarItems}
+            </div>
+            <ChevronDoubleRightIcon className={`absolute -right-3 bottom-20 bg-white cursor-pointer 
+            rounded-full outline outline-1 outline-gray-400 p-1 h-7 w-7 ${open && "rotate-180"}`}
+                onClick={() => setOpen(!open)} />
         </aside>
     )
 }
