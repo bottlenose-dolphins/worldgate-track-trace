@@ -1,9 +1,15 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import React from "react";
 import "../../index.css";
 import Navbar from "src/layout/Navbar";
 
 export default function Home() {
+  const username = localStorage.getItem("username");
+
+  if (username !== "" && username !== null) {
+    return <Navigate to="blStatus" replace />;
+  }
+
   const navigate = useNavigate();
   function handleClick() {
     navigate("/sign-up");

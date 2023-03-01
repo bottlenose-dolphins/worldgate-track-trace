@@ -15,7 +15,7 @@ function App() {
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />
         </Route>
-        
+
         {/* Protected Routes/Routes with SideBar */}
         <Route element={<ProtectedLayout />}>
           <Route path="/blstatus" element={<BLStatusPage />} />

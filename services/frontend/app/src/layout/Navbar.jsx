@@ -9,14 +9,6 @@ import logoWhite from "../img/TrackAndTraceWhite.png";
 import NavbarUser from "./NavbarUser";
 
 export default function Navbar() {
-    const [username, setUsername] = useState("");
-    useEffect(() => {
-        const usernameValue = localStorage.getItem("username")
-        if (typeof usernameValue !== "undefined" && usernameValue && usernameValue !== "") {
-            setUsername(usernameValue);
-        }
-    })
-
     const [pageNavigation, setPageNavigation] = useState([
         { name: "Home", href: "/" },
         { name: "Back to Worldgate", href: "https://www.worldgate.com.sg" },
@@ -40,7 +32,6 @@ export default function Navbar() {
     ));
 
     return (
-        username.length > 0 ? <NavbarUser username={username} /> : // NavbarUser is the navbar for post-signin
             <Disclosure as='nav' className=''>
                 {({ open }) => (
                     <>
