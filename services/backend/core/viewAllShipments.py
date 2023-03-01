@@ -31,86 +31,41 @@ USER_URL = "http://core_users:5002/user/verify"
 @app.route("/getExportContainerNum", methods=['POST'])
 def getExportContainerNum():
 
-    # pass the whole request from jeff side to the verify_jwt_csrf_validity function if 500 dont proceed else just proceed
-    # then just retrieve userId from the response 
+    data = request.get_json()
+    wguser_id = data['wguser_id']
 
-    csrfTokenCookie = request.cookies.get('csrf_access_token')
-    accessTokenCookie = request.cookies.get('access_token_cookie')
-    payload = {
-        "cstf_access_token":csrfTokenCookie,
-        "access_token_cookie":accessTokenCookie
+    data = {
+        "wguser_id" : wguser_id
     }
-    print("payload: ", payload)
-    print("headers: ", request.headers.get('X-CSRF-TOKEN'))
 
-    # csrfTokenCookie = request.cookies.get('csrf_access_token')
-    # print(csrfTokenCookie)
-    # headers = {'X-CSRF-TOKEN': csrfTokenCookie}
-    # print("headers: ", headers)
-
-    wguser_id_response = invoke_http(USER_URL, data=None, headers=request.headers.get('X-CSRF-TOKEN'), cookies=payload, method='GET')
-    # print(type(wguser_id_response))
-
-    # res = requests.request(
-    #     method='GET',
-    #     url=USER_URL,
-    #     headers=request.headers.get('X-CSRF-TOKEN'),
-    #     data=None,
-    #     cookies=payload,
-    #     allow_redirects=False
-    # )
-
-    # response = Response(wguser_id_response.content)
-    wguser_id_response_dumped = json.dumps(wguser_id_response)
-    wguser_id_response_loads = json.loads(wguser_id_response_dumped)
-
-    return wguser_id_response_loads
-
-    
-
-    # return str(wguser_id_response_loads)
-    # wguser_id = wguser_id_response['userId']
-
-    # return jsonify(
-    #         {
-    #             "code":200,
-    #             "data":
-    #             {
-    #                 "output" : wguser_id_response
-    #             }
-    #         }
-    # )
+    export_ref_num_response = invoke_http(EXPORT_URL + "/export/export_ref_n/wguser_id", method="POST", json=data)
+    export_ref_num_dumped = json.dumps(export_ref_num_response)
+    export_ref_num_loads = json.loads(export_ref_num_dumped)
+    retrieved_output_from_export = export_ref_num_loads['data']['output']
 
 
+    for a_record in retrieved_output_from_export:
+        single_export_ref_num = a_record['export_ref_n']
+
+        data = {
+                    "export_ref_n" : single_export_ref_num
+                }
+
+        container_num_response = invoke_http(EXPORT_CONT_URL + "/export_cont/container_num", method="POST", json=data)
+        container_num_response_dumped = json.dumps(container_num_response)
+        container_num_response_loads = json.loads(container_num_response_dumped)
+        retrieved_list_containerNum_output = container_num_response_loads['data']['container_nums']
+
+        if len(retrieved_list_containerNum_output) > 0:
+            retrieved_tuple_containerNum_output = tuple(retrieved_list_containerNum_output)
+            a_record["container_numbers"] = retrieved_tuple_containerNum_output
+            # a_record["type"] = "Export"
+        
+        else:
+            a_record["container_numbers"] = []
 
 
-    # wguser_id = data['wguser_id']
-
-    
-
-    # export_ref_num_response = invoke_http(EXPORT_URL + "/export/export_ref_n/wguser_id", method="POST", json=data)
-    # export_ref_num_dumped = json.dumps(export_ref_num_response)
-    # export_ref_num_loads = json.loads(export_ref_num_dumped)
-    # retrieved_output_from_export = export_ref_num_loads['data']['output']
-
-    # for a_record in retrieved_output_from_export:
-    #     single_export_ref_num = a_record['export_ref_n']
-
-    #     data = {
-    #                 "export_ref_n" : single_export_ref_num
-    #             }
-
-    #     container_num_response = invoke_http(EXPORT_CONT_URL + "/export_cont/container_num", method="POST", json=data)
-    #     container_num_response_dumped = json.dumps(container_num_response)
-    #     container_num_response_loads = json.loads(container_num_response_dumped)
-    #     retrieved_list_containerNum_output = container_num_response_loads['data']['container_nums']
-
-    #     if retrieved_list_containerNum_output:
-    #         retrieved_tuple_containerNum_output = tuple(retrieved_list_containerNum_output)
-    #         a_record["container_numbers"] = retrieved_tuple_containerNum_output
-    #         # a_record["type"] = "Export"
-
-    # return retrieved_output_from_export
+    return retrieved_output_from_export
 
 
 
@@ -128,6 +83,7 @@ def getImportContainerNum():
     import_ref_num_dumped = json.dumps(import_ref_num_response)
     import_ref_num_response_loads = json.loads(import_ref_num_dumped)
     retrieved_output_from_import = import_ref_num_response_loads['data']['output']
+    print(retrieved_output_from_import)
 
     for a_record in retrieved_output_from_import:
         single_import_ref_num = a_record['import_ref_n']
@@ -141,10 +97,15 @@ def getImportContainerNum():
         container_num_response_loads = json.loads(container_num_response_dumped)
         retrieved_list_containerNum_output = container_num_response_loads['data']['container_nums']
 
-        if retrieved_list_containerNum_output:
+        if len(retrieved_list_containerNum_output) > 0:
             retrieved_tuple_containerNum_output = tuple(retrieved_list_containerNum_output)
             a_record["container_numbers"] = retrieved_tuple_containerNum_output
             # a_record["type"] = "Import"
+        
+        else:
+            a_record["container_numbers"] = []
+
+
 
     return retrieved_output_from_import
 
@@ -281,5 +242,58 @@ ExportContainerNum Sample JSON Response
 
 
 """
+
+
+
+    # pass the whole request from jeff side to the verify_jwt_csrf_validity function if 500 dont proceed else just proceed
+    # then just retrieve userId from the response 
+
+    # csrfTokenCookie = request.cookies.get('csrf_access_token')
+    # accessTokenCookie = request.cookies.get('access_token_cookie')
+    # payload = {
+    #     "cstf_access_token" : csrfTokenCookie,
+    #     "access_token_cookie" : accessTokenCookie
+    # }
+    # print("payload: ", payload)
+    # print("headers: ", request.headers.get('X-CSRF-TOKEN'))
+
+    # csrfTokenCookie = request.cookies.get('csrf_access_token')
+    # print(csrfTokenCookie)
+    # headers = {'X-CSRF-TOKEN': csrfTokenCookie}
+    # print("headers: ", headers)
+
+    # wguser_id_response = invoke_http(USER_URL, data=None, headers=request.headers.get('X-CSRF-TOKEN'), cookies=payload, method='GET')
+    # print(type(wguser_id_response))
+
+    # res = requests.request(
+    #     method='GET',
+    #     url=USER_URL,
+    #     headers=request.headers.get('X-CSRF-TOKEN'),
+    #     data=None,
+    #     cookies=payload,
+    #     allow_redirects=False
+    # )
+
+    # response = Response(wguser_id_response.content)
+    # wguser_id_response_dumped = json.dumps(wguser_id_response)
+    # wguser_id_response_loads = json.loads(wguser_id_response_dumped)
+
+    # return wguser_id_response_loads
+
+    
+
+    # return str(wguser_id_response_loads)
+    # wguser_id = wguser_id_response['userId']
+
+    # return jsonify(
+    #         {
+    #             "code":200,
+    #             "data":
+    #             {
+    #                 "output" : wguser_id_response
+    #             }
+    #         }
+    # )
+
 
 

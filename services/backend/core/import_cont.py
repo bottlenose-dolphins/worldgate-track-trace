@@ -76,6 +76,16 @@ def get_cont_num():
                     }
                 }
             ), 200
+        
+        else:
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {
+                        "container_nums": "No Container Numbers associated with the given import_ref_n : " + str(import_ref_n)
+                    }
+                }
+            ), 200
 
     
     except Exception as e:

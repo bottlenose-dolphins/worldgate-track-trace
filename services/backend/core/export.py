@@ -89,15 +89,23 @@ def get_export_ref_n_using_wguser_id():
             formatted_date_str = dt_obj.strftime('%d/%m/%Y')
             a_record["delivery_date"] = formatted_date_str
 
-        
-
-
         return jsonify(
             {
                 "code":200,
                 "data":
                 {
                     "output" : result
+                }
+            }
+        ),200
+    
+    else:
+        return jsonify(
+            {
+                "code":200,
+                "data":
+                {
+                    "output" : "No details retrieved with the wguser_id : " + wguser_id
                 }
             }
         ),200
@@ -137,49 +145,58 @@ if __name__ == "__main__":
     "data": {
         "output": [
             {
-                "delivery_date": "Tue, 01 Jun 2021 00:00:00 GMT",
-                "destination_port": "KARACHI",
-                "export_ref_n": 14368
+                "delivery_date": "01/06/2021",
+                "export_destination": "KARACHI",
+                "export_ref_n": 17612,
+                "type": "Export"
             },
             {
-                "delivery_date": "Sat, 07 Nov 2020 00:00:00 GMT",
-                "destination_port": "MUMBAI,INDIA",
-                "export_ref_n": 14165
+                "delivery_date": "07/11/2020",
+                "export_destination": "MUMBAI,INDIA",
+                "export_ref_n": 17625,
+                "type": "Export"
             },
             {
-                "delivery_date": "Tue, 05 Sep 2017 00:00:00 GMT",
-                "destination_port": "CHITTAGONG",
-                "export_ref_n": 14284
+                "delivery_date": "05/09/2017",
+                "export_destination": "CHITTAGONG",
+                "export_ref_n": 17595,
+                "type": "Export"
             },
             {
-                "delivery_date": "Sat, 27 May 2017 00:00:00 GMT",
-                "destination_port": "HAMBURG",
-                "export_ref_n": 14161
+                "delivery_date": "27/05/2017",
+                "export_destination": "HAMBURG",
+                "export_ref_n": 17648,
+                "type": "Export"
             },
             {
-                "delivery_date": "Sat, 12 Jun 2010 00:00:00 GMT",
-                "destination_port": "CHIASSO CY",
-                "export_ref_n": 14290
+                "delivery_date": "12/06/2010",
+                "export_destination": "CHIASSO CY",
+                "export_ref_n": 17581,
+                "type": "Export"
             },
             {
-                "delivery_date": "Thu, 19 Nov 2009 00:00:00 GMT",
-                "destination_port": "BANGKOK PORT, *",
-                "export_ref_n": 14166
+                "delivery_date": "19/11/2009",
+                "export_destination": "BANGKOK PORT, *",
+                "export_ref_n": 17633,
+                "type": "Export"
             },
             {
-                "delivery_date": "Fri, 23 Sep 2005 00:00:00 GMT",
-                "destination_port": "CHIASSO CY",
-                "export_ref_n": 17587
+                "delivery_date": "23/09/2005",
+                "export_destination": "CHIASSO CY",
+                "export_ref_n": 17587,
+                "type": "Export"
             },
             {
-                "delivery_date": "Sun, 07 Nov 1999 00:00:00 GMT",
-                "destination_port": "COLOMBO, SRI LANKA",
-                "export_ref_n": 14277
+                "delivery_date": "08/05/1999",
+                "export_destination": "NHAVA SHEVA",
+                "export_ref_n": 17549,
+                "type": "Export"
             },
             {
-                "delivery_date": "Sat, 08 May 1999 00:00:00 GMT",
-                "destination_port": "NHAVA SHEVA",
-                "export_ref_n": 14520
+                "delivery_date": "22/09/1997",
+                "export_destination": "NHAVA SHEVA",
+                "export_ref_n": 17609,
+                "type": "Export"
             }
         ]
     }
