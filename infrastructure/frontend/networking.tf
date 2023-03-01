@@ -53,18 +53,18 @@ resource "aws_lb_listener" "listener_fe_default_subnet" {
 
 
 #VARU's WIP R53
-# resource "aws_route53_zone" "worldgatetracktrace" {
-#   name = "worldgatetracktrace.live"
-# }
+data "aws_route53_zone" "hosted_zone" {
+    name = var.domain_name
+}
 
-# resource "aws_route53_record" "worldgatetracktrace" {
-#   zone_id = aws_route53_zone.worldgatetracktrace.zone_id
-#   name    = "worldgatetracktrace.live"
-#   type    = "A"
-
-#   alias {
-#     name                   = aws_alb.application_load_balancer.dns_name
-#     zone_id                = aws_alb.application_load_balancer.zone_id
-#     evaluate_target_health = true
-#   }
-# }
+resource "aws_route53_record" "site_domain" {
+    zone_id = data.aws_route53_zone.hosted_zone.zone_id
+    name    = var.record_name
+    type    = "A"
+    
+    alias {
+      name                   = aws_alb.application_load_balancer.dns_name
+      zone_id                = aws_alb.application_load_balancer.zone_id
+      evaluate_target_health = true
+    }
+}
