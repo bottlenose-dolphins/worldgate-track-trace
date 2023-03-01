@@ -228,6 +228,9 @@ Returns username and wguser_id of user.
 def verify_jwt_csrf_validity():
     # decode jwt to extract the csrf
     csrf_in_jwt = get_jwt()["csrf"]
+    csrfHeader = request.headers.get('X-CSRF-TOKEN')
+    print("csrfJWT : " + csrf_in_jwt)
+    print("csrfHeader : " + csrfHeader)
     if csrf_in_jwt is None or request.headers.get('X-CSRF-TOKEN') is None: # no cookie or request header
         return jsonify({
             "code": 500,
