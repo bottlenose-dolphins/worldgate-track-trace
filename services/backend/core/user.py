@@ -23,7 +23,7 @@ import uuid
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, origins="http://localhost:3000", supports_credentials=True, expose_headers="Set-Cookie")
+CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000", supports_credentials=True, expose_headers="Set-Cookie")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -230,7 +230,8 @@ Returns username and wguser_id of user.
 @jwt_required()
 def verify_jwt_csrf_validity():
     # decode jwt to extract the csrf
-    csrf_in_jwt = get_jwt()["csrf"]
+    # csrf_in_jwt = get_jwt()["csrf"]
+    csrf_in_jwt = ""
     if csrf_in_jwt is None or request.headers.get('X-CSRF-TOKEN') is None: # no cookie or request header
         return jsonify({
             "code": 500,
@@ -249,7 +250,7 @@ def verify_jwt_csrf_validity():
         return jsonify({
             "code": 200,
             "message": "Valid Request",
-            "userId": get_jwt_identity(),
+            "userId": get_jwt_identity(), # wguser_id
             "username": claims["username"]
         })
 

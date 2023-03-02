@@ -55,7 +55,7 @@ export const blStatus = async(shippingLine, identifier, identifierType, directio
     try {
         const authRes = await authenticate()
 
-        if (authRes.status === 200) {
+        if (authRes.code === 200) {
             const res = await axios.post(`${COMPLEX_SCRAPER_ENDPOINT}/scrape`, {
                 "shipping_line": shippingLine,
                 "identifier": identifier,

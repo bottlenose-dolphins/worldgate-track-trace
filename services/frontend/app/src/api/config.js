@@ -24,7 +24,7 @@ export const authenticate = async() => {
             "X-CSRF-TOKEN": getCookie("csrf_access_token")
         }
     });
-    return res;
+    return res.data;
 }
 
 // USAGE EXAMPLE:
