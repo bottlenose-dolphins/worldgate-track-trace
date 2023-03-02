@@ -1,3 +1,5 @@
+# For import_cont.py
+
 FROM python:3.11
 
 #cx-Oracle fails to install via alpine (smaller image)
@@ -7,6 +9,7 @@ FROM python:3.11
 
 RUN mkdir app
 WORKDIR    /opt/oracle
+
 
 RUN        apt-get update && apt-get install -y libaio1 wget unzip \
 
@@ -26,13 +29,17 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
             && ldconfig
 
 WORKDIR /app
-COPY . .
+COPY requirements.txt .
+COPY import_cont.py .
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
+ENV SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
 
-EXPOSE 5002
+
+
+EXPOSE 5004
 
 # start the server
-CMD [ "python", "user.py" ]
+CMD [ "python", "import_cont.py" ]

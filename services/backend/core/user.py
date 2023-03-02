@@ -8,6 +8,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager, get_jwt, get_jwt_identity, jwt_required
 from flask_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies
 import cx_Oracle
+from obtainIp import obtainIP
 
 from os import getenv
 from dotenv import load_dotenv
@@ -87,6 +88,11 @@ def is_email(email):
 @app.route("/ping", methods=['GET'])
 def health_check():
     return("hello")
+
+@app.route("/testRoute", methods=['GET'])
+def testRoute():
+    return obtainIP("scraper_ymlu_service")
+    
 
 @app.route("/user/signup", methods=['POST'])
 def sign_up():
@@ -222,6 +228,9 @@ Returns username and wguser_id of user.
 def verify_jwt_csrf_validity():
     # decode jwt to extract the csrf
     csrf_in_jwt = get_jwt()["csrf"]
+    csrfHeader = request.headers.get('X-CSRF-TOKEN')
+    print("csrfJWT : " + csrf_in_jwt)
+    print("csrfHeader : " + csrfHeader)
     if csrf_in_jwt is None or request.headers.get('X-CSRF-TOKEN') is None: # no cookie or request header
         return jsonify({
             "code": 500,
@@ -245,5 +254,5 @@ def verify_jwt_csrf_validity():
         })
 
 if __name__ == "__main__":
-    #port can also be determined in docker file through CMD instead
-    app.run(host='0.0.0.0', port=5002, debug=True) # debug for DEV environment only
+    app.run(debug=True)
+    # app.run(host='0.0.0.0', port=5002, debug=True) #to work as a local flask app

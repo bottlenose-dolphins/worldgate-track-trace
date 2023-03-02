@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { SignInPage, SignUpPage, HomePage, ViewShipmentsPage } from "src/routes";
+import { BLStatusPage, SignInPage, SignUpPage, HomePage } from "src/routes";
 import "./App.css";
 
 function App() {
@@ -11,6 +12,8 @@ function App() {
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/view-shipments" element={<ViewShipmentsPage />} />
+        <Route path="/sign-up" element={<SignUpPage/>} />
+        <Route path="/blstatus" element={<BLStatusPage/>} />
       </Routes>
     </Router>
   );
