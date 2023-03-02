@@ -187,6 +187,7 @@ def sign_in():
         response = jsonify({
             "code": 200,
             "message": "login success",
+            "username": found_user.username
         })
         set_access_cookies(response, access_token)
         return response
@@ -200,9 +201,11 @@ def sign_in():
 
 @app.route("/user/signout", methods=["POST"])
 def sign_out():
-    response = jsonify({"msg": "sign out successful"})
+    response = jsonify({
+        "code": 200,
+        "message": "sign out successful"})
     unset_jwt_cookies(response)
-    return response
+    return response, 200
 
 # Using an `after_request` callback, we refresh any token that is within 15 minutes of expiring.
 @app.after_request

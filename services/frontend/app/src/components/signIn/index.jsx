@@ -25,7 +25,8 @@ export default function SignIn() {
         const res = await signIn(username, password);
         if (res.code === 200) {
             setError("");
-            // TODO: Redirect to home page/dashboard
+            localStorage.setItem("username", res.username);
+            navigate("/view-shipments");
         } else if (res.code !== 500) {
             setError("Incorrect username/email address or password");
         } else {
@@ -58,12 +59,12 @@ export default function SignIn() {
                     </div>
                     <button
                         type='submit'
-                        className='mt-5 text-white place-self-end bg-blue-500 hover:bg-blue-400 font-medium rounded-lg text-md w-full sm:w-auto px-8 py-2 text-center'
+                        className='mt-4 text-white place-self-end bg-blue-500 hover:bg-blue-400 font-medium rounded-lg text-md w-full sm:w-auto px-8 py-2 text-center'
                     >
                         Sign In
                     </button>
                 </form>
-                <div className='pt-5 text-red-500'>{ error }</div>
+                <div className='pt-2 text-sm text-red-500'>{error}</div>
             </div>
         </div>
     )

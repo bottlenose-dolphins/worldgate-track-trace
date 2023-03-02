@@ -2,7 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import time
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+import subprocess
 
 app = Flask(__name__)
 
@@ -10,9 +11,9 @@ app = Flask(__name__)
 def ping():
     return("hello")
 
-@app.route('/ONE/<string:tracking_type>/<string:identifier>')
+@app.route('/ONE', methods=['POST']) 
 
-def oneScraper(tracking_type,identifier):
+def oneScraper():
 
     try:
 
@@ -33,6 +34,12 @@ def oneScraper(tracking_type,identifier):
         driver = webdriver.Chrome(options=options)
 
         driver.maximize_window()
+
+        data = request.get_json()
+
+        tracking_type = data["tracking_type"]
+
+        identifier = data["identifier"]
 
         # remove ONEY prefix from BL Number
 
@@ -110,6 +117,8 @@ def oneScraper(tracking_type,identifier):
 
     except Exception as e:
 
+        restart_microservice()
+
         return jsonify(
 
             {
@@ -122,15 +131,25 @@ def oneScraper(tracking_type,identifier):
 
         ), 500
 
+# will restart the specific docker-compose file 
+
+def restart_microservice():
+
+    subprocess.call(['docker-compose','stop','scraper_one'])
+
+    subprocess.call(['docker-compose', 'rm', '-f', 'scraper_one'])
+
+    subprocess.call(['docker-compose', 'up', '-d', 'scraper_one'])
+
 if __name__ == '__main__':
     app.run(debug=True)
     # app.run(host='0.0.0.0', port=8083, debug=True) #to work as a local flask app
 
 
 # TESTING URL
+# http://127.0.0.1:8083/ONE
 
-# http://192.168.1.118:8084/ONE/BL/ONEYSINC72210300
-# http://192.168.1.118:8084/ONE/BL/ONEYSINC69412601
-# http://192.168.1.118:8084/ONE/CTR/GAOU6627318
-# http://192.168.1.118:8084/ONE/CTR/TCNU7130634
+
+
+
 

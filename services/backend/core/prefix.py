@@ -40,9 +40,9 @@ def prefix_exists(shipping_line):
 
 # Retrieve prefix
 @app.route("/prefix/retrieve", methods=['POST'])
-def retrieve_prefix():
+def get_prefix():
     data = request.get_json()
-    shipping_line = data["shipping_line"]
+    shipping_line = data["vendor_name"]
     if prefix_exists(shipping_line):
         prefix = Prefix.query.filter_by(shipping_fullform=shipping_line).first().shipping_acronym
 

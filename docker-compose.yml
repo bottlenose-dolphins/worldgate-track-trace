@@ -130,6 +130,18 @@ services:
     ports:
       - 5011:5011
 
+  core_vendor_mast:
+    container_name: core_vendor_mast
+    build:
+      context: ./services/backend/core
+      dockerfile: Dockerfile-vendor-mast-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+    ports:
+      - 5012:5012
+
   web:
     container_name: web
     build:
@@ -203,6 +215,36 @@ services:
     shm_size: '1gb'
     ports:
       - 8083:8083
+  
+  scraper_cosc:
+    container_name: scraper_cosc
+    build:
+      context: ./services/backend/scrapers
+      shm_size: '1gb'
+      dockerfile: Dockerfile-Cosco-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - PYTHONUNBUFFERED=1
+    shm_size: '1gb'
+    ports:
+      - 8085:8085
+  
+  scraper_cord:
+    container_name: scraper_cord
+    build:
+      context: ./services/backend/scrapers
+      shm_size: '1gb'
+      dockerfile: Dockerfile-Cord-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - PYTHONUNBUFFERED=1
+      - cordUsername =${cordUsername}
+      - cordPassword =${cordPassword}
+    shm_size: '1gb'
+    ports:
+      - 8084:8084
 
 
 
