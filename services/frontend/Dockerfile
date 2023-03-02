@@ -4,12 +4,12 @@ COPY . .
 WORKDIR /app
 
 # install node modules 
-RUN npm ci
+RUN npm i
 #build app
 RUN npm run build
 
 # expose port 
-EXPOSE 3000
+EXPOSE 80
 # start app
 CMD ["npm", "start"]
 

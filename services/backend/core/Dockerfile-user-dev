@@ -26,6 +26,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip
             RUN ldconfig
 
 WORKDIR /app
+ENV CACHEBUST = 3
 COPY user.py .
 COPY requirements.txt . 
 COPY obtainIp.py .

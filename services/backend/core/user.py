@@ -23,17 +23,20 @@ import uuid
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000", supports_credentials=True, expose_headers="Set-Cookie")
+CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",
+     supports_credentials=True, expose_headers="Set-Cookie")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = getenv('JWT_SECRET', default='secret_local_testing_only')
+app.config['JWT_SECRET_KEY'] = getenv(
+    'JWT_SECRET', default='secret_local_testing_only')
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=0.5)
 # app.config['JWT_COOKIE_SECURE'] = True # for prod
 
 jwt = JWTManager(app)
 db = SQLAlchemy(app)
+
 
 class User(db.Model):
     __tablename__ = "wg_user"
@@ -76,23 +79,27 @@ def validate_username(username):
         }), 404
     return None
 
+
 def generate_uuid():
     return shortuuid.uuid()
 
+
 def is_email(email):
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-    if(re.fullmatch(regex, email)):
+    if (re.fullmatch(regex, email)):
         return True
     return False
 
+
 @app.route("/ping", methods=['GET'])
 def health_check():
-    return("hello")
+    return ("hello")
+
 
 @app.route("/testRoute", methods=['GET'])
 def testRoute():
     return obtainIP("scraper_ymlu_service")
-    
+
 
 @app.route("/user/signup", methods=['POST'])
 def sign_up():
@@ -117,7 +124,8 @@ def sign_up():
         password.encode('utf-8') + password_salt.encode('utf-8')
     ).hexdigest()
 
-    new_user = User(username, email, password_salt, password_hash, phone, company)
+    new_user = User(username, email, password_salt,
+                    password_hash, phone, company)
 
     try:
         db.session.add(new_user)
@@ -138,6 +146,7 @@ def sign_up():
             "message": "Create user unsuccessful",
             "data": str(err)
         }), 500
+
 
 @app.route("/user/signin", methods=['POST'])
 def sign_in():
@@ -169,7 +178,8 @@ def sign_in():
             }), 404
 
         input_password_hash = hashlib.sha512(
-            input_password.encode('utf-8') + found_user.password_salt.encode('utf-8')
+            input_password.encode('utf-8') +
+            found_user.password_salt.encode('utf-8')
         ).hexdigest()
         verified = found_user.password_hash == input_password_hash
 
@@ -179,11 +189,12 @@ def sign_in():
                 "message": "Wrong password"
             }), 401
 
-        # access token stored in httpOnly cookie, 
+        # access token stored in httpOnly cookie,
         # double submit token stored in regular cookie
         additional_claims = {"username": found_user.username}
-        access_token = create_access_token(identity=found_user.wguser_id, additional_claims=additional_claims)
-        
+        access_token = create_access_token(
+            identity=found_user.wguser_id, additional_claims=additional_claims)
+
         response = jsonify({
             "code": 200,
             "message": "login success",
@@ -199,6 +210,7 @@ def sign_in():
             "data": str(err)
         }), 500
 
+
 @app.route("/user/signout", methods=["POST"])
 def sign_out():
     response = jsonify({
@@ -208,6 +220,8 @@ def sign_out():
     return response, 200
 
 # Using an `after_request` callback, we refresh any token that is within 15 minutes of expiring.
+
+
 @app.after_request
 def refresh_expiring_jwt(response):
     try:
@@ -222,17 +236,22 @@ def refresh_expiring_jwt(response):
         # Case where there is not a valid JWT. Just return the original response
         return response
 
+
 """
 To be called before ALL protected endpoints. Verifies valid JWT and double submit token in request header
 Returns username and wguser_id of user.
 """
+
+
 @app.route("/user/verify", methods=['GET'])
 @jwt_required()
 def verify_jwt_csrf_validity():
     # decode jwt to extract the csrf
-    # csrf_in_jwt = get_jwt()["csrf"]
-    csrf_in_jwt = ""
-    if csrf_in_jwt is None or request.headers.get('X-CSRF-TOKEN') is None: # no cookie or request header
+    csrf_in_jwt = get_jwt()["csrf"]
+    # csrf_in_jwt = ""
+    # no cookie or request header
+    if csrf_in_jwt is None or request.headers.get('X-CSRF-TOKEN') is None:
+        print("no csrf in jwt")
         return jsonify({
             "code": 500,
             "message": "Token Not Found - Request Unauthorised"
@@ -241,6 +260,7 @@ def verify_jwt_csrf_validity():
     csrf_in_header = request.headers.get('X-CSRF-TOKEN').split(' ')[-1]
     # compare both csrfs
     if csrf_in_jwt != csrf_in_header:
+        print("crsf dont match")
         return jsonify({
             "code": 500,
             "message": "Invalid Token - Request Unauthorised"
@@ -250,9 +270,10 @@ def verify_jwt_csrf_validity():
         return jsonify({
             "code": 200,
             "message": "Valid Request",
-            "userId": get_jwt_identity(), # wguser_id
+            "userId": get_jwt_identity(),  # wguser_id
             "username": claims["username"]
         })
+
 
 if __name__ == "__main__":
     app.run(debug=True)
