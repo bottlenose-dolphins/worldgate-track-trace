@@ -77,15 +77,15 @@ def get_import_ref_n_using_wguser_id():
                 {
                     "import_ref_n": a_row.import_ref_n,
                     "import_destination": "Singapore",
-                    "arrival_date": str(a_row.delivery_d),
+                    "arrival_date": a_row.delivery_d,
                     "type": "Import"
                 }
         for a_row in output]
 
         for a_record in result:
             date_str = a_record["arrival_date"]
-            dt_obj = datetime.strptime(date_str, '%Y-%m-%d')
-            formatted_date_str = dt_obj.strftime('%d/%m/%Y')
+            dt_obj = datetime.strptime(date_str, '%a, %d %b %Y %H:%M:%S %Z')
+            formatted_date_str = dt_obj.strftime('%d %b %Y')
             a_record["arrival_date"] = formatted_date_str
 
             
