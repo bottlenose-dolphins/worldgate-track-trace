@@ -54,23 +54,23 @@ export default function ViewShipmentComponent(props){
     const fetchData = async () => {
       if (type === "Import") {
         const importShipments = await getImportShipment();
-        setItems(importShipments);
+        setItems(importShipments.slice().reverse());
       } else if (type === "Export") {
         const exportShipments = await getExportShipment();
-        setItems(exportShipments);
+        setItems(exportShipments.slice().reverse());
       }
     };
     fetchData();
   }, [type]);
 
-  console.log(items);
-
   const handleClick = () => {
     if(buttonText==="closest to arrival"){
       setButtonText("furthest from arrival");
+      setItems(items.slice().reverse());
     }
     else{
       setButtonText("closest to arrival");
+      setItems(items.slice().reverse());
     }
   };
 
@@ -79,7 +79,7 @@ export default function ViewShipmentComponent(props){
     <h1 className="text-2xl font-medium text-blue-700">{title}</h1>
       <div className="my-auto bg-light-blue-500 p-4 rounded-lg border border-blue-500 w-1/2">
       <h2 className="mt-6 text-lg font-medium text-blue-700 inline-block">List view</h2>
-      <img className="ml-96 inline-block" src={sortButton} alt="sort"/> <button type="button" className="font-medium text-blue-700" onClick={handleClick}>{buttonText}</button>
+      <img className="ml-80 inline-block" src={sortButton} alt="sort"/> <button type="button" className="font-medium text-blue-700" onClick={handleClick}>{buttonText}</button>
       <div className="mt-6">
       {items.map((item, index) => {
 
