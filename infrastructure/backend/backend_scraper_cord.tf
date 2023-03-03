@@ -1,14 +1,14 @@
-resource "aws_cloudwatch_log_group" "tracktrace_scraper_good" {
-    name = "tracktrace_scraper_good"
+resource "aws_cloudwatch_log_group" "tracktrace_scraper_cord_log" {
+    name = "tracktrace_scraper_cord_log"
 }
 
-resource "aws_ecs_task_definition" "tracktrace_scraper_good" {
-    family                   = "tracktrace_scraper_good" 
+resource "aws_ecs_task_definition" "tracktrace_scraper_cord" {
+    family                   = "tracktrace_scraper_cord" 
     container_definitions    = <<DEFINITION
     [
         {
-        "name": "tracktrace_scraper_good",
-        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper_good_v1.0_ARM",
+        "name": "tracktrace_core_user",
+        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper_Cord",
         "essential": true,
         "portMappings": [
             {
@@ -25,7 +25,7 @@ resource "aws_ecs_task_definition" "tracktrace_scraper_good" {
         "logConfiguration": {
           "logDriver": "awslogs",
           "options": {
-            "awslogs-group": "tracktrace_scraper_good",
+            "awslogs-group": "tracktrace_scraper_cord_log",
             "awslogs-region": "ap-southeast-1",
             "awslogs-stream-prefix": "ecs"
                 }
@@ -45,12 +45,12 @@ resource "aws_ecs_task_definition" "tracktrace_scraper_good" {
 }
 
 
-resource "aws_ecs_service" "tracktrace_scraper_good_service" {
-    name            = "tracktrace_scraper_good_service"                             # Naming our first service
+resource "aws_ecs_service" "tracktrace_scraper_cord_service" {
+    name            = "tracktrace_scraper_cord_service"                             # Naming our first service
     cluster         = "${aws_ecs_cluster.tracktrace_cluster.id}"             # Referencing our created Cluster
-    task_definition = "${aws_ecs_task_definition.tracktrace_scraper_good.arn}" # Referencing the task our service will spin up
+    task_definition = "${aws_ecs_task_definition.tracktrace_scraper_cord.arn}" # Referencing the task our service will spin up
     launch_type     = "FARGATE"
-    desired_count   = 2 # Setting the number of containers we want deployed to 2
+    desired_count   = 1 # Setting the number of containers we want deployed to 2
 
     network_configuration {
     subnets          = ["${aws_default_subnet.default_subnet_a.id}", "${aws_default_subnet.default_subnet_b.id}", "${aws_default_subnet.default_subnet_c.id}"]
@@ -58,6 +58,6 @@ resource "aws_ecs_service" "tracktrace_scraper_good_service" {
     }
 
     service_registries {
-    registry_arn = "${aws_service_discovery_service.scraper_good.arn}"
+    registry_arn = "${aws_service_discovery_service.scraper_cord.arn}"
     }
 }

@@ -38,6 +38,10 @@ class ImportShipment(db.Model):
             "cr_agent_id": self.cr_agent_id
         }
 
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("import_shipment")
+
 # Retrieve shipment information by Master B/L
 @app.route("/import_shipment/retrieve", methods=['POST'])
 def retrieve_shipment():
@@ -178,5 +182,5 @@ def get_agent_id():
         ), 500
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5005, debug=True)
-    # app.run(host='0.0.0.0', debug=True)
+    # app.run(host='0.0.0.0', port=5005, debug=True)
+    app.run(host='0.0.0.0', debug=True)

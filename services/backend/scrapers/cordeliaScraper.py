@@ -6,6 +6,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import subprocess
+from os import getenv
 
 #server related
 # server related
@@ -13,9 +14,9 @@ from flask import Flask, jsonify, request
 
 import time
 
-username = ""
-password = ""
 app = Flask(__name__)
+username = getenv("cordUsername")
+password = getenv("cordPassword")
 
 @app.route("/CCSL", methods=['POST'])
 def track():

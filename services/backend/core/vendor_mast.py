@@ -31,6 +31,10 @@ class Vendor(db.Model):
             "vendor_name": self.vendor_name
         }
 
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("vendor_mast")
+
 # Retrieve vendor_name by vendor_id
 @app.route("/vendor_mast/vendor_name", methods=['POST'])
 def get_vendor_name():
@@ -58,5 +62,5 @@ def get_vendor_name():
         ), 404
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5012, debug=True)
-    # app.run(host='0.0.0.0', debug=True)
+    # app.run(host='0.0.0.0', port=5012, debug=True)
+    app.run(host='0.0.0.0', debug=True)

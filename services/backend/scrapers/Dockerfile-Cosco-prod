@@ -23,10 +23,8 @@ RUN rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 # copying the neccessary script
 COPY requirements.txt .
-COPY goodrichScraper.py .
-RUN mkdir creds 
-COPY ./creds/creds_goodrich.py ./creds
-RUN mv goodrichScraper.py app.py
+COPY coscoScraper.py .
+RUN mv coscoScraper.py app.py
 
 # upgrade pip and install requirements
 RUN pip install --upgrade pip

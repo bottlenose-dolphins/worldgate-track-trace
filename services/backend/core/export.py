@@ -42,6 +42,10 @@ class Export(db.Model):
             "port_del_name": self.port_del_name
         }
 
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("export")
+
 # Retrieve EXPORT_REF_N by House B/L
 @app.route("/export/export_ref_n", methods=['POST'])
 def get_export_ref_n():
@@ -119,13 +123,12 @@ def get_export_ref_n_using_wguser_id():
         }
     ), 500
 
-@app.route("/ping", methods=['GET'])
-def health_check():
-    return("Hi")
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5006, debug=True)
-    # app.run(host='0.0.0.0', debug=True)
+
+    # app.run(host='0.0.0.0', port=5006, debug=True)
+    app.run(host='0.0.0.0', debug=True)
+
 
 """
     SAMPLE API ENDPOINT

@@ -31,6 +31,10 @@ class ExportCont(db.Model):
             "cont_n": self.cont_n
         }
 
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("export_cont")
+
 # Retrieve EXPORT_REF_N from EXPORT_REF_CONT by CONT_N
 @app.route("/export_cont/export_ref_n", methods=['POST'])
 def get_export_ref_n():
@@ -104,6 +108,9 @@ if __name__ == "__main__":
 
 """
 Sample API Endpoint
+    # app.run(host='0.0.0.0', port=5007, debug=True)
+    app.run(host='0.0.0.0', debug=True)
+# Sample API Endpoint
 
 http://127.0.0.1:5007/export_cont/container_num
 

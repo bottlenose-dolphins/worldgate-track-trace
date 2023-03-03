@@ -1,14 +1,14 @@
-resource "aws_cloudwatch_log_group" "tracktrace_core_user" {
-    name = "tracktrace_core_user"
+resource "aws_cloudwatch_log_group" "tracktrace_core_export_cont_log" {
+    name = "tracktrace_core_export_cont_log"
 }
 
-resource "aws_ecs_task_definition" "tracktrace_core_user" {
-    family                   = "tracktrace_core_user" 
+resource "aws_ecs_task_definition" "tracktrace_core_export_cont" {
+    family                   = "tracktrace_core_export_cont" 
     container_definitions    = <<DEFINITION
     [
         {
-        "name": "tracktrace_core_user",
-        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_user_v2.0_ARM",
+        "name": "tracktrace_core_export_cont",
+        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_export-cont",
         "essential": true,
         "portMappings": [
             {
@@ -16,8 +16,8 @@ resource "aws_ecs_task_definition" "tracktrace_core_user" {
             "hostPort": 80
             }
         ],
-        "memory": 1024,
-        "cpu": 512,
+        "memory": 512,
+        "cpu": 256,
         "runtimePlatform": {
         "operatingSystemFamily": "LINUX",
         "cpuArchitecture": "ARM64"
@@ -28,7 +28,7 @@ resource "aws_ecs_task_definition" "tracktrace_core_user" {
         "logConfiguration": {
           "logDriver": "awslogs",
           "options": {
-            "awslogs-group": "tracktrace_core_user",
+            "awslogs-group": "tracktrace_core_export_cont_log",
             "awslogs-region": "ap-southeast-1",
             "awslogs-stream-prefix": "ecs"
                 }
@@ -43,16 +43,16 @@ resource "aws_ecs_task_definition" "tracktrace_core_user" {
     task_role_arn         = "arn:aws:iam::283879969377:role/trackTraceServiceDiscovery"
     requires_compatibilities = ["FARGATE"] # Stating that we are using ECS Fargate
     network_mode             = "awsvpc"    # Using awsvpc as our network mode as this is required for Fargate
-    memory                   = 1024         # Specifying the memory our container requires
-    cpu                      = 512         # Specifying the CPU our container requires
+    memory                   = 512         # Specifying the memory our container requires
+    cpu                      = 256         # Specifying the CPU our container requires
     execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole2.arn}"
 }
 
 
-resource "aws_ecs_service" "tracktrace_core_user_service" {
-    name            = "tracktrace_core_user_service"                             # Naming our first service
+resource "aws_ecs_service" "tracktrace_core_export_cont_service" {
+    name            = "tracktrace_core_export_cont_service"                             # Naming our first service
     cluster         = "${aws_ecs_cluster.tracktrace_cluster.id}"             # Referencing our created Cluster
-    task_definition = "${aws_ecs_task_definition.tracktrace_core_user.arn}" # Referencing the task our service will spin up
+    task_definition = "${aws_ecs_task_definition.tracktrace_core_export_cont.arn}" # Referencing the task our service will spin up
     launch_type     = "FARGATE"
     desired_count   = 2 # Setting the number of containers we want deployed to 2
 
@@ -62,6 +62,6 @@ resource "aws_ecs_service" "tracktrace_core_user_service" {
     }
 
     service_registries {
-    registry_arn = "${aws_service_discovery_service.core_user.arn}"
+    registry_arn = "${aws_service_discovery_service.core_export_cont.arn}"
     }
 }
