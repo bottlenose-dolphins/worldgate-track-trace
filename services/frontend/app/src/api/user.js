@@ -24,6 +24,7 @@ export const signIn = async(username, password) => {
 export const signUp = async(username, email, password, phone, company) => {
     try {
             const res = await axios.post(`${USER_ENDPOINT}/signup`, {
+            "username": username,
             "email": email,
             "password": password,
             "phone": phone,
