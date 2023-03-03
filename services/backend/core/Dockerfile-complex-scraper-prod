@@ -1,4 +1,4 @@
-# for complex_scraper.py (NOT able to test API endpoints bc cant seem to import invokes.py on my end)
+# for complex_scraper.py
 
 FROM python:3.11
 

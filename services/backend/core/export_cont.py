@@ -55,7 +55,7 @@ def get_export_ref_n():
         }
     ), 500
 
-# Retrieve CONT_N from EXPORT_REF_CONT using EXPORT_REF_N 
+# Retrieve CONT_N from EXPORT_REF_CONT using EXPORT_REF_N --> Returns a List which will be appended to the response from export.py function
 @app.route("/export_cont/container_num", methods=['POST'])
 def get_cont_num():
     try:
@@ -66,12 +66,25 @@ def get_cont_num():
 
         
         if len(container_nums):
-            container_numbers = [{"container_num": cont.cont_n} for cont in container_nums]
+            outputList = []
+            for container_num in container_nums:
+                outputList.append(container_num.cont_n)
+            
             return jsonify(
                 {
                     "code": 200,
                     "data": {
-                        "container_nums": container_numbers
+                        "container_nums": outputList
+                    }
+                }
+            ), 200
+        
+        else:
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {
+                        "container_nums": "No Container Numbers associated with the given import_ref_n : " + str(export_ref_n)
                     }
                 }
             ), 200
@@ -88,3 +101,34 @@ def get_cont_num():
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5007, debug=True)
     # app.run(host='0.0.0.0', debug=True)
+
+"""
+Sample API Endpoint
+
+http://127.0.0.1:5007/export_cont/container_num
+
+Sample JSON request
+
+{
+    "export_ref_n" : 17587
+}
+
+Sample JSON response
+
+{
+    "code": 200,
+    "data": {
+        "container_nums": [
+            "REGU4985177",
+            "REGU4995920",
+            "REGU4991740",
+            "REGU4205368",
+            "TEXU7407574",
+            "CRXU4483116",
+            "TEXU7099492",
+            "REGU4982408"
+        ]
+    }
+}
+
+"""
