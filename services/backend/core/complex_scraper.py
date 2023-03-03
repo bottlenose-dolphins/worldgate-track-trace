@@ -13,17 +13,24 @@ load_dotenv()
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+print(getenv('SQLALCHEMY_DATABASE_URI'))
+
+prod = getenv("prod")
+print("prod type: ", type(prod))
+
+print("********")
+
 db = SQLAlchemy(app)
 
-scraper_url = "http://scraper_ymlu:8080/"
-prefix_url = "http://core_prefix:5011/"
-import_shipment_url = "http://core_import_shipment:5005/"
-export_shipment_url = "http://core_export_shipment:5008/"
-import_url = "http://core_import:5003/"
-export_url = "http://core_export:5006/"
-import_cont_url = "http://core_import_cont:5004/"
-export_cont_url = "http://core_export_cont:5007/"
-vendor_mast_url = "http://core_vendor_mast:5012/"
+# scraper_url = "http://scraper_ymlu:8080/"
+# prefix_url = "http://core_prefix:5011/"
+# import_shipment_url = "http://core_import_shipment:5005/"
+# export_shipment_url = "http://core_export_shipment:5008/"
+# import_url = "http://core_import:5003/"
+# export_url = "http://core_export:5006/"
+# import_cont_url = "http://core_import_cont:5004/"
+# export_cont_url = "http://core_export_cont:5007/"
+# vendor_mast_url = "http://core_vendor_mast:5012/"
 
 @app.route("/ping", methods=['GET'])
 def health_check():
@@ -129,7 +136,8 @@ def get_prefix(master_bl, direction):
                 "vendor_id": export_ref_res["data"]["cr_agent_id"]
             } 
 
-    vendor_mast_res = invoke_http(vendor_mast_url + "vendor_mast/vendor_name", method='POST', json=data)        
+    # vendor_mast_res = invoke_http(vendor_mast_url + "vendor_mast/vendor_name", method='POST', json=data)        
+    vendor_mast_res = invoke_http2("core_vendor_mast", "vendor_mast/vendor_name", prod, method="POST", json=data) 
     if vendor_mast_res["code"] == 200:
         data = {
             "vendor_name": vendor_mast_res["data"]["vendor_name"]
