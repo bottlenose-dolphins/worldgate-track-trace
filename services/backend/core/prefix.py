@@ -33,16 +33,20 @@ class Prefix(db.Model):
 
 # Check if prefix exists
 def prefix_exists(shipping_line):
+    print("checked shipping line", shipping_line)
     prefix = Prefix.query.filter_by(shipping_fullform=shipping_line)
     if prefix:
+        print("checked shipping line", shipping_line, " exists")
         return True
+    print("checked shipping line", shipping_line, " does not exists")
     return False
 
 # Retrieve prefix
 @app.route("/prefix/retrieve", methods=['POST'])
-def retrieve_prefix():
+def get_prefix():
     data = request.get_json()
-    shipping_line = data["shipping_line"]
+    shipping_line = data["vendor_name"]
+    print("querying shipping line: ", shipping_line)
     if prefix_exists(shipping_line):
         prefix = Prefix.query.filter_by(shipping_fullform=shipping_line).first().shipping_acronym
 
@@ -94,5 +98,5 @@ def add_prefix(prefix, shipping_line):
     ), 409
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5011, debug=True)
-    # app.run(host='0.0.0.0', debug=True)
+    # app.run(host='0.0.0.0', port=5011, debug=True)
+    app.run(host='0.0.0.0', debug=True)

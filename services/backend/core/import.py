@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from datetime import datetime
 
 from os import getenv
 from dotenv import load_dotenv
@@ -22,20 +23,22 @@ class Import(db.Model):
     cust_id = db.Column(db.String, nullable=False)
     hbl_n = db.Column(db.String, nullable=False)
     wguser_id = db.Column(db.String, nullable=True)
+    delivery_d = db.Column(db.Date, nullable=True)
 
-    def __init__(self, import_ref_n, cust_id, hbl_n, wguser_id):
+    def __init__(self, import_ref_n, cust_id, hbl_n, wguser_id, delivery_d):
         self.import_ref_n = import_ref_n
         self.cust_id = cust_id
         self.hbl_n = hbl_n
         self.wguser_id = wguser_id
+        self.delivery_d = delivery_d
 
     def json(self):
         return {
             "import_ref_n": self.import_ref_n,
             "cust_id": self.cust_id,
             "hbl_n": self.hbl_n,
-            "wguser_id": self.wguser_id
-
+            "wguser_id": self.wguser_id,
+            "delivery_d": self.delivery_d
         }
 
 # Retrieve IMPORT_REF_N by House B/L
@@ -62,23 +65,56 @@ def get_import_ref_n():
         }
     ), 500
 
-# Retrieve IMPORT_REF_N using WGUSER_ID
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("import")
+
+# Retrieve IMPORT_REF_N using WGUSER_ID -> Returning all the IMPORT_REF_N according to WGUSER_ID and sorted by latest to earliest using DELIVERY_D
 @app.route("/import/import_ref_n/wguser_id", methods=['POST'])
 def get_import_ref_n_using_wguser_id():
     data = request.get_json()
     wguser_id = data['wguser_id']
-    import_ref_n = Import.query.filter_by(wguser_id=wguser_id).first().import_ref_n
+    output = Import.query.filter_by(wguser_id=wguser_id).order_by(Import.delivery_d.desc()).all()
 
-    if import_ref_n:
+    if len(output):
+        result = [
+                {
+                    "import_ref_n": a_row.import_ref_n,
+                    "import_destination": "Singapore",
+                    "arrival_date": str(a_row.delivery_d),
+                    "type": "Import"
+                }
+        for a_row in output]
+
+        for a_record in result:
+            date_str = a_record["arrival_date"]
+            dt_obj = datetime.strptime(date_str, '%Y-%m-%d')
+            formatted_date_str = dt_obj.strftime('%d %b %Y')
+            a_record["arrival_date"] = formatted_date_str
+
+            
         return jsonify(
             {
                 "code":200,
                 "data":
                 {
-                    "import_ref_n" : import_ref_n
+                    "output" : result
                 }
             }
         ),200
+    
+    else:
+        return jsonify(
+            {
+                "code":200,
+                "data":
+                {
+                    "output" : "No details retrieved with the wguser_id : " + wguser_id
+                }
+            }
+        ),200
+
+
     
     return jsonify(
         {
@@ -88,5 +124,136 @@ def get_import_ref_n_using_wguser_id():
     ), 500
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5003, debug=True)
-    # app.run(host='0.0.0.0', debug=True)
+    # app.run(host='0.0.0.0', port=5003, debug=True)
+    app.run(host='0.0.0.0', debug=True)
+
+"""
+SAMPLE API ENDPOINT
+
+http://127.0.0.1:5003/import/import_ref_n/wguser_id
+
+SAMPLE JSON REQUEST
+
+{
+    "wguser_id" : "HMuAqcsAFtnJGfrM84VqL7"
+}
+
+SAMPLE OUTPUT
+
+[
+    {
+        "container_numbers": [
+            "HLXU5027876",
+            "HLXU2139717",
+            "HLCU4187010",
+            "HLCU2231582",
+            "HLCU2258177",
+            "HLXU3075047",
+            "HLCU2100704"
+        ],
+        "delivery_date": "01/06/2021",
+        "export_destination": "KARACHI",
+        "export_ref_n": 17612,
+        "type": "Export"
+    },
+    {
+        "container_numbers": [
+            "GESU4205066",
+            "HDMU6127648",
+            "TGHU7584650"
+        ],
+        "delivery_date": "07/11/2020",
+        "export_destination": "MUMBAI,INDIA",
+        "export_ref_n": 17625,
+        "type": "Export"
+    },
+    {
+        "container_numbers": [
+            "COPU5223250",
+            "COPU4226315"
+        ],
+        "delivery_date": "05/09/2017",
+        "export_destination": "CHITTAGONG",
+        "export_ref_n": 17595,
+        "type": "Export"
+    },
+    {
+        "container_numbers": [
+            "DNAU2559042",
+            "DNAU2514140",
+            "DNAU2517113",
+            "DNAU2334827",
+            "DNAU2404837",
+            "DNAU2528566"
+        ],
+        "delivery_date": "27/05/2017",
+        "export_destination": "HAMBURG",
+        "export_ref_n": 17648,
+        "type": "Export"
+    },
+    {
+        "container_numbers": [
+            "COKU0020043",
+            "XTRU2060428",
+            "UXXU2229503"
+        ],
+        "delivery_date": "12/06/2010",
+        "export_destination": "CHIASSO CY",
+        "export_ref_n": 17581,
+        "type": "Export"
+    },
+    {
+        "container_numbers": [
+            "EMCU 3424530",
+            "IPXU 3371140",
+            "FSCU 7532318",
+            "FSCU 7840795"
+        ],
+        "delivery_date": "19/11/2009",
+        "export_destination": "BANGKOK PORT, *",
+        "export_ref_n": 17633,
+        "type": "Export"
+    },
+    {
+        "container_numbers": [
+            "REGU4985177",
+            "REGU4995920",
+            "REGU4991740",
+            "REGU4205368",
+            "TEXU7407574",
+            "CRXU4483116",
+            "TEXU7099492",
+            "REGU4982408"
+        ],
+        "delivery_date": "23/09/2005",
+        "export_destination": "CHIASSO CY",
+        "export_ref_n": 17587,
+        "type": "Export"
+    },
+    {
+        "container_numbers": [
+            "YMLU 4947640",
+            "YMLU 4494327",
+            "YMLU 4933266"
+        ],
+        "delivery_date": "08/05/1999",
+        "export_destination": "NHAVA SHEVA",
+        "export_ref_n": 17549,
+        "type": "Export"
+    },
+    {
+        "container_numbers": [
+            "CLHU3395117",
+            "ZCSU8202585",
+            "GLDU7038020"
+        ],
+        "delivery_date": "22/09/1997",
+        "export_destination": "NHAVA SHEVA",
+        "export_ref_n": 17609,
+        "type": "Export"
+    }
+]
+"""    
+
+
+

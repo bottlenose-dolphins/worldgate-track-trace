@@ -37,6 +37,9 @@ class ExportShipment(db.Model):
             "ocean_bl": self.ocean_bl,
             "port_disc_id": self.port_disc_id
         }
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("export_shipment")
 
 # Retrieve shipment information by Master B/L
 @app.route("/export_shipment/retrieve", methods=['POST'])
@@ -154,5 +157,5 @@ def update_shipment_cont():
     ), 500
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5008, debug=True)
-    # app.run(host='0.0.0.0', debug=True)
+    # app.run(host='0.0.0.0', port=5008, debug=True)
+    app.run(host='0.0.0.0', debug=True)

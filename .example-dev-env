@@ -1,0 +1,9 @@
+# CLONE, FILL IN AND RENAME AS .env
+
+DB_URI="<DB_URI>"
+goodUsername=<un>
+goodPassword=<pw>
+cordUsername=<un>
+cordPassword=<pw>
+
+REACT_APP_API_ENDPOINT="127.0.0.1"

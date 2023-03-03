@@ -2,25 +2,27 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+import subprocess
+from os import getenv
 
 #server related
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
-# creds
-from creds.creds_goodrich import username
-from creds.creds_goodrich import password
 
 app = Flask(__name__)
 
+username = getenv("goodUsername")
+password = getenv("goodPassword")
+
 @app.route("/ping", methods=['GET'])
 def ping():
-    return("hello")
+    return("goodrich")
 
     # run with:
     # http://127.0.0.1:8081/GOOD/BL/VASSINCMB015609
     # http://127.0.0.1:8081/GOOD/CTR/VMLU3817377
-@app.route("/GOOD/<string:tracking_type>/<string:tracking_identifier>", methods=['GET'])
-def track(tracking_type, tracking_identifier):
+@app.route("/GOOD", methods=['POST'])
+def track():
 
     options = Options()
     #https://stackoverflow.com/questions/53681161/why-puppeteer-needs-no-sandbox-to-launch-chrome-in-cloud-functions
@@ -30,6 +32,10 @@ def track(tracking_type, tracking_identifier):
     options.add_argument('--disable-gpu')
     options.add_argument('--disable-features=VizDisplayCompositor')
     options.add_argument('--disable-dev-shm-usage')
+
+    data = request.get_json()
+    tracking_identifier = data["tracking_identifier"]
+    tracking_type = data["tracking_type"]
 
     # # init
     # driver = webdriver.Chrome()
@@ -98,6 +104,8 @@ def track(tracking_type, tracking_identifier):
         )
 
     except Exception as e:
+
+        restart_microservice()
         
         return jsonify(
             {
@@ -108,6 +116,12 @@ def track(tracking_type, tracking_identifier):
     
     finally:
         driver.close()
+
+def restart_microservice():
+
+    subprocess.call(['docker-compose','stop','scraper_good'])
+    subprocess.call(['docker-compose', 'rm', '-f', 'scraper_good'])
+    subprocess.call(['docker-compose', 'up', '-d', 'scraper_good'])
 
 
 if __name__ == '__main__':

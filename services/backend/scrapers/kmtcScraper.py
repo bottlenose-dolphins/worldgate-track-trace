@@ -4,9 +4,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import Select
 import time
+import subprocess
 
 #server related
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -14,8 +15,8 @@ app = Flask(__name__)
 def ping():
     return("hello")
 
-@app.route("/KMTC/<string:tracking_type>/<string:tracking_identifier>", methods=['GET'])
-def track(tracking_type, tracking_identifier):
+@app.route("/KMTC", methods=['POST'])
+def track():
 
     options = Options()
     options.add_argument('--headless')
@@ -24,6 +25,10 @@ def track(tracking_type, tracking_identifier):
 
     # init
     driver = webdriver.Chrome(options=options)
+
+    data = request.get_json()
+    tracking_identifier = data["tracking_identifier"]
+    tracking_type = data["tracking_type"]
 
 
 
@@ -82,6 +87,8 @@ def track(tracking_type, tracking_identifier):
 
     except Exception as e:
 
+        restart_microservice()
+
         return jsonify(
             {
                 "code": 500,
@@ -91,6 +98,12 @@ def track(tracking_type, tracking_identifier):
 
     finally:
         driver.close()
+
+def restart_microservice():
+
+    subprocess.call(['docker-compose','stop','scraper_kmtc'])
+    subprocess.call(['docker-compose', 'rm', '-f', 'scraper_kmtc'])
+    subprocess.call(['docker-compose', 'up', '-d', 'scraper_kmtc'])
 
 
 if __name__ == '__main__':
