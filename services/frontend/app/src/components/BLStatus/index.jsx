@@ -23,10 +23,10 @@ import "./bl.scss";
 export default function BLStatus() {
   const navigate=useNavigate();
   const [selectedOption, setSelectedOption] = useState(null);
-  const [secondSelectedOption, setSecondSelectedOption] = useState("export");
-  const [selectedvalue, setSelectedValue] = useState("bl");
+  const [secondSelectedOption, setSecondSelectedOption] = useState(null);
+  const [selectedvalue, setSelectedValue] = useState("ctr");
   const [trackingHistory, setTrackingHistory] = useState([]);
-  const [secondselectedvalue, setSecondSelectedValue] = useState(null);
+  const [secondselectedvalue, setSecondSelectedValue] = useState("export");
   const [billOfLadingNumber, setBillOfLadingNumber] = useState("");
   const [displaytext, setDisplay] = useState("");
   const [error, setError] = useState("");
@@ -54,6 +54,9 @@ const handleTrackShipment = async () => {
     closeModal();
     setLoading(true);
     setError(null);
+    console.log(billOfLadingNumber)
+    console.log(selectedvalue)
+    console.log(secondselectedvalue)
     
     try {
       const response = await blStatus("Yang Ming", billOfLadingNumber, selectedvalue, secondselectedvalue)
@@ -61,12 +64,15 @@ const handleTrackShipment = async () => {
       if (response.status !== 200) {
         throw new Error("No status found");
       }
-      
+      else if(response.status===200){
       const data = await response.json();
       setTrackingHistory([data]);
    
+      
       navigate("/Status",{state:{arrival:trackingHistory[0].data.arrival_date,discharge:trackingHistory[0].data.port_of_discharge,vessel:trackingHistory[0].data.vessel_name,status:trackingHistory[0].data.status!=="undefined"?"No Status":trackingHistory[0].data.status,bl:billOfLadingNumber,loading:trackingHistory[0].data.port_of_loading,shipline:trackingHistory[0].data.shipping_line}})
-    } catch (err) {
+    } 
+  }
+    catch (err) {
       navigate("/error",{state:{identifier:billOfLadingNumber,direction:secondselectedvalue,type:selectedvalue}})
       setError2(err.message);
     } finally {
