@@ -182,6 +182,7 @@ def sign_in():
         response = jsonify({
             "code": 200,
             "message": "login success",
+            "username": found_user.username
         })
         set_access_cookies(response, access_token)
         return response
@@ -195,9 +196,11 @@ def sign_in():
 
 @app.route("/user/signout", methods=["POST"])
 def sign_out():
-    response = jsonify({"msg": "sign out successful"})
+    response = jsonify({
+        "code": 200,
+        "message": "sign out successful"})
     unset_jwt_cookies(response)
-    return response
+    return response, 200
 
 # Using an `after_request` callback, we refresh any token that is within 15 minutes of expiring.
 @app.after_request
@@ -223,6 +226,9 @@ Returns username and wguser_id of user.
 def verify_jwt_csrf_validity():
     # decode jwt to extract the csrf
     csrf_in_jwt = get_jwt()["csrf"]
+    csrfHeader = request.headers.get('X-CSRF-TOKEN')
+    print("csrfJWT : " + csrf_in_jwt)
+    print("csrfHeader : " + csrfHeader)
     if csrf_in_jwt is None or request.headers.get('X-CSRF-TOKEN') is None: # no cookie or request header
         return jsonify({
             "code": 500,

@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from datetime import datetime
 
 from os import getenv
 from dotenv import load_dotenv
@@ -78,14 +79,19 @@ def get_export_ref_n_using_wguser_id():
 
     if len(output):
         result = [
-            {
-                "export_ref_n": a_row.export_ref_n,
-                "destination_port": a_row.port_del_name,
-                "delivery_date": a_row.del_to
-            } 
-                for a_row in output]
-        
+                {
+                    "export_ref_n": a_row.export_ref_n,
+                    "export_destination": a_row.port_del_name,
+                    "delivery_date": str(a_row.del_to),
+                    "type": "Export"
+                }
+        for a_row in output]
 
+        for a_record in result:
+            date_str = a_record["delivery_date"]
+            dt_obj = datetime.strptime(date_str, '%Y-%m-%d')
+            formatted_date_str = dt_obj.strftime('%d %b %Y')
+            a_record["delivery_date"] = formatted_date_str
 
         return jsonify(
             {
@@ -93,6 +99,17 @@ def get_export_ref_n_using_wguser_id():
                 "data":
                 {
                     "output" : result
+                }
+            }
+        ),200
+    
+    else:
+        return jsonify(
+            {
+                "code":200,
+                "data":
+                {
+                    "output" : "No details retrieved with the wguser_id : " + wguser_id
                 }
             }
         ),200
@@ -113,68 +130,81 @@ if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
 
 
-#     SAMPLE API ENDPOINT
+"""
+    SAMPLE API ENDPOINT
 
-#     http://127.0.0.1:5006/export/export_ref_n/wguser_id
+    http://127.0.0.1:5006/export/export_ref_n/wguser_id
 
-#     SAMPLE JSON REQUEST
+    SAMPLE JSON REQUEST
 
-#     {
-#         "wguser_id" : "bk666dcoeZTH3dxZCuu4FR"
-#     }
+    {
+        "wguser_id" : "bk666dcoeZTH3dxZCuu4FR"
+    }
 
-#     SAMPLE OUTPUT
+    SAMPLE OUTPUT
 
-#     {
-#     "code": 200,
-#     "data": {
-#         "output": [
-#             {
-#                 "delivery_date": "Tue, 01 Jun 2021 00:00:00 GMT",
-#                 "destination_port": "KARACHI",
-#                 "export_ref_n": 14368
-#             },
-#             {
-#                 "delivery_date": "Sat, 07 Nov 2020 00:00:00 GMT",
-#                 "destination_port": "MUMBAI,INDIA",
-#                 "export_ref_n": 14165
-#             },
-#             {
-#                 "delivery_date": "Tue, 05 Sep 2017 00:00:00 GMT",
-#                 "destination_port": "CHITTAGONG",
-#                 "export_ref_n": 14284
-#             },
-#             {
-#                 "delivery_date": "Sat, 27 May 2017 00:00:00 GMT",
-#                 "destination_port": "HAMBURG",
-#                 "export_ref_n": 14161
-#             },
-#             {
-#                 "delivery_date": "Sat, 12 Jun 2010 00:00:00 GMT",
-#                 "destination_port": "CHIASSO CY",
-#                 "export_ref_n": 14290
-#             },
-#             {
-#                 "delivery_date": "Thu, 19 Nov 2009 00:00:00 GMT",
-#                 "destination_port": "BANGKOK PORT, *",
-#                 "export_ref_n": 14166
-#             },
-#             {
-#                 "delivery_date": "Fri, 23 Sep 2005 00:00:00 GMT",
-#                 "destination_port": "CHIASSO CY",
-#                 "export_ref_n": 17587
-#             },
-#             {
-#                 "delivery_date": "Sun, 07 Nov 1999 00:00:00 GMT",
-#                 "destination_port": "COLOMBO, SRI LANKA",
-#                 "export_ref_n": 14277
-#             },
-#             {
-#                 "delivery_date": "Sat, 08 May 1999 00:00:00 GMT",
-#                 "destination_port": "NHAVA SHEVA",
-#                 "export_ref_n": 14520
-#             }
-#         ]
-#     }
-# }
+    {
+    "code": 200,
+    "data": {
+        "output": [
+            {
+                "delivery_date": "01/06/2021",
+                "export_destination": "KARACHI",
+                "export_ref_n": 17612,
+                "type": "Export"
+            },
+            {
+                "delivery_date": "07/11/2020",
+                "export_destination": "MUMBAI,INDIA",
+                "export_ref_n": 17625,
+                "type": "Export"
+            },
+            {
+                "delivery_date": "05/09/2017",
+                "export_destination": "CHITTAGONG",
+                "export_ref_n": 17595,
+                "type": "Export"
+            },
+            {
+                "delivery_date": "27/05/2017",
+                "export_destination": "HAMBURG",
+                "export_ref_n": 17648,
+                "type": "Export"
+            },
+            {
+                "delivery_date": "12/06/2010",
+                "export_destination": "CHIASSO CY",
+                "export_ref_n": 17581,
+                "type": "Export"
+            },
+            {
+                "delivery_date": "19/11/2009",
+                "export_destination": "BANGKOK PORT, *",
+                "export_ref_n": 17633,
+                "type": "Export"
+            },
+            {
+                "delivery_date": "23/09/2005",
+                "export_destination": "CHIASSO CY",
+                "export_ref_n": 17587,
+                "type": "Export"
+            },
+            {
+                "delivery_date": "08/05/1999",
+                "export_destination": "NHAVA SHEVA",
+                "export_ref_n": 17549,
+                "type": "Export"
+            },
+            {
+                "delivery_date": "22/09/1997",
+                "export_destination": "NHAVA SHEVA",
+                "export_ref_n": 17609,
+                "type": "Export"
+            }
+        ]
+    }
+}
+"""
+
+
 

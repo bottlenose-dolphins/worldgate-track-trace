@@ -6,10 +6,11 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from os import getenv
+import subprocess
 
 #server related
 # server related
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 import time
 
@@ -18,12 +19,16 @@ app = Flask(__name__)
 username = getenv("cordUsername")
 password = getenv("cordPassword")
 
-@app.route("/CCSL/<string:tracking_type>/<string:tracking_identifier>", methods=['GET'])
-def track(tracking_type, tracking_identifier):
+@app.route("/CCSL", methods=['POST'])
+def track():
 
     options = Options()
     options.add_argument('--headless')
     options.add_argument('--disable-gpu')
+
+    data = request.get_json()
+    tracking_identifier = data["tracking_identifier"]
+    tracking_type = data["tracking_type"]
 
     # init
     driver = webdriver.Chrome(options=options)
@@ -83,6 +88,9 @@ def track(tracking_type, tracking_identifier):
         )
         
     except Exception as e:
+
+        restart_microservice()
+
         return jsonify(
             {
                 "code": 500,
@@ -91,6 +99,12 @@ def track(tracking_type, tracking_identifier):
     finally:
         driver.close()
         
-    
+
+def restart_microservice():
+
+    subprocess.call(['docker-compose','stop','scraper_cord'])
+    subprocess.call(['docker-compose', 'rm', '-f', 'scraper_cord'])
+    subprocess.call(['docker-compose', 'up', '-d', 'scraper_cord'])
+
 if __name__ == '__main__':
     app.run(port=5004, debug=True)

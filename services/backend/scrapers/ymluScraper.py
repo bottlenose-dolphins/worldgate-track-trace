@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from flask import Flask, jsonify, request
 import time
+import subprocess
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -79,12 +80,21 @@ def ymluScraper():
             )
 
     except Exception as e:
+
+        restart_microservice()
+        
         return jsonify(
             {
                 "code": 500,
                 "message": str(e)
             }
         ), 500
+
+def restart_microservice():
+
+    subprocess.call(['docker-compose','stop','scraper_ymlu'])
+    subprocess.call(['docker-compose', 'rm', '-f', 'scraper_ymlu'])
+    subprocess.call(['docker-compose', 'up', '-d', 'scraper_ymlu'])
         
 if __name__ == '__main__':
     app.run(debug=True)

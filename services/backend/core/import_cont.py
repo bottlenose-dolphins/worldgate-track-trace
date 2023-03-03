@@ -80,6 +80,16 @@ def get_cont_num():
                     }
                 }
             ), 200
+        
+        else:
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {
+                        "container_nums": "No Container Numbers associated with the given import_ref_n : " + str(import_ref_n)
+                    }
+                }
+            ), 200
 
     
     except Exception as e:
@@ -94,17 +104,33 @@ if __name__ == "__main__":
     # app.run(host='0.0.0.0', port=5004, debug=True)
     app.run(host='0.0.0.0', debug=True)
 
-# Sample API Endpoint
+"""
+Sample API Endpoint
 
-# http://127.0.0.1:5004/import_cont/container_num
+http://127.0.0.1:5004/import_cont/container_num
 
-# Sample JSON Request
+Sample JSON Request
 
-# {
-#     "import_ref_n" : 21658
-# }
+{
+    "import_ref_n" : 21658
+}
 
-# Sample JSON Response
+Sample JSON Response
+
+{
+    "code": 200,
+    "data": {
+        "container_nums": [
+            "APHU6142610",
+            "APHU6318274",
+            "APLU9023090",
+            "FSCU9928083",
+            "TCKU9278056"
+        ]
+    }
+}
+
+"""
 
 # {
 #     "code": 200,
