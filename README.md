@@ -27,7 +27,7 @@ One labelled ```dev```, e.g. ```Dockerfile-dev``` and the other ```prod```. e.g.
 
 Clone the ```.example-dev-env``` file and fill in the various credentials
 
-In addition, comment out irrelevant Oracle Client Library Download in ```./services/backend/core```
+In addition, comment out irrelevant Oracle Client Library Download in every single dockerfile-<type>-dev in ```./services/backend/core```
 
 ```
 #for ARM64
@@ -42,7 +42,7 @@ In addition, comment out irrelevant Oracle Client Library Download in ```./servi
 
 ```
 
-This also needs to be done in ```./services/backend/scrapers/Dockerfile-<Shipping Line>``` by Changing ```ARG ARCH``` to ```arm64``` or ```amd64```
+This also needs to be done in ```./services/backend/scrapers/Dockerfile-<Shipping Line>-dev``` by Changing ```ARG ARCH``` to ```arm64``` or ```amd64```
 
 Lastly, run ```docker compose up``` in the root dir
 
