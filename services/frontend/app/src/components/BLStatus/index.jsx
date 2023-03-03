@@ -1,4 +1,4 @@
-
+import { blStatus } from "src/api/user";
 import { useState } from "react";
 import { Bars } from "react-loading-icons";
 
@@ -21,20 +21,7 @@ export default function BLStatus() {
     setError(null);
     
     try {
-      const requestBody = {
-        shipping_line: "Yang Ming",
-        identifier: billOfLadingNumber,
-        identifier_type: selectedvalue,
-        direction: secondselectedvalue,
-      };
-      
-      const response = await fetch("http://localhost:8081/scrape", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(requestBody)
-      });
+      const response = await blStatus("Yang Ming", billOfLadingNumber, selectedvalue, secondselectedvalue)
       
       if (response.status !== 200) {
         throw new Error("No status found");

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { USER_ENDPOINT } from "./config";
+import { USER_ENDPOINT, COMPLEX_SCRAPER_ENDPOINT, authenticate } from "./config";
 
 export const signIn = async(username, password) => {
     try { 
@@ -18,7 +18,6 @@ export const signIn = async(username, password) => {
     }
 }
 
-
 export const signOut = async() => {
     try {
         const res = await axios.post(`${USER_ENDPOINT}/signout`,{
@@ -33,6 +32,7 @@ export const signOut = async() => {
     }
 }
 
+// original
 // email: <str:email>, name: <str:name>, password: <str:password> , phone: <int:phone>, company: <str:company>
 export const signUp = async(username, email, password, phone, company) => {
     try {
@@ -52,3 +52,24 @@ export const signUp = async(username, email, password, phone, company) => {
     }
 }
 
+export const blStatus = async(shippingLine, identifier, identifierType, direction) => {
+    try {
+        const authRes = await authenticate()
+
+        if (authRes.code === 200) {
+            const res = await axios.post(`${COMPLEX_SCRAPER_ENDPOINT}/scrape`, {
+                "shipping_line": shippingLine,
+                "identifier": identifier,
+                "identifier_type": identifierType,
+                "direction": direction
+            });
+            if (res) {
+                return res.data;
+            }
+            throw new Error("No data returned from backend");
+        }       
+        throw new Error("Request Unauthorised") 
+    } catch (error) {
+        return error.response.data;
+    }
+}
