@@ -129,11 +129,11 @@ return(
  <input type="radio" name="select" id="option-2" onClick={() => {setSelectedValue("ctr");}} defaultChecked/>
    <label htmlFor="option-1" className="option option-1">
      <div className="dot"/>
-      <span>Import</span>
+      <span>BL</span>
       </label>
    <label htmlFor="option-2" className="option option-2">
      <div className="dot"/>
-      <span>Export</span>
+      <span>Container</span>
    </label>
 </div>
       
@@ -160,11 +160,11 @@ return(
  <input type="radio" name="select2" id="option-4" onClick={() => {setSecondSelectedValue("export");}} defaultChecked/>
    <label htmlFor="option-3" className="option option-3">
      <div className="dot"/>
-      <span>BL</span>
+      <span>Import</span>
       </label>
    <label htmlFor="option-4" className="option option-4">
      <div className="dot"/>
-      <span>Container</span>
+      <span>Export</span>
    </label>
 </div>
   {/* <label htmlFor="rad3">
