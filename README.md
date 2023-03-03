@@ -27,7 +27,7 @@ One labelled ```dev```, e.g. ```Dockerfile-dev``` and the other ```prod```. e.g.
 
 Clone the ```.example-dev-env``` file and fill in the various credentials
 
-In addition, comment out irrelevant Oracle Client Library Download in every single dockerfile-<type>-dev in ```./services/backend/core```
+In addition, comment out irrelevant Oracle Client Library Download in every single dev dockerfile, annoted ```Dockerfile-<microservice>-dev``` in ```./services/backend/core```
 
 ```
 #for ARM64
