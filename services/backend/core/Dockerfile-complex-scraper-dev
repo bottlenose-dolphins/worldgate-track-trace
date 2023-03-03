@@ -1,4 +1,4 @@
-# for complex_scraper.py (NOT able to test API endpoints bc cant seem to import invokes.py on my end)
+# for complex_scraper.py
 
 FROM python:3.11
 
@@ -29,18 +29,24 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
             && ldconfig
 
 WORKDIR /app
+ARG CACHEBUST=5
 COPY requirements.txt .
 COPY complex_scraper.py .
+RUN mv complex_scraper.py app.py
+
+#for invoking microservice calls within app
 COPY invokes.py .
+COPY obtainIp.py .
+
+#local machine inter container communication
+ENV prod=0
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
-ENV SQLALCHEMY_DATABASE_URI=oracle://wg:wgdemo*()@202.73.56.175:1521/efprod
-
-
+ENV PYTHONUNBUFFERED=1
 
 EXPOSE 5009
 
 # start the server
-CMD [ "python", "complex_scraper.py" ]
+CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5009"]

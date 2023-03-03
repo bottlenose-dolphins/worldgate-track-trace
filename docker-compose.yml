@@ -5,6 +5,12 @@ networks:
         driver: bridge
 
 services:
+
+#   ___  __  ____  ____    ____  ____  ____  _  _  __  ___  ____  ____ 
+#  / __)/  \(  _ \(  __)  / ___)(  __)(  _ \/ )( \(  )/ __)(  __)/ ___)
+# ( (__(  O ))   / ) _)   \___ \ ) _)  )   /\ \/ / )(( (__  ) _) \___ \
+#  \___)\__/(__\_)(____)  (____/(____)(__\_) \__/ (__)\___)(____)(____/
+  
   core_users:
     container_name: core_users
     build:
@@ -13,8 +19,7 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
-      - PYTHONUNBUFFERED=1
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
     ports:
       - 5002:5002
   
@@ -26,8 +31,7 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
-      - PYTHONUNBUFFERED=1
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
     ports:
       - 5003:5003
   
@@ -39,8 +43,7 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
-      - PYTHONUNBUFFERED=1
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
     ports:
       - 5004:5004
   
@@ -52,7 +55,7 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
     ports:
       - 5005:5005
 
@@ -64,7 +67,7 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
     ports:
       - 5006:5006
 
@@ -76,7 +79,7 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
     ports:
       - 5007:5007
   
@@ -88,7 +91,8 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
+      # - PYTHONUNBUFFERED=1
     ports:
       - 5008:5008
   
@@ -100,21 +104,21 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
-      - PYTHONUNBUFFERED=1
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
+      # - PYTHONUNBUFFERED=1
     ports:
       - 5009:5009
   
-  core_viewall:
-    container_name: core_viewall
+  core_view_all:
+    container_name: core_view_all
     build:
       context: ./services/backend/core
       dockerfile: Dockerfile-view-all-dev
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
-      - PYTHONUNBUFFERED=1
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
+      # - PYTHONUNBUFFERED=1
     ports:
       - 5010:5010
   
@@ -126,21 +130,42 @@ services:
     networks:
       - tracktrace_test_network
     environment:
-      - SQLALCHEMY_DATABASE_URI=<DB_URI>
+      # - PYTHONUNBUFFERED=1
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
     ports:
       - 5011:5011
+
+  core_vendor_mast:
+    container_name: core_vendor_mast
+    build:
+      context: ./services/backend/core
+      dockerfile: Dockerfile-vendor-mast-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      # - PYTHONUNBUFFERED=1
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
+    ports:
+      - 5012:5012
+
+#  ____  ____   __   __ _  ____  ____  __ _  ____ 
+# (  __)(  _ \ /  \ (  ( \(_  _)(  __)(  ( \(    \
+#  ) _)  )   /(  O )/    /  )(   ) _) /    / ) D (
+# (__)  (__\_) \__/ \_)__) (__) (____)\_)__)(____   
 
   web:
     container_name: web
     build:
       context: ./services/frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-dev
       args:
         - NODE_ENV=development
     networks:
       - tracktrace_test_network
+    environment:
+        - REACT_APP_API_ENDPOINT=${REACT_APP_API_ENDPOINT}
     ports:
-      - 3000:3000
+      - 80:80
     stdin_open: true
     tty: true
     # volumes:
@@ -150,15 +175,23 @@ services:
     depends_on:
       - core_users
 
+
+#  ____   ___  ____   __   ____  ____  ____    ____  ____  ____  _  _  __  ___  ____  ____ 
+# / ___) / __)(  _ \ / _\ (  _ \(  __)(  _ \  / ___)(  __)(  _ \/ )( \(  )/ __)(  __)/ ___)
+# \___ \( (__  )   //    \ ) __/ ) _)  )   /  \___ \ ) _)  )   /\ \/ / )(( (__  ) _) \___ \
+# (____/ \___)(__\_)\_/\_/(__)  (____)(__\_)  (____/(____)(__\_) \__/ (__)\___)(____)(____/   
+
   scraper_ymlu:
     container_name: scraper_ymlu
     build:
       context: ./services/backend/scrapers
       dockerfile: Dockerfile-Ymlu-dev
+      shm_size: '300mb'
     networks:
       - tracktrace_test_network
     environment:
       - PYTHONUNBUFFERED=1
+    shm_size: '300mb'
     ports:
       - 8080:8080
 
@@ -166,15 +199,15 @@ services:
     container_name: scraper_good
     build:
       context: ./services/backend/scrapers
-      dockerfile: Dockerfile-Goodrich-dev
+      dockerfile: Dockerfile-Good-dev
     networks:
       - tracktrace_test_network
     environment:
       - PYTHONUNBUFFERED=1
+      - goodUsername =${goodUsername}
+      - goodPassword =${goodPassword}
     ports:
       - 8081:8081
-  
-
 
   scraper_kmtc:
     container_name: scraper_kmtc
@@ -204,5 +237,34 @@ services:
     ports:
       - 8083:8083
 
+  scraper_cosc:
+    container_name: scraper_cosc
+    build:
+      context: ./services/backend/scrapers
+      shm_size: '1gb'
+      dockerfile: Dockerfile-Cosco-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - PYTHONUNBUFFERED=1
+    shm_size: '1gb'
+    ports:
+      - 8085:8085
+
+  scraper_cord:
+    container_name: scraper_cord
+    build:
+      context: ./services/backend/scrapers
+      shm_size: '1gb'
+      dockerfile: Dockerfile-Cord-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - PYTHONUNBUFFERED=1
+      - cordUsername =${cordUsername}
+      - cordPassword =${cordPassword}
+    shm_size: '1gb'
+    ports:
+      - 8084:8084
 
 

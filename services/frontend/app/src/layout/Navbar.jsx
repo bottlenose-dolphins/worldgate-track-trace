@@ -4,18 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
-import TrackAndTrace from "../img/TrackAndTrace.png";
+import logo from "../img/TrackAndTrace.png";
+import logoWhite from "../img/TrackAndTraceWhite.png";
 import NavbarUser from "./NavbarUser";
 
 export default function Navbar() {
-    const [username, setUsername] = useState("");
-    useEffect(() => {
-        const usernameValue = localStorage.getItem("username")
-        if (typeof usernameValue !== "undefined" && usernameValue && usernameValue !== "") {
-            setUsername(usernameValue);
-        }
-    })
-
     const [pageNavigation, setPageNavigation] = useState([
         { name: "Home", href: "/" },
         { name: "Back to Worldgate", href: "https://www.worldgate.com.sg" },
@@ -28,19 +21,22 @@ export default function Navbar() {
             as='a'
             href={item.href}
             target={item.href.charAt(0) === "/" ? "_self" : "_blank"}
-            className="text-gray-500 font-semibold hover:text-gray-700 block px-3 py-2 rounded-md text-base font-medium"
+            className={classNames(
+                isLandingPage()
+                    ? "text-white hover:text-gray-300"
+                    : "text-gray-500 hover:text-gray-700",
+                "font-semibold block px-3 py-2 rounded-md text-base font-medium")}
         >
             {item.name}
         </Disclosure.Button>
     ));
 
     return (
-        username.length > 0 ? <NavbarUser username={username} /> : // NavbarUser is the navbar for post-signin
-            <Disclosure as='nav' className='bg-white'>
+            <Disclosure as='nav' className=''>
                 {({ open }) => (
                     <>
                         <div className='flex h-16 justify-between mx-auto max-w-full px-6 sm:px-6 lg:px-8'>
-                            <img className='inline w-15 h-9 my-3' src={TrackAndTrace} alt='Track&Trace logo' />
+                            <img className='inline w-15 h-9 my-3' src={isLandingPage() ? logoWhite : logo} alt='Track&Trace logo' />
                             <RoutingItems open={open} pageNavigation={pageNavigation} />
                         </div>
                         <Disclosure.Panel className='md:hidden'>
@@ -66,11 +62,14 @@ function MobileNavbarItems({ open }) {
     return (
         <div className='flex'>
             <div className='mx-2 flex space-x-3 items-center md:hidden'>
-                { 
+                {
                     displaySignInButton() ? (<SignInButton />) : ""
                 }
-                <Disclosure.Button className='inline-flex items-center justify-center rounded-md p-2 
-                text-gray-500 hover:text-gray-700 outline outline-gray-400 focus:outline-none focus:ring-2 focus:ring-inset'>
+                <Disclosure.Button className={classNames(
+                    isLandingPage()
+                        ? "text-white hover:text-gray-300 outline outline-white"
+                        : "text-gray-500 hover:text-gray-700 outline outline-gray-400",
+                    "inline-flex items-center justify-center rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-inset")}>
                     <span className='sr-only'>Open main menu</span>
                     {open ? (
                         <XMarkIcon className='block h-6 w-6' aria-hidden='true' />
@@ -92,7 +91,11 @@ function DesktopNavbarItems({ pageNavigation }) {
             <Link
                 to={routingItem.href}
                 key={routingItem.name}
-                className="text-gray-500 font-semibold hover:text-gray-700 drop-shadow-2xl shadow-gray-800 px-3 py-2 text-sm font-medium"
+                className={classNames(
+                    isLandingPage()
+                        ? "text-white hover:text-gray-300"
+                        : "text-gray-500 hover:text-gray-700",
+                    "font-semibold drop-shadow-2xl shadow-gray-800 px-3 py-2 text-sm font-medium")}
                 onClick={() => setCurrentPage(routingItem.href)}
             >
                 {routingItem.name}
@@ -101,8 +104,12 @@ function DesktopNavbarItems({ pageNavigation }) {
                 href={routingItem.href}
                 target="_blank"
                 rel="noreferrer"
-                className="text-gray-500 font-semibold hover:text-gray-700 drop-shadow-2xl shadow-gray-800 px-3 py-2 text-sm font-medium"
-
+                className={classNames(
+                    isLandingPage()
+                        ? "text-white hover:text-gray-300"
+                        : "text-gray-500 hover:text-gray-700",
+                    "font-semibold drop-shadow-2xl shadow-gray-800 px-3 py-2 text-sm font-medium")}
+                onClick={() => setCurrentPage(routingItem.href)}
             >
                 {routingItem.name}
             </a>
@@ -132,6 +139,10 @@ function SignInButton() {
     );
 }
 
+export function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+}
+
 function displaySignInButton() {
     const currentUrl = document.location.toString().split("/");
     const page = `/${currentUrl[currentUrl.length - 1]}`;
@@ -139,4 +150,13 @@ function displaySignInButton() {
         return false;
     }
     return true;
+}
+
+function isLandingPage() {
+    const currentUrl = document.location.toString().split("/");
+    const page = `/${currentUrl[currentUrl.length - 1]}`;
+    if (page === "/") {
+        return true;
+    }
+    return false;
 }
