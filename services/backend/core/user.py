@@ -23,8 +23,7 @@ import uuid
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",
-     supports_credentials=True, expose_headers="Set-Cookie")
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True, expose_headers="Set-Cookie")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -93,13 +92,7 @@ def is_email(email):
 
 @app.route("/ping", methods=['GET'])
 def health_check():
-    return ("hello")
-
-
-@app.route("/testRoute", methods=['GET'])
-def testRoute():
-    return obtainIP("scraper_ymlu_service")
-
+    return("user")    
 
 @app.route("/user/signup", methods=['POST'])
 def sign_up():
@@ -248,10 +241,10 @@ Returns username and wguser_id of user.
 def verify_jwt_csrf_validity():
     # decode jwt to extract the csrf
     csrf_in_jwt = get_jwt()["csrf"]
-    # csrf_in_jwt = ""
-    # no cookie or request header
-    if csrf_in_jwt is None or request.headers.get('X-CSRF-TOKEN') is None:
-        print("no csrf in jwt")
+    csrfHeader = request.headers.get('X-CSRF-TOKEN')
+    print("csrfJWT : " + csrf_in_jwt)
+    print("csrfHeader : " + csrfHeader)
+    if csrf_in_jwt is None or request.headers.get('X-CSRF-TOKEN') is None: # no cookie or request header
         return jsonify({
             "code": 500,
             "message": "Token Not Found - Request Unauthorised"

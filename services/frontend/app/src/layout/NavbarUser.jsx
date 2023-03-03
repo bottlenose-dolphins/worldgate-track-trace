@@ -29,14 +29,12 @@ export default function NavbarUser({ username }) {
         <Disclosure as='nav' className='bg-white'>
             {({ open }) => (
                 <>
-                    <div className='flex h-16 justify-between mx-auto max-w-full px-6 sm:px-6 lg:px-8'>
+                    <div className='flex h-16 border-b border-gray-300 justify-between mx-auto max-w-full px-6 sm:px-6 lg:px-8'>
                         <img className='inline w-15 h-9 my-3' src={TrackAndTrace} alt='Track&Trace logo' />
                         <div className='inline-flex items-center flex-row-reverse md:flex-row space-x-3 lg:space-x-5'>
                             <RoutingItems open={open} pageNavigation={pageNavigation} />
-                            {/* <BellIcon className='text-gray-500 hover:text-gray-700 h-6 w-6' /> */}
                             <WelcomeUsername username={username} />
                             <BellIcon className='text-gray-500 hover:text-gray-700 block h-6 w-6' />
-                            {/* <RoutingItems open={open} pageNavigation={pageNavigation} /> */}
                         </div>
                     </div>
                     <Disclosure.Panel className='md:hidden'>

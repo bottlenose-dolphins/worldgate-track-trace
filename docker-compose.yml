@@ -157,7 +157,7 @@ services:
     container_name: web
     build:
       context: ./services/frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-dev
       args:
         - NODE_ENV=development
     networks:
@@ -238,32 +238,4 @@ services:
       - 8083:8083
 
 
-  scraper_cord:
-    container_name: scraper_cord
-    build:
-      context: ./services/backend/scrapers
-      shm_size: '1gb'
-      dockerfile: Dockerfile-Cord-dev
-    networks:
-      - tracktrace_test_network
-    environment:
-      - PYTHONUNBUFFERED=1
-      - cordUsername =${cordUsername}
-      - cordPassword =${cordPassword}
-    shm_size: '1gb'
-    ports:
-      - 8084:8084
 
-  scraper_cosc:
-    container_name: scraper_cosc
-    build:
-      context: ./services/backend/scrapers
-      shm_size: '1gb'
-      dockerfile: Dockerfile-Cosco-dev
-    networks:
-      - tracktrace_test_network
-    environment:
-      - PYTHONUNBUFFERED=1
-    shm_size: '1gb'
-    ports:
-      - 8085:8085
