@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from datetime import datetime
 
 from os import getenv
 from dotenv import load_dotenv
@@ -78,21 +77,14 @@ def get_import_ref_n_using_wguser_id():
 
     if len(output):
         result = [
-                {
-                    "import_ref_n": a_row.import_ref_n,
-                    "import_destination": "Singapore",
-                    "arrival_date": str(a_row.delivery_d),
-                    "type": "Import"
-                }
+            {
+                "import_ref_n": a_row.import_ref_n,
+                "import_destination": "Singapore",
+                "arrival_date": a_row.delivery_d
+            }
         for a_row in output]
-
-        for a_record in result:
-            date_str = a_record["arrival_date"]
-            dt_obj = datetime.strptime(date_str, '%Y-%m-%d')
-            formatted_date_str = dt_obj.strftime('%d %b %Y')
-            a_record["arrival_date"] = formatted_date_str
-
-            
+        # sorted_result = sorted(result, key=lambda x: x.delivery_)
+    
         return jsonify(
             {
                 "code":200,
@@ -102,18 +94,6 @@ def get_import_ref_n_using_wguser_id():
                 }
             }
         ),200
-    
-    else:
-        return jsonify(
-            {
-                "code":200,
-                "data":
-                {
-                    "output" : "No details retrieved with the wguser_id : " + wguser_id
-                }
-            }
-        ),200
-
 
     
     return jsonify(
@@ -127,133 +107,73 @@ if __name__ == "__main__":
     # app.run(host='0.0.0.0', port=5003, debug=True)
     app.run(host='0.0.0.0', debug=True)
 
-"""
-SAMPLE API ENDPOINT
+# SAMPLE API ENDPOINT
 
-http://127.0.0.1:5003/import/import_ref_n/wguser_id
+# http://127.0.0.1:5003/import/import_ref_n/wguser_id
 
-SAMPLE JSON REQUEST
+# SAMPLE JSON REQUEST
 
-{
-    "wguser_id" : "HMuAqcsAFtnJGfrM84VqL7"
-}
+# {
+#     "wguser_id" : "HMuAqcsAFtnJGfrM84VqL7"
+# }
 
-SAMPLE OUTPUT
+# SAMPLE OUTPUT
 
-[
-    {
-        "container_numbers": [
-            "HLXU5027876",
-            "HLXU2139717",
-            "HLCU4187010",
-            "HLCU2231582",
-            "HLCU2258177",
-            "HLXU3075047",
-            "HLCU2100704"
-        ],
-        "delivery_date": "01/06/2021",
-        "export_destination": "KARACHI",
-        "export_ref_n": 17612,
-        "type": "Export"
-    },
-    {
-        "container_numbers": [
-            "GESU4205066",
-            "HDMU6127648",
-            "TGHU7584650"
-        ],
-        "delivery_date": "07/11/2020",
-        "export_destination": "MUMBAI,INDIA",
-        "export_ref_n": 17625,
-        "type": "Export"
-    },
-    {
-        "container_numbers": [
-            "COPU5223250",
-            "COPU4226315"
-        ],
-        "delivery_date": "05/09/2017",
-        "export_destination": "CHITTAGONG",
-        "export_ref_n": 17595,
-        "type": "Export"
-    },
-    {
-        "container_numbers": [
-            "DNAU2559042",
-            "DNAU2514140",
-            "DNAU2517113",
-            "DNAU2334827",
-            "DNAU2404837",
-            "DNAU2528566"
-        ],
-        "delivery_date": "27/05/2017",
-        "export_destination": "HAMBURG",
-        "export_ref_n": 17648,
-        "type": "Export"
-    },
-    {
-        "container_numbers": [
-            "COKU0020043",
-            "XTRU2060428",
-            "UXXU2229503"
-        ],
-        "delivery_date": "12/06/2010",
-        "export_destination": "CHIASSO CY",
-        "export_ref_n": 17581,
-        "type": "Export"
-    },
-    {
-        "container_numbers": [
-            "EMCU 3424530",
-            "IPXU 3371140",
-            "FSCU 7532318",
-            "FSCU 7840795"
-        ],
-        "delivery_date": "19/11/2009",
-        "export_destination": "BANGKOK PORT, *",
-        "export_ref_n": 17633,
-        "type": "Export"
-    },
-    {
-        "container_numbers": [
-            "REGU4985177",
-            "REGU4995920",
-            "REGU4991740",
-            "REGU4205368",
-            "TEXU7407574",
-            "CRXU4483116",
-            "TEXU7099492",
-            "REGU4982408"
-        ],
-        "delivery_date": "23/09/2005",
-        "export_destination": "CHIASSO CY",
-        "export_ref_n": 17587,
-        "type": "Export"
-    },
-    {
-        "container_numbers": [
-            "YMLU 4947640",
-            "YMLU 4494327",
-            "YMLU 4933266"
-        ],
-        "delivery_date": "08/05/1999",
-        "export_destination": "NHAVA SHEVA",
-        "export_ref_n": 17549,
-        "type": "Export"
-    },
-    {
-        "container_numbers": [
-            "CLHU3395117",
-            "ZCSU8202585",
-            "GLDU7038020"
-        ],
-        "delivery_date": "22/09/1997",
-        "export_destination": "NHAVA SHEVA",
-        "export_ref_n": 17609,
-        "type": "Export"
-    }
-]
-"""    
-
-
+# {
+#     "code": 200,
+#     "data": {
+#         "output": [
+#             {
+#                 "arrival_date": "Thu, 22 Sep 2022 00:00:00 GMT",
+#                 "import_destination": "Singapore",
+#                 "import_ref_n": 14100
+#             },
+#             {
+#                 "arrival_date": "Sun, 30 Jun 2019 00:00:00 GMT",
+#                 "import_destination": "Singapore",
+#                 "import_ref_n": 14057
+#             },
+#             {
+#                 "arrival_date": "Fri, 02 Nov 2018 00:00:00 GMT",
+#                 "import_destination": "Singapore",
+#                 "import_ref_n": 14019
+#             },
+#             {
+#                 "arrival_date": "Sat, 16 Jul 2016 00:00:00 GMT",
+#                 "import_destination": "Singapore",
+#                 "import_ref_n": 14059
+#             },
+#             {
+#                 "arrival_date": "Fri, 27 Jun 2014 00:00:00 GMT",
+#                 "import_destination": "Singapore",
+#                 "import_ref_n": 14073
+#             },
+#             {
+#                 "arrival_date": "Sat, 26 Jun 2004 00:00:00 GMT",
+#                 "import_destination": "Singapore",
+#                 "import_ref_n": 14238
+#             },
+#             {
+#                 "arrival_date": "Tue, 15 Jun 2004 00:00:00 GMT",
+#                 "import_destination": "Singapore",
+#                 "import_ref_n": 14114
+#             },
+#             {
+#                 "arrival_date": "Tue, 15 Jun 2004 00:00:00 GMT",
+#                 "import_destination": "Singapore",
+#                 "import_ref_n": 14115
+#             },
+#             {
+#                 "arrival_date": "Thu, 10 Jun 2004 00:00:00 GMT",
+#                 "import_destination": "Singapore",
+#                 "import_ref_n": 14069
+#             },
+#             {
+#                 "arrival_date": "Tue, 08 Jun 2004 00:00:00 GMT",
+#                 "import_destination": "Singapore",
+#                 "import_ref_n": 14058
+#             }
+#         ]
+#     }
+# }
 
