@@ -300,7 +300,7 @@ return(
  
 </div>
 }
-  {loading && <p className="ml-40 text-3xl">Loading.... <Bars stroke="#00FF00" strokeOpacity={.500} /></p>}
+  {/* {loading && <p className="ml-40 text-3xl">Loading.... <Bars stroke="#00FF00" strokeOpacity={.500} /></p>} */}
 
 
   
