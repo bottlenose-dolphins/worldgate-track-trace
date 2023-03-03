@@ -26,7 +26,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip
             RUN ldconfig
 
 WORKDIR /app
-ENV CACHEBUST = 3
+ARG CACHEBUST=5
 COPY user.py .
 COPY requirements.txt . 
 COPY obtainIp.py .
@@ -35,7 +35,6 @@ RUN mv user.py app.py
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
-ENV SQLALCHEMY_DATABASE_URI=<DB_URI>
 ENV PYTHONUNBUFFERED=1
 
 EXPOSE 5002

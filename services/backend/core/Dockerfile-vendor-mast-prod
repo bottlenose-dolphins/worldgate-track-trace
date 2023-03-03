@@ -1,4 +1,4 @@
-# for export.py
+# for complex_scraper.py (NOT able to test API endpoints bc cant seem to import invokes.py on my end)
 
 FROM python:3.11
 
@@ -29,10 +29,10 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
             && ldconfig
 
 WORKDIR /app
-ARG CACHEBUST=3
+ARG CACHEBUST=5
 COPY requirements.txt .
-COPY export.py .
-RUN mv export.py app.py
+COPY vendor_mast.py .
+RUN mv vendor_mast.py app.py
 
 #parsed during running of build command 
 ARG db 
@@ -43,6 +43,7 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
 ENV PYTHONUNBUFFERED=1
+
 
 
 
