@@ -1,9 +1,8 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./bl.scss";
 import { useLocation } from "react-router-dom";
-import dateFormat, { masks } from "dateformat";
+import dateFormat from "dateformat";
 
 
 

@@ -38,7 +38,7 @@ export default function SideBar() {
     ));
 
     return (
-        <aside className={`${open ? "w-48" : "w-16"} duration-200 h-screen bg-white border-r border-gray-300 relative`}>
+        <aside className={`${open ? "w-48" : "w-16"} flex-none duration-200 h-screen bg-white border-r border-gray-300 relative`}>
             <div className="flex flex-col pt-5 justify-center">
                 {renderSideBarItems}
             </div>
