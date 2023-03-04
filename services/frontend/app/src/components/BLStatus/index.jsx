@@ -110,11 +110,9 @@ export default function BLStatus() {
 
   return (
 
-    <div className="">
-      <div className="flex flex-row ml-10">
-
-        <div className="flex flex-col">
-          <h2 className="text-4xl text-left text-center font-bold mt-20">Tracking Your Shipment has <br /> never been this easy!</h2>
+    <div className="justify-center">
+        <div className="flex flex-col items-center ml-40">
+          <h2 className="text-4xl text-left text-center font-bold mt-20">Tracking your shipment has <br /> never been this easy!</h2>
           {/* Search Bar w/ Button */}
           <div className="relative">
             <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><MagnifyingGlassIcon className="w-6 h-6 mt-10" /></span>
@@ -124,7 +122,7 @@ export default function BLStatus() {
               Search
             </button>
           </div>
-          <h4 className="text-stone-500 text-center mt-2 "><i>Enter B/L or Container Number</i></h4>
+          <h4 className="text-stone-500 text-center mt-2"><i>Enter B/L or Container Number</i></h4>
         </div>
 
         <Modal
@@ -133,7 +131,6 @@ export default function BLStatus() {
           style={customStyles}
           contentLabel="Example Modal"
         >
-
           <button type="button" className="font-bold mb-2" onClick={closeModal}>X</button>
           <span><h3 className="text-center italic mb-2">Choose Options</h3></span>
           <hr />
@@ -169,12 +166,10 @@ export default function BLStatus() {
             </div>
           </div>
           <hr />
-
           <button type="button" onClick={handleTrackShipment} className=" mt-2 bg-[#217BF4]  hover:bg-blue-700 text-white font-bold py-2 px-4 ml-36 rounded-full">
             Confirm
           </button>
         </Modal>
-        <img src={ship} alt="" className="lg:opacity-100 xs:opacity-25 absolute h-80 w-80 right-0 bottom-20 mr-20" />
 
         {error &&
           <div className="bg-red-100 border border-red-400 mt-20 text-red-700 px-4 py-3 rounded relative" role="alert">
@@ -192,11 +187,11 @@ export default function BLStatus() {
 
           </div>
         }
-      </div>
 
-      <svg xmlns="http://www.w3.org/2000/svg" className="w-screen" viewBox="0 0 1440 320"><path fill="#a2d9ff" fillOpacity="0.8" d="M0,96L40,80C80,64,160,32,240,53.3C320,75,400,149,480,165.3C560,181,640,139,720,117.3C800,96,880,96,960,106.7C1040,117,1120,139,1200,133.3C1280,128,1360,96,1400,80L1440,64L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z" />
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-screen" viewBox="0 0 1440 320"><path fill="#0099ff" fillOpacity="0.2" d="M0,96L80,122.7C160,149,320,203,480,202.7C640,203,800,149,960,128C1120,107,1280,117,1360,122.7L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z" />
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-screen" viewBox="0 0 1440 320"><path fill="#0099ff" fillOpacity="1" d="M0,128L60,154.7C120,181,240,235,360,229.3C480,224,600,160,720,154.7C840,149,960,203,1080,213.3C1200,224,1320,192,1380,176L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z" /></svg>
+      <img src={ship} alt="" className="hidden lg:block absolute h-72 w-72 2xl:h-1/2 2xl:w-1/4 right-20 top-40 2xl:right-1/5 2xl:top-1/3" />
+      <svg xmlns="http://www.w3.org/2000/svg" className="absolute bottom-0 w-screen" viewBox="0 0 1440 250"><path fill="#a2d9ff" fillOpacity="0.8" d="M0,96L40,80C80,64,160,32,240,53.3C320,75,400,149,480,165.3C560,181,640,139,720,117.3C800,96,880,96,960,106.7C1040,117,1120,139,1200,133.3C1280,128,1360,96,1400,80L1440,64L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z" />
+        <svg xmlns="http://www.w3.org/2000/svg" className="absolute bottom-0 w-screen" viewBox="0 0 1440 250"><path fill="#0099ff" fillOpacity="0.2" d="M0,96L80,122.7C160,149,320,203,480,202.7C640,203,800,149,960,128C1120,107,1280,117,1360,122.7L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z" />
+          <svg xmlns="http://www.w3.org/2000/svg" className="absolute bottom-0 w-screen" viewBox="0 0 1440 250"><path fill="#0099ff" fillOpacity="1" d="M0,128L60,154.7C120,181,240,235,360,229.3C480,224,600,160,720,154.7C840,149,960,203,1080,213.3C1200,224,1320,192,1380,176L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z" /></svg>
         </svg>
       </svg>
     </div>
