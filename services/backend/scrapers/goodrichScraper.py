@@ -19,9 +19,9 @@ def ping():
     return("goodrich")
 
     # run with:
-    # http://127.0.0.1:8081/GOOD/BL/VASSINCMB015609
-    # http://127.0.0.1:8081/GOOD/CTR/VMLU3817377
-@app.route("/GOOD", methods=['POST'])
+    # http://127.0.0.1:8081/GOOD/bl/VASSINCMB015609
+    # http://127.0.0.1:8081/GOOD/ctr/VMLU3817377
+@app.route("/good", methods=['POST'])
 def track():
 
     options = Options()
@@ -34,8 +34,8 @@ def track():
     options.add_argument('--disable-dev-shm-usage')
 
     data = request.get_json()
-    tracking_identifier = data["tracking_identifier"]
-    tracking_type = data["tracking_type"]
+    identifier = data["identifier"]
+    identifier_type = data["identifier_type"]
 
     # # init
     # driver = webdriver.Chrome()
@@ -63,11 +63,11 @@ def track():
         # print("entered result page")
         
         # query and results page
-        if(tracking_type == "CTR"):
+        if(identifier_type == "ctr"):
             driver.find_element(by=By.XPATH, value="//*[@id=\"TAB1\"]/ul/li[2]/a").click()
             # query
-            # enter CTR value
-            driver.find_element(by=By.ID, value="ContainerNo").send_keys(tracking_identifier)
+            # enter ctr value
+            driver.find_element(by=By.ID, value="ContainerNo").send_keys(identifier)
             # click search button
             driver.find_element(by=By.XPATH, value="//*[@id=\"TAB2\"]/div[1]/div/div[3]/input").click()
             
@@ -75,10 +75,10 @@ def track():
             vessel_name= driver.find_element(by=By.XPATH, value="//*[@id=\"table2id\"]/table[1]/tbody/tr[3]/td[2]").text.strip().title()
             status, arrival_datetime = driver.find_element(by=By.ID, value="fpodEtaId2").text.split(" : ")
         
-        elif(tracking_type == "BL"):
+        elif(identifier_type == "bl"):
             # query
-            # enter BL value
-            driver.find_element(by=By.ID, value="BlNo").send_keys(tracking_identifier)
+            # enter bl value
+            driver.find_element(by=By.ID, value="BlNo").send_keys(identifier)
             # click search button
             driver.find_element(by=By.XPATH, value=" //*[@id=\"TAB1\"]/div[1]/div/div[3]/input").click()
             
@@ -105,7 +105,7 @@ def track():
 
     except Exception as e:
 
-        restart_microservice()
+        # restart_microservice()
         
         return jsonify(
             {

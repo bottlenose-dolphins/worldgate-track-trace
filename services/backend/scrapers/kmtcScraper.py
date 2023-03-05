@@ -15,7 +15,7 @@ app = Flask(__name__)
 def ping():
     return("hello")
 
-@app.route("/KMTC", methods=['POST'])
+@app.route("/kmtc", methods=['POST'])
 def track():
 
     options = Options()
@@ -27,10 +27,8 @@ def track():
     driver = webdriver.Chrome(options=options)
 
     data = request.get_json()
-    tracking_identifier = data["tracking_identifier"]
-    tracking_type = data["tracking_type"]
-
-
+    identifier = data["identifier"]
+    identifier_type = data["identifier_type"]
 
     # set max waiting time before throwing an exception
     driver.implicitly_wait(5)
@@ -42,11 +40,11 @@ def track():
     try:
         se = Select(driver.find_element("xpath", "//*[@id='frm']/div/table/tbody/tr/td[1]/select"))
         # query and results page
-        if(tracking_type == "BL"):
+        if(identifier_type == "bl"):
             se.select_by_value("BL")
             # query
             # enter BL value
-            driver.find_element(by=By.ID, value="blNo").send_keys(tracking_identifier)
+            driver.find_element(by=By.ID, value="blNo").send_keys(identifier)
             # click search button
             driver.find_element(by=By.XPATH, value="//*[@id='frm']/div/table/tbody/tr/td[3]/a").click()
             time.sleep(5)
@@ -59,9 +57,9 @@ def track():
             arrival_datetime = driver.find_element(by=By.XPATH, value="//*[@id='frm']/div[2]/table/tbody/tr/td[6]").text.strip().title()
             arrival_datetime = arrival_datetime[arrival_datetime.index('\n')+1:]
 
-        elif(tracking_type == "CTR"):
+        elif(identifier_type == "ctr"):
             se.select_by_value("CN")
-            driver.find_element(by=By.ID, value="blNo").send_keys(tracking_identifier)
+            driver.find_element(by=By.ID, value="blNo").send_keys(identifier)
             driver.find_element(by=By.XPATH, value="//*[@id='frm']/div/table/tbody/tr/td[3]/a").click()
             time.sleep(5)
 
@@ -87,7 +85,7 @@ def track():
 
     except Exception as e:
 
-        restart_microservice()
+        # restart_microservice()
 
         return jsonify(
             {

@@ -11,7 +11,7 @@ app = Flask(__name__)
 def ping():
     return("hello")
 
-@app.route('/ONE', methods=['POST']) 
+@app.route('/one', methods=['POST']) 
 
 def oneScraper():
 
@@ -37,17 +37,17 @@ def oneScraper():
 
         data = request.get_json()
 
-        tracking_type = data["tracking_type"]
+        identifier_type = data["identifier_type"]
 
         identifier = data["identifier"]
 
-        # remove ONEY prefix from BL Number
+        # remove ONEY prefix from bl Number
 
-        if tracking_type == "BL":
+        if identifier_type == "bl":
 
             identifier = identifier[4:]
         
-        # Can interchange identifier with Container/BL Number as the process is similar
+        # Can interchange identifier with Container/bl Number as the process is similar
 
         driver.get('https://ecomm.one-line.com/one-ecom/manage-shipment/cargo-tracking?ctrack-field=' + identifier + '&trakNoParam=' + identifier)
 
@@ -117,7 +117,7 @@ def oneScraper():
 
     except Exception as e:
 
-        restart_microservice()
+        # restart_microservice()
 
         return jsonify(
 
