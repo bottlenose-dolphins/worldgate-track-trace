@@ -23,20 +23,24 @@ class ExportShipment(db.Model):
     eta = db.Column(db.Date, nullable=False)
     ocean_bl = db.Column(db.String, nullable=False)
     port_disc_id = db.Column(db.String, nullable=False)
+    cr_agent_id = db.Column(db.String, nullable=False)
 
-    def __init__(self, export_ref_n, eta, ocean_bl, port_disc_id):
+    def __init__(self, export_ref_n, eta, ocean_bl, port_disc_id, cr_agent_id):
         self.export_ref_n = export_ref_n
         self.eta = eta
         self.ocean_bl = ocean_bl
         self.port_disc_id = port_disc_id
+        self.cr_agent_id = cr_agent_id
 
     def json(self):
         return {
             "export_ref_n": self.export_ref_n,
             "eta": self.eta,
             "ocean_bl": self.ocean_bl,
-            "port_disc_id": self.port_disc_id
+            "port_disc_id": self.port_disc_id,
+            "cr_agent_id": self.cr_agent_id
         }
+
 @app.route("/ping", methods=['GET'])
 def health_check():
     return("export_shipment")
@@ -156,6 +160,33 @@ def update_shipment_cont():
         }
     ), 500
 
+# Retrieve cr_agent_id by ocean_bl
+@app.route("/export_shipment/agent_id", methods=['POST'])
+def get_agent_id():
+    data = request.get_json()
+    master_bl = data["master_bl"]
+    
+    try:
+        cr_agent_id = ExportShipment.query.filter_by(ocean_bl=master_bl).first().cr_agent_id
+
+        if cr_agent_id:
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {
+                        "cr_agent_id": cr_agent_id
+                        }
+                }
+            ), 200
+    
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "Failed to retrieve CR_AGENT_ID"
+            }
+        ), 500
+
 if __name__ == "__main__":
-    # app.run(host='0.0.0.0', port=5008, debug=True)
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', port=5008, debug=True)
+    # app.run(host='0.0.0.0', debug=True)

@@ -23,19 +23,22 @@ class ImportShipment(db.Model):
     eta = db.Column(db.Date, nullable=False)
     ocean_bl = db.Column(db.String, nullable=False)
     cr_agent_id = db.Column(db.String, nullable=False)
+    port_load_id = db.Column(db.String, nullable=False)
 
-    def __init__(self, import_ref_n, eta, ocean_bl, cr_agent_id):
+    def __init__(self, import_ref_n, eta, ocean_bl, cr_agent_id, port_load_id):
         self.import_ref_n = import_ref_n
         self.eta = eta
         self.ocean_bl = ocean_bl
         self.cr_agent_id = cr_agent_id
+        self.port_load_id = port_load_id
 
     def json(self):
         return {
             "import_ref_n": self.import_ref_n,
             "eta": self.eta,
             "ocean_bl": self.ocean_bl,
-            "cr_agent_id": self.cr_agent_id
+            "cr_agent_id": self.cr_agent_id,
+            "port_load_id": self.port_load_id
         }
 
 @app.route("/ping", methods=['GET'])
@@ -72,14 +75,15 @@ def retrieve_shipment():
 def get_master_bl():
     data = request.get_json()
     import_ref_n = data["import_ref_n"]
-    master_bl = ImportShipment.query.filter_by(import_ref_n=import_ref_n).first().ocean_bl
+    response = ImportShipment.query.filter_by(import_ref_n=import_ref_n).first()
     
-    if master_bl:
+    if response:
         return jsonify(
             {
                 "code": 200,
                 "data": {
-                    "master_bl": master_bl
+                    "master_bl": response.ocean_bl,
+                    "origin": response.port_load_id
                     }
             }
         ), 200
@@ -182,5 +186,5 @@ def get_agent_id():
         ), 500
 
 if __name__ == "__main__":
-    # app.run(host='0.0.0.0', port=5005, debug=True)
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', port=5005, debug=True)
+    # app.run(host='0.0.0.0', debug=True)
