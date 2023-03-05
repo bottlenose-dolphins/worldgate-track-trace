@@ -1,19 +1,14 @@
 import { useState } from "react";
 
 import { blStatus } from "src/api/user";
-import { Alert, Navbar } from "react-bootstrap";
-import { Bars } from "react-loading-icons";
+
 import Modal from "react-modal";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Button from "react-bootstrap/Button";
 
 import { useNavigate } from "react-router-dom";
 
-import ModalBody from "react-bootstrap/ModalBody";
-import ModalHeader from "react-bootstrap/ModalHeader";
-import ModalFooter from "react-bootstrap/ModalFooter";
-import ModalTitle from "react-bootstrap/ModalTitle";
-import Navigation from "../../layout/NavbarUser";
+
 
 import ship from "../../img/ship3d.png";
 
@@ -21,13 +16,11 @@ import "./bl.scss";
 
 export default function BLStatus() {
   const navigate = useNavigate();
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [secondSelectedOption, setSecondSelectedOption] = useState(null);
-  const [selectedvalue, setSelectedValue] = useState("ctr");
+ 
+  const [searchType, setSearchType] = useState("ctr");
   const [trackingHistory, setTrackingHistory] = useState([]);
-  const [secondselectedvalue, setSecondSelectedValue] = useState("export");
+  const [directionType, setDirectionType] = useState("export");
   const [billOfLadingNumber, setBillOfLadingNumber] = useState("");
-  const [displaytext, setDisplay] = useState("");
   const [error, setError] = useState("");
   const [error2, setError2] = useState("");
   const [loading, setLoading] = useState(false);
@@ -52,11 +45,10 @@ export default function BLStatus() {
     setLoading(true);
     setError(null);
     console.log(billOfLadingNumber)
-    console.log(selectedvalue)
-    console.log(secondselectedvalue)
+
 
     try {
-      const response = await blStatus("Yang Ming", billOfLadingNumber, selectedvalue, secondselectedvalue)
+      const response = await blStatus("Yang Ming", billOfLadingNumber, searchType, directionType)
 
       if (response.status !== 200) {
         throw new Error("No status found");
@@ -70,7 +62,7 @@ export default function BLStatus() {
       }
     }
     catch (err) {
-      navigate("/error", { state: { identifier: billOfLadingNumber, direction: secondselectedvalue, type: selectedvalue } })
+      navigate("/error", { state: { identifier: billOfLadingNumber, direction: directionType, type: searchType } })
       setError2(err.message);
     } finally {
       setError2("Connection Failed");
@@ -137,8 +129,8 @@ export default function BLStatus() {
 
           <div className="middle">
             <div className="wrapper">
-              <input type="radio" name="select" id="option-1" onClick={() => { setSelectedValue("bl"); }} />
-              <input type="radio" name="select" id="option-2" onClick={() => { setSelectedValue("ctr"); }} defaultChecked />
+              <input type="radio" name="select" id="option-1" onClick={() => { setSearchType("bl"); }} />
+              <input type="radio" name="select" id="option-2" onClick={() => { setSearchType("ctr"); }} defaultChecked />
               <label htmlFor="option-1" className="option option-1">
                 <div className="dot" />
                 <span>BL</span>
@@ -153,8 +145,8 @@ export default function BLStatus() {
           <div className="middle mt-6">
             <hr />
             <div className="wrapper">
-              <input type="radio" name="select2" id="option-3" onClick={() => { setSecondSelectedValue("import"); }} />
-              <input type="radio" name="select2" id="option-4" onClick={() => { setSecondSelectedValue("export"); }} defaultChecked />
+              <input type="radio" name="select2" id="option-3" onClick={() => { setDirectionType("import"); }} />
+              <input type="radio" name="select2" id="option-4" onClick={() => { setDirectionType("export"); }} defaultChecked />
               <label htmlFor="option-3" className="option option-3">
                 <div className="dot" />
                 <span>Import</span>

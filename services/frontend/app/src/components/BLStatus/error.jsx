@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "react-bootstrap/Card";
+
 import { useLocation } from "react-router-dom";
 import error from "../../img/error.png";
 import "./bl.scss";
