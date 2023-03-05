@@ -1,24 +1,17 @@
 import { useState } from "react";
-
-import { blStatus } from "src/api/user";
+import { useNavigate } from "react-router-dom";
+import { searchShipmentStatus } from "src/api/shipment";
 
 import Modal from "react-modal";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import Button from "react-bootstrap/Button";
-
-import { useNavigate } from "react-router-dom";
-
-
-
 import ship from "../../img/ship3d.png";
-
 import "./bl.scss";
 
 export default function BLStatus() {
   const navigate = useNavigate();
  
   const [searchType, setSearchType] = useState("ctr");
-  const [trackingHistory, setTrackingHistory] = useState([]);
+  const [trackingHistory, setTrackingHistory] = useState({});
   const [directionType, setDirectionType] = useState("export");
   const [billOfLadingNumber, setBillOfLadingNumber] = useState("");
   const [error, setError] = useState("");
@@ -48,19 +41,19 @@ export default function BLStatus() {
 
 
     try {
-      const response = await blStatus("Yang Ming", billOfLadingNumber, searchType, directionType)
+      const response = await searchShipmentStatus("Yang Ming", billOfLadingNumber, searchType, directionType)
       console.log(response);
       console.log(response.status);
 
-      if (response.status !== 200) {
+      if (response.code !== 200) {
         throw new Error("No status found");
       }
-      else if (response.status === 200) {
-        const data = await response.json();
-        setTrackingHistory([data]);
+      else if (response.code === 200) {
+        // const data = await response.json();
+        setTrackingHistory(response.data);
 
 
-        navigate("/Status", { state: { arrival: trackingHistory[0].data.arrival_date, discharge: trackingHistory[0].data.port_of_discharge, vessel: trackingHistory[0].data.vessel_name, status: trackingHistory[0].data.status !== "undefined" ? "No Status" : trackingHistory[0].data.status, bl: billOfLadingNumber, loading: trackingHistory[0].data.port_of_loading, shipline: trackingHistory[0].data.shipping_line } })
+        navigate("/Status", { state: { arrival: response.data.arrival_date, discharge: response.data.port_of_discharge, vessel: response.data.vessel_name, status: "ARRIVED", bl: billOfLadingNumber, loading: "PORT OF LOADING TEST", shipline: "YANG MING" } })
       }
     }
     catch (err) {
