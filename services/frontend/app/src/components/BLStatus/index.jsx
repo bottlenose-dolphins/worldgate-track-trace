@@ -49,6 +49,8 @@ export default function BLStatus() {
 
     try {
       const response = await blStatus("Yang Ming", billOfLadingNumber, searchType, directionType)
+      console.log(response);
+      console.log(response.status);
 
       if (response.status !== 200) {
         throw new Error("No status found");
