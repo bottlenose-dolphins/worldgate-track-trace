@@ -39,7 +39,8 @@
       "import/prefer-default-export": "off",
       "prefer-template": "off",
       "no-shadow": "off",
-      "arrow-body-style": "off"
+      "arrow-body-style": "off",
+      "prefer-destructuring": "off"
     }
 }
   

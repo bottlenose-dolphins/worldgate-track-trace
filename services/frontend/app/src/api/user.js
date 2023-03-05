@@ -68,7 +68,7 @@ export const blStatus = async(shippingLine, identifier, identifierType, directio
             }
             throw new Error("No data returned from backend");
         }       
-        throw new Error("Request Unauthorised") 
+        throw new Error("Request Unauthorised");
     } catch (error) {
         return error.response.data;
     }
