@@ -2,8 +2,8 @@ import axios from "axios";
 
 const { REACT_APP_API_ENDPOINT } = process.env;
 
-export const USER_ENDPOINT = `http://${REACT_APP_API_ENDPOINT}:5000/user`;
-export const COMPLEX_SCRAPER_ENDPOINT = `http://${REACT_APP_API_ENDPOINT}:5009/scrape`;
+export const USER_ENDPOINT = `http://${REACT_APP_API_ENDPOINT}:5002/user`;
+export const COMPLEX_SCRAPER_ENDPOINT = `http://${REACT_APP_API_ENDPOINT}:5009`;
 
 // to extract csrf_access_token, which should then be put into request header ("X-CSRF-TOKEN")
 export function getCookie(name) {

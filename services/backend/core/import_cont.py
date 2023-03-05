@@ -31,6 +31,10 @@ class ImportCont(db.Model):
             "cont_n": self.cont_n
         }
 
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("import_cont")
+
 # Retrieve IMPORT_REF_N from IMPORT_REF_CONT by CONT_N
 @app.route("/import_cont/import_ref_n", methods=['POST'])
 def get_import_ref_n():
@@ -97,8 +101,8 @@ def get_cont_num():
         ), 500
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5004, debug=True)
-    # app.run(host='0.0.0.0', debug=True)
+    # app.run(host='0.0.0.0', port=5004, debug=True)
+    app.run(host='0.0.0.0', debug=True)
 
 """
 Sample API Endpoint

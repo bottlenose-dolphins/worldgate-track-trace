@@ -29,18 +29,19 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
             && ldconfig
 
 WORKDIR /app
+ARG CACHEBUST=5
 COPY requirements.txt .
 COPY vendor_mast.py .
-COPY invokes.py .
+RUN mv vendor_mast.py app.py
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
-ENV SQLALCHEMY_DATABASE_URI="<DB_URI>"
+ENV PYTHONUNBUFFERED=1
 
 
 
 EXPOSE 5012
 
 # start the server
-CMD [ "python", "vendor_mast.py" ]
+CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5012"]

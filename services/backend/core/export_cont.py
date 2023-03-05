@@ -31,6 +31,10 @@ class ExportCont(db.Model):
             "cont_n": self.cont_n
         }
 
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("export_cont")
+
 # Retrieve EXPORT_REF_N from EXPORT_REF_CONT by CONT_N
 @app.route("/export_cont/export_ref_n", methods=['POST'])
 def get_export_ref_n():
@@ -69,7 +73,7 @@ def get_cont_num():
             outputList = []
             for container_num in container_nums:
                 outputList.append(container_num.cont_n)
-            
+                
             return jsonify(
                 {
                     "code": 200,
@@ -78,7 +82,6 @@ def get_cont_num():
                     }
                 }
             ), 200
-        
         else:
             return jsonify(
                 {
