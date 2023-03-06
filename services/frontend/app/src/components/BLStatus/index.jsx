@@ -33,12 +33,10 @@ export default function BLStatus() {
   const handleShow = () => setShow(true);
 
   const handleTrackShipment = async () => {
-
     closeModal();
     setLoading(true);
     setError(null);
-    console.log(billOfLadingNumber)
-
+    console.log(billOfLadingNumber);
 
     try {
       const response = await searchShipmentStatus("Yang Ming", billOfLadingNumber, searchType, directionType)
@@ -49,9 +47,7 @@ export default function BLStatus() {
         throw new Error("No status found");
       }
       else if (response.code === 200) {
-        // const data = await response.json();
         setTrackingHistory(response.data);
-
 
         navigate("/Status", { state: { arrival: response.data.arrival_date, discharge: response.data.port_of_discharge, vessel: response.data.vessel_name, status: "ARRIVED", bl: billOfLadingNumber, loading: "PORT OF LOADING TEST", shipline: "YANG MING" } })
       }
@@ -153,7 +149,7 @@ export default function BLStatus() {
             </div>
           </div>
           <hr />
-          <button type="button" onClick={handleTrackShipment} className=" mt-2 bg-[#217BF4]  hover:bg-blue-700 text-white font-bold py-2 px-4 ml-36 rounded-full">
+          <button type="button" onClick={handleTrackShipment} className=" mt-2 bg-[#217BF4] hover:bg-blue-700 text-white font-bold py-2 px-4 ml-36 rounded-full">
             Confirm
           </button>
         </Modal>

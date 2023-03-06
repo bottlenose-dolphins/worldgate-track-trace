@@ -4,8 +4,6 @@ import "./bl.scss";
 import { useLocation } from "react-router-dom";
 import dateFormat from "dateformat";
 
-
-
 export default function Status() {
     const location=useLocation();
     const {arrival}=location.state;
