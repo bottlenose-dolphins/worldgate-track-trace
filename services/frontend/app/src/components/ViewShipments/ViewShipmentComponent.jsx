@@ -4,10 +4,9 @@ import { getImportShipments, getExportShipments } from "src/api/shipment";
 import locationWhite from "../../img/locationWhite.png";
 import sortButton from "../../img/sortButton.png";
 
-export default function ViewShipmentComponent(props) {
+export default function ViewShipmentComponent({ title, type }) {
 
   const [buttonText, setButtonText] = useState("closest to arrival");
-  const { title, type } = props;
   const [items, setItems] = useState([]);
 
   useEffect(() => {
