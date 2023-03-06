@@ -89,7 +89,7 @@ def oneScraper():
 
                         "port_of_discharge": destinationPort,
 
-                        "time_of_arrival": expectedArrivalTime[8:]
+                        "arrival_date": expectedArrivalTime[8:]
 
                     }
 
