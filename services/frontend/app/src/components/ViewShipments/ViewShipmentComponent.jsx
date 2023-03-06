@@ -1,41 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Card } from "react-bootstrap";
-import { getImportShipments, getExportShipments } from "src/api/shipment";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import locationWhite from "../../img/locationWhite.png";
 
-export default function ViewShipmentComponent({ title, type }) {
+export default function ViewShipmentComponent({ title, data }) {
   const [isLatestOnTop, setIsLatestOnTop] = useState(true);
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (type === "Import") {
-        const importShipments = await getImportShipments();
-        setItems(importShipments.slice());
-      } else if (type === "Export") {
-        const exportShipments = await getExportShipments();
-        setItems(exportShipments.slice());
-      }
-    };
-    fetchData();
-  }, [type]);
+  const [items, setItems] = useState(data);
 
   const handleClick = () => {
     setIsLatestOnTop(!isLatestOnTop);
-    setItems(items.slice().reverse());
+    setItems(items.reverse());
   };
 
   return (
     <div className="p-9 w-3/4">
-      <h1 className="text-2xl font-medium text-blue-700">{title}</h1>
+      <h1 className="text-2xl font-medium text-blue-700 mb-1">{title}</h1>
       <div className="my-auto bg-blue-50 p-4 rounded-lg border border-blue-500">
 
         <div className="flex justify-between mt-3 mx-1">
           <div className="text-lg font-medium text-blue-700 w-1/2">List View</div>
           <button type="button" className="flex justify-end w-1/2 items-center" onClick={handleClick}>
             <ChevronDownIcon className={`w-6 h-6 text-blue-700 mr-1 ${!isLatestOnTop && "rotate-180"}`} />
-            <div className="font-medium text-blue-700 hover:underline">{ isLatestOnTop ? "closest to arrival" : "furthest from arrival" }</div>
+            <div className="font-medium text-blue-700 hover:underline">{isLatestOnTop ? "closest to arrival" : "furthest from arrival"}</div>
           </button>
         </div>
 
