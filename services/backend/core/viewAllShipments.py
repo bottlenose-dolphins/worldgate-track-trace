@@ -29,6 +29,7 @@ EXPORT_URL = "http://core_export:5006"
 EXPORT_CONT_URL = "http://core_export_cont:5007"
 
 USER_URL = "http://core_users:5002/user/verify"
+
 prod = getenv("prod")
 print("prod type: ", type(prod))
 
@@ -37,7 +38,6 @@ print("********")
 @app.route("/ping", methods=['GET'])
 def health_check():
     return("viewallshipments")
-
 
 @app.route("/getExportContainerNum", methods=['POST'])
 def getExportContainerNum():
@@ -68,7 +68,7 @@ def getExportContainerNum():
         container_num_response_dumped = json.dumps(container_num_response)
         container_num_response_loads = json.loads(container_num_response_dumped)
         retrieved_list_containerNum_output = container_num_response_loads['data']['container_nums']
-
+        
         if len(retrieved_list_containerNum_output) > 0:
             retrieved_tuple_containerNum_output = tuple(retrieved_list_containerNum_output)
             a_record["container_numbers"] = retrieved_tuple_containerNum_output
@@ -256,8 +256,6 @@ ExportContainerNum Sample JSON Response
 ]
 
 """
-
-
 
     # pass the whole request from jeff side to the verify_jwt_csrf_validity function if 500 dont proceed else just proceed
     # then just retrieve userId from the response 

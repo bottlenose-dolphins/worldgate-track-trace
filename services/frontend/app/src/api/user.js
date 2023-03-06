@@ -55,7 +55,7 @@ export const signUp = async(username, email, password, phone, company) => {
 export const blStatus = async(shippingLine, identifier, identifierType, direction) => {
     try {
         const authRes = await authenticate()
-
+        
         if (authRes.code === 200) {
             const res = await axios.post(`${COMPLEX_SCRAPER_ENDPOINT}/scrape`, {
                 "shipping_line": shippingLine,
@@ -68,7 +68,7 @@ export const blStatus = async(shippingLine, identifier, identifierType, directio
             }
             throw new Error("No data returned from backend");
         }       
-        throw new Error("Request Unauthorised") 
+        throw new Error("Request Unauthorised");
     } catch (error) {
         return error.response.data;
     }

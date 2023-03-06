@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+import { BLStatusPage, SignInPage, SignUpPage, HomePage, ViewShipmentsPage } from "src/routes";
 import { ToastContainer } from "react-toastify";
-import { BLStatusPage, SignInPage, SignUpPage, HomePage } from "src/routes";
 import Layout from "./layout/Layout";
 import ProtectedLayout from "./layout/ProtectedLayout";
 import "./App.css";
@@ -18,6 +19,7 @@ function App() {
 
         {/* Protected Routes/Routes with SideBar */}
         <Route element={<ProtectedLayout />}>
+          <Route path="/view-shipments" element={<ViewShipmentsPage />} />
           <Route path="/blstatus" element={<BLStatusPage />} />
         </Route>
       </Routes>
