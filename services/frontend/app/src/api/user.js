@@ -1,5 +1,5 @@
 import axios from "axios";
-import { USER_ENDPOINT, COMPLEX_SCRAPER_ENDPOINT, authenticate } from "./config";
+import { USER_ENDPOINT } from "./config";
 
 export const signIn = async(username, password) => {
     try { 

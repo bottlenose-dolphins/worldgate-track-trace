@@ -45,7 +45,9 @@
         "controlComponents": [],
         "assert": "both",
         "depth": 25
-      }]
+      }],
+      "arrow-body-style": "off",
+      "prefer-destructuring": "off"
     }
 }
   

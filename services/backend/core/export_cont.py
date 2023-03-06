@@ -73,7 +73,7 @@ def get_cont_num():
             outputList = []
             for container_num in container_nums:
                 outputList.append(container_num.cont_n)
-            
+                
             return jsonify(
                 {
                     "code": 200,
@@ -82,7 +82,6 @@ def get_cont_num():
                     }
                 }
             ), 200
-        
         else:
             return jsonify(
                 {
@@ -108,9 +107,6 @@ if __name__ == "__main__":
 
 """
 Sample API Endpoint
-    # app.run(host='0.0.0.0', port=5007, debug=True)
-    app.run(host='0.0.0.0', debug=True)
-# Sample API Endpoint
 
 http://127.0.0.1:5007/export_cont/container_num
 
