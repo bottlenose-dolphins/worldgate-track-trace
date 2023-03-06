@@ -18,16 +18,17 @@ app = Flask(__name__)
 username = getenv("cordUsername")
 password = getenv("cordPassword")
 
-@app.route("/CCSL", methods=['POST'])
+@app.route("/cord", methods=['POST'])
 def track():
 
     options = Options()
     options.add_argument('--headless')
     options.add_argument('--disable-gpu')
+    options.add_argument('--no-sandbox')
 
     data = request.get_json()
-    tracking_identifier = data["tracking_identifier"]
-    tracking_type = data["tracking_type"]
+    identifier = data["identifier"]
+    identifier_type = data["identifier_type"]
 
     # init
     driver = webdriver.Chrome(options=options)
@@ -39,7 +40,6 @@ def track():
     driver.get("https://www.cordelialine.com/login-and-registration/")
 
     try:
-      
         # username and password input elements
         eleUsername = driver.find_element(by=By.ID, value="erf_username")
         elePassword = driver.find_element(by=By.ID, value="erf_password")
@@ -53,8 +53,8 @@ def track():
         time.sleep(3)
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")     
         # query and results page
-        if(tracking_type == "BL"):
-            driver.get("https://www.cordelialine.com/bltracking/?blno="+tracking_identifier)
+        if(identifier_type == "bl"):
+            driver.get("https://www.cordelialine.com/bltracking/?blno="+identifier)
             time.sleep(2)
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")     
 
@@ -64,8 +64,8 @@ def track():
             status = driver.find_element(by=By.XPATH, value="//*[@id='checkShedTable1']/tbody/tr/td[12]").text.strip().title()
             arrival_datetime = driver.find_element(by=By.XPATH, value="//*[@id='checkShedTable1']/tbody/tr/td[2]").text.strip().title()
 
-        elif(tracking_type == "CTR"):
-            driver.get("https://www.cordelialine.com/container-tracking/?contno="+tracking_identifier)
+        elif(identifier_type == "ctr"):
+            driver.get("https://www.cordelialine.com/container-tracking/?contno="+identifier)
             time.sleep(2)
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);") 
             
@@ -88,7 +88,7 @@ def track():
         
     except Exception as e:
 
-        restart_microservice()
+        # restart_microservice()
 
         return jsonify(
             {
