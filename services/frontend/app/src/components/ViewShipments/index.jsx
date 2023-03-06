@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getExportShipments, getImportShipments } from "src/api/shipment";
+import ClipLoader from "react-spinners/ClipLoader";
 import ViewShipmentComponent from "./ViewShipmentComponent";
 
 export default function ToggleTab() {
@@ -40,17 +41,27 @@ export default function ToggleTab() {
 
   return (
     <div className="bg-blue-50 w-screen">
-      {!loading && <div className="flex flex-col ml-4 mt-4">
-        <div className="tabs-header flex">
-          {renderTabs}
+      {loading ?
+        <div className="flex justify-center items-center h-full">
+          <ClipLoader
+            color="#217BF4"
+            size={60}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
         </div>
+        : <div className="flex flex-col ml-4 mt-4">
+          <div className="tabs-header flex">
+            {renderTabs}
+          </div>
 
-        <div className="border border-black w-3/4 bg-white">
-          {activeTab === "Import" && <div><ViewShipmentComponent title="Incoming Shipments" data={importShipments} /></div>}
-          {activeTab === "Export" && <div><ViewShipmentComponent title="Outgoing Shipments" data={exportShipments} /></div>}
-          {activeTab === "Upcoming" && <div><ViewShipmentComponent title="Upcoming Shipments" data={upcomingShipments} /></div>}
+          <div className="border border-black w-3/4 bg-white">
+            {activeTab === "Import" && <div><ViewShipmentComponent title="Incoming Shipments" data={importShipments} /></div>}
+            {activeTab === "Export" && <div><ViewShipmentComponent title="Outgoing Shipments" data={exportShipments} /></div>}
+            {activeTab === "Upcoming" && <div><ViewShipmentComponent title="Upcoming Shipments" data={upcomingShipments} /></div>}
+          </div>
         </div>
-      </div>}
-    </div>
+      }
+    </div >
   );
 };
