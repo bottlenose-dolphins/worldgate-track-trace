@@ -9,42 +9,70 @@ export default function Status() {
   const location = useLocation();
   const { eta } = location.state;
   const { portOfDischarge } = location.state;
-  const { status } = location.state;
   const { vesselName } = location.state;
   const { blNo } = location.state;
   const { shippingLine } = location.state;
   const { portOfLoading } = location.state;
 
+  const { status } = location.state;
+  const shipmentStatus = !status ? "UNKNOWN STATUS" : status.toUpperCase();
+
+  const { type } = location.state;
+  console.log(type);
   const etaFormatted = dateFormat(eta, "d mmm yyyy");
+
+  function hasShipmentArrived() {
+    const todayDateString = new Date().toLocaleDateString("en-ZA");
+    if (todayDateString > eta) {
+      return true;
+    }
+    return false;
+  }
+
+  const shipmentStatusColours = {
+    "UNKNOWN STATUS" : "bg-gray-400",
+    "EARLY" : "bg-cyan-500",
+    "ON TIME" : "bg-green-600",
+    "DELAYED" : "bg-red-600"
+  }
+
+  const searchTypes = {
+    "bl" : "B/L NO",
+    "ctr" : "CTR NO"
+  }
 
   return (
     <div className="bg-gradient-to-r from-white via-sky-100 to-sky-200 w-screen">
       <div className="grid grid-cols-2 gap-10 p-2">
         <ShipmentCard eta={etaFormatted} pod={portOfDischarge} vesselName={vesselName} blNo={blNo} />
 
-        <div className="p-2 mt-3">
-          <h2 className="text-3xl">Tracking Status</h2>
-          <div className="grid grid-cols-2 my-7 font-bold text-xl justify-start">
-            <h2 className="">B/L: {blNo}</h2>
+        <div className="p-2 mt-2">
+          <h2 className={`text-3xl font-bold text-white w-fit py-1 px-3 rounded-md ${shipmentStatusColours[shipmentStatus]}`}>{shipmentStatus}</h2>
+          <div className="grid grid-cols-2 my-7 font-bold text-lg justify-start">
+            <h2 className="">{searchTypes[type]}: {blNo}</h2>
             <h1 className="">ETA: {!eta ? "Unknown ETA" : eta}</h1>
           </div>
 
           <div >
             <ul className="step-progress">
-              <li className="step-progress-item is-done"><strong>Shipment Origin</strong><br /><h2 className="text-xl">{!portOfLoading ? "Unknown POL" : portOfLoading}</h2></li>
-              <li className="step-progress-item is-done"><strong>Shipment In Progress Via</strong><br /><h2 className="text-xl">{!shippingLine ? "Unknown Shipping Line" : shippingLine}</h2></li>
-              <li className="step-progress-item is-done"><strong>Shipment Disembarked</strong><br /><h2 className="text-xl">{!portOfDischarge ? "Unknown POD" : portOfDischarge}</h2></li>
-              <li className="step-progress-item current"><strong>Shipment Status</strong><br /><h2 className="text-xl">{!status ? "Unknown Status" : status}</h2></li>
-
-              <h1 className="ml-80">ETA:{!eta ? "Unknown ETA" : eta}</h1>
-
+              <li className="step-progress-item is-done">
+                <strong>Shipment Departed</strong>
+                <br />
+                <h2 className="text-xl">{!portOfLoading ? "Unknown POL" : portOfLoading}</h2>
+              </li>
+              <li className={`step-progress-item ${hasShipmentArrived() ? "is-done" : "current"}`}>
+                <strong>Shipment In Progress Via</strong>
+                <br />
+                <h2 className="text-xl">{!shippingLine ? "Unknown Shipping Line" : shippingLine}</h2>
+              </li>
+              <li className={`step-progress-item ${hasShipmentArrived() ? "current" : ""}`}>
+                <strong className={`${hasShipmentArrived() ? "" : "text-gray-400"}`}>Shipment Arrived</strong>
+                <br />
+                <h2 className={`text-xl ${hasShipmentArrived() ? "" : "text-gray-400"}`}>{!portOfDischarge ? "Unknown POD" : portOfDischarge}</h2>
+              </li>
             </ul>
           </div>
-          <div>
-            {/* <h1 className="p-6 text-3xl font-bold text-[#217BF4]">On Time</h1> */}
-          </div>
         </div>
-
 
       </div>
       <svg xmlns="http://www.w3.org/2000/svg" className="block" viewBox="0 0 1440 320"><path fill="#a2d9ff" fillOpacity="0.8" d="M0,96L40,80C80,64,160,32,240,53.3C320,75,400,149,480,165.3C560,181,640,139,720,117.3C800,96,880,96,960,106.7C1040,117,1120,139,1200,133.3C1280,128,1360,96,1400,80L1440,64L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z" />

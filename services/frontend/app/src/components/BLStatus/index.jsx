@@ -45,11 +45,12 @@ export default function BLStatus() {
         const result = response.data;
         setTrackingHistory(result);
         navigate("/Status", { state: { 
+          blNo: billOfLadingNumber, 
+          type: searchType,
           eta: result.arrival_date, 
           portOfDischarge: result.port_of_discharge, 
           vesselName: result.vessel_name, 
-          status: result.status, 
-          blNo: billOfLadingNumber, 
+          status: result.delay_status, 
           portOfLoading: result.port_of_loading, 
           shippingLine: result.shipping_line } })
       }
