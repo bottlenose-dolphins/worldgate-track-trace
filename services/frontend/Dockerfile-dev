@@ -1,6 +1,6 @@
 FROM node:17-alpine
 
-ARG CACHEBUST=2
+ARG CACHEBUST=232
 COPY . .
 WORKDIR /app
 
@@ -21,7 +21,7 @@ RUN npm run build
 
 ENV prod=0
 # expose port 
-EXPOSE 3000
+EXPOSE 80
 # start app
 CMD ["npm", "start"]
 

@@ -24,6 +24,7 @@ class ImportShipment(db.Model):
     ocean_bl = db.Column(db.String, nullable=False)
     cr_agent_id = db.Column(db.String, nullable=False)
     port_load_id = db.Column(db.String, nullable=False)
+    og_eta = db.Column(db.Date, nullable=False)
 
     def __init__(self, import_ref_n, eta, ocean_bl, cr_agent_id, port_load_id):
         self.import_ref_n = import_ref_n
@@ -182,6 +183,53 @@ def get_agent_id():
             {
                 "code": 500,
                 "message": "Failed to retrieve CR_AGENT_ID"
+            }
+        ), 500
+
+
+# Retrieve delay status by import_ref_n
+@app.route("/import_shipment/delay", methods=['POST'])
+def get_delay_status():
+    data = request.get_json()
+    import_ref_n = data["import_ref_n"]
+    
+    try:
+        eta = ImportShipment.query.filter_by(import_ref_n=import_ref_n).first().eta
+        og_eta = ImportShipment.query.filter_by(import_ref_n=import_ref_n).first().og_eta
+
+        if eta > og_eta:
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {
+                        "status": "delayed"
+                        }
+                }
+            ), 200
+        elif eta == og_eta:
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {
+                        "status": "on time"
+                        }
+                }
+            ), 200
+        else:
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {
+                        "status": "early"
+                        }
+                }
+            ), 200
+    
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "Failed to retrieve delay status"
             }
         ), 500
 
