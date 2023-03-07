@@ -1,9 +1,9 @@
-version: 0.2
+version: 0.6
 
 phases:
   install:
     runtime-versions:
-      python: 3.11
+      python: 3.10
 
   pre_build:
     commands:
