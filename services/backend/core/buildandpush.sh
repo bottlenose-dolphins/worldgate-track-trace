@@ -1,9 +1,10 @@
+#!/bin/bash
 # aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 283879969377.dkr.ecr.ap-southeast-1.amazonaws.com
 
 #add db uri 
-# images=('user' , 'export' , 'import' , 'export-cont' , 'import-cont' , 'export-shipment' , 'import-shipment' , 'complex-scraper' , 'prefix' , 'vendor-mast' , 'view-all')
+images=('user' , 'export' , 'import' , 'export-cont' , 'import-cont' , 'export-shipment' , 'import-shipment' , 'complex-scraper' , 'prefix' , 'vendor-mast' , 'view-all')
 
-images=('user')
+# images=('user')
 
 for image in "${images[@]}"
 do
