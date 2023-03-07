@@ -54,9 +54,9 @@ def scrape():
             # Retrieve Master BL from House BL
             if identifier_type == "bl":
                 if direction == "import":
-                    master_bl, origin = get_import_master_bl(identifier)
+                    master_bl, origin, import_ref_n = get_import_master_bl(identifier)
                 elif direction == "export":
-                    master_bl = get_export_master_bl(identifier)            
+                    master_bl, export_ref_n = get_export_master_bl(identifier)            
 
                 data = {
                             "identifier": master_bl,
@@ -65,9 +65,9 @@ def scrape():
             
             if identifier_type == "ctr":
                 if direction == "import":
-                    master_bl, origin = get_import_master_bl_ctr(identifier)
+                    master_bl, origin, import_ref_n = get_import_master_bl_ctr(identifier)
                 elif direction == "export":
-                    master_bl = get_export_master_bl_ctr(identifier)   
+                    master_bl, export_ref_n = get_export_master_bl_ctr(identifier)   
             
             # Retrieve shipping line's prefix
             prefix, vendor_name = get_prefix(master_bl, direction)
@@ -87,6 +87,20 @@ def scrape():
                 elif identifier_type == "ctr":
                     update_shipment_info_cont(identifier, arrival_date, port_of_discharge, vessel_name, direction)
                 
+                # TODO: extract to function
+                if direction == "import":
+                    import_delay_data = {
+                        "import_ref_n": import_ref_n
+                    }
+                    delay_res = invoke_http2("core_import_shipment", "import_shipment/delay", prod, method='POST', json=import_delay_data)
+                    delay_status = delay_res["data"]["status"]
+                elif direction == "export":
+                    export_delay_data = {
+                        "export_ref_n": export_ref_n
+                    }
+                    delay_res = invoke_http2("core_export_shipment", "export_shipment/delay", prod, method='POST', json=export_delay_data)
+                    delay_status = delay_res["data"]["status"]
+
                 return jsonify(
                     {
                         "code": 200,
@@ -95,7 +109,8 @@ def scrape():
                                 "port_of_discharge": port_of_discharge,
                                 "vessel_name": vessel_name,
                                 "shipping_line": vendor_name,
-                                "port_of_loading": origin
+                                "port_of_loading": origin,
+                                "delay_status": delay_status
                             }
                     }
                 ), 200
@@ -232,7 +247,7 @@ def get_import_master_bl(house_bl):
     master_bl = response["data"]["master_bl"]
     origin = response["data"]["origin"]
     
-    return master_bl, origin
+    return master_bl, origin, import_ref_n
 
 # Retrieve Master B/L by House B/L (EXPORT)
 def get_export_master_bl(house_bl):
@@ -253,8 +268,8 @@ def get_export_master_bl(house_bl):
     # response = invoke_http(export_shipment_url + "export_shipment/bl", method='POST', json=data)
     response = invoke_http2("core_export_shipment", "export_shipment/bl", prod, method='POST', json=data)
     master_bl = response["data"]["master_bl"]
-    
-    return master_bl
+
+    return master_bl, export_ref_n
     
 # Retrieve Master B/L by Container Number (IMPORT)
 def get_import_master_bl_ctr(container_number):
@@ -273,7 +288,8 @@ def get_import_master_bl_ctr(container_number):
     import_ref_res = invoke_http2("core_import_shipment", "import_shipment/bl", prod, method='POST', json=data)
     master_bl = import_ref_res["data"]["master_bl"]
     origin = import_ref_res["data"]["origin"]
-    return master_bl, origin
+
+    return master_bl, origin, import_ref_n
 
 # Retrieve Master B/L by Container Number (EXPORT)
 def get_export_master_bl_ctr(container_number):
@@ -292,7 +308,8 @@ def get_export_master_bl_ctr(container_number):
     # export_ref_res = invoke_http(export_shipment_url + "export_shipment/bl", method='POST', json=data)
     export_ref_res = invoke_http2("core_export_shipment", "export_shipment/bl", prod, method='POST', json=data)
     master_bl = export_ref_res["data"]["master_bl"]
-    return master_bl
+
+    return master_bl, export_ref_n
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5009, debug=True)
