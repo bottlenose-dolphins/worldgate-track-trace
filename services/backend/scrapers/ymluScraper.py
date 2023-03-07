@@ -81,7 +81,7 @@ def ymluScraper():
 
     except Exception as e:
 
-        restart_microservice()
+        # restart_microservice()
         
         return jsonify(
             {

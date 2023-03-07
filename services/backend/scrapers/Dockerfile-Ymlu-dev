@@ -20,7 +20,7 @@ RUN wget ${URLBASE}/chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb \
 && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-ARG CACHEBUST=5
+ARG CACHEBUST=67
 # copying the neccessary scri[]
 COPY requirements.txt .
 COPY ymluScraper.py .

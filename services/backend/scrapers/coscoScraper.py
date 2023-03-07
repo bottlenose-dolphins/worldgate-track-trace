@@ -29,7 +29,9 @@ def coscoScraper():
             identifier = identifier[4:]
 
         options = Options()
-        options.headless = True
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--no-sandbox')
         driver = webdriver.Chrome(options=options)
 
         driver.get("https://elines.coscoshipping.com/ebusiness/cargotracking")
@@ -83,7 +85,7 @@ def coscoScraper():
 
     except Exception as e:
 
-        restart_microservice()
+        # restart_microservice()
 
         return jsonify(
             {

@@ -204,8 +204,8 @@ services:
       - tracktrace_test_network
     environment:
       - PYTHONUNBUFFERED=1
-      - goodUsername =${goodUsername}
-      - goodPassword =${goodPassword}
+      - goodUsername=${goodUsername}
+      - goodPassword=${goodPassword}
     ports:
       - 8081:8081
 
@@ -261,8 +261,8 @@ services:
       - tracktrace_test_network
     environment:
       - PYTHONUNBUFFERED=1
-      - cordUsername =${cordUsername}
-      - cordPassword =${cordPassword}
+      - cordUsername=${cordUsername}
+      - cordPassword=${cordPassword}
     shm_size: '1gb'
     ports:
       - 8084:8084
