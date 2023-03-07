@@ -39,6 +39,13 @@
       "import/prefer-default-export": "off",
       "prefer-template": "off",
       "no-shadow": "off",
+      "jsx-a11y/label-has-associated-control": ["off", {
+        "labelComponents": [],
+        "labelAttributes": [],
+        "controlComponents": [],
+        "assert": "both",
+        "depth": 25
+      }],
       "arrow-body-style": "off",
       "prefer-destructuring": "off"
     }

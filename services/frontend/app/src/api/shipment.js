@@ -1,12 +1,44 @@
 import axios from "axios";
-import { VIEW_ALL_SHIPMENTS_ENDPOINT, authenticate } from "./config";
+import { VIEW_ALL_SHIPMENTS_ENDPOINT, COMPLEX_SCRAPER_ENDPOINT, authenticate } from "./config";
+
+const axiosShipmentsInstance = axios.create({
+    baseURL: VIEW_ALL_SHIPMENTS_ENDPOINT,
+    timeout: 10000,
+});
+
+const axiosComplexInstance = axios.create({
+    baseURL: COMPLEX_SCRAPER_ENDPOINT,
+    timeout: 20000,
+});
+
+export const searchShipmentStatus = async (identifier, identifierType, direction) => {
+    try {
+        const authRes = await authenticate();
+
+        if (authRes.code === 200) {
+            const res = await axiosComplexInstance.post("/scrape", {
+                "identifier": identifier,
+                "identifier_type": identifierType,
+                "direction": direction
+            });
+            if (res) {
+                return res.data;
+            }
+            throw new Error("No data returned from backend");
+        }
+        throw new Error("Request Unauthorised");
+    } catch (error) {
+        console.log(error.response.data.message);
+        return error.response.data;
+    }
+}
 
 export const getImportShipments = async () => {
     try {
         const authRes = await authenticate();
         if (authRes.code === 200) {
             const userId = authRes.userId;
-            const res = await axios.post(`${VIEW_ALL_SHIPMENTS_ENDPOINT}/getImportContainerNum`, {
+            const res = await axiosShipmentsInstance.post("/getImportContainerNum", {
                 "wguser_id": userId
             });
             if (res) {
@@ -17,7 +49,8 @@ export const getImportShipments = async () => {
         throw new Error("Request Unauthorised");
     }
     catch (error) {
-        return error.response.data;
+        console.log(error.response.data);
+        return [];
     }
 }
 
@@ -26,7 +59,7 @@ export const getExportShipments = async () => {
         const authRes = await authenticate();
         if (authRes.code === 200) {
             const userId = authRes.userId;
-            const res = await axios.post(`${VIEW_ALL_SHIPMENTS_ENDPOINT}/getExportContainerNum`, {
+            const res = await axiosShipmentsInstance.post("/getExportContainerNum", {
                 "wguser_id": userId
             });
             if (res) {
@@ -35,8 +68,8 @@ export const getExportShipments = async () => {
             throw new Error("No data returned from backend");
         }
         throw new Error("Request Unauthorised");
-    }
-    catch (error) {
-        return error.response.data;
+    } catch (error) {
+        console.log(error.response.data);
+        return [];
     }
 }

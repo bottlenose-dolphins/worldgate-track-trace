@@ -38,11 +38,11 @@ export default function SideBar() {
     ));
 
     return (
-        <aside className={`${open ? "w-48" : "w-16"} duration-200 h-screen bg-white border-r border-gray-300 relative`}>
+        <aside className={`${open ? "w-48" : "w-16"} z-50 flex-none duration-200 h-screen bg-white border-r border-gray-300 relative`}>
             <div className="flex flex-col pt-5 justify-center">
                 {renderSideBarItems}
             </div>
-            <ChevronDoubleLeftIcon className={`absolute -right-3 bottom-20 bg-white cursor-pointer 
+            <ChevronDoubleLeftIcon className={`absolute -right-3 bottom-24 bg-white cursor-pointer 
             rounded-full outline outline-1 outline-gray-400 p-1 h-7 w-7 ${!open && "rotate-180"}`}
                 onClick={() => setOpen(!open)} />
         </aside>

@@ -26,9 +26,10 @@ export default function ViewShipmentComponent({ title, data }) {
         </div>
 
         <div className="flex flex-col mt-5">
-          {items.map((item, index) => {
+          {items.length === 0 && <div className="mx-1">No shipments found</div>}
+          {items.length > 0 && items.map((item, index) => {
             return (
-              <ShipmentCard item={item} index={index} />
+              <ShipmentCard key={index} item={item} index={index} />
             );
           })}
         </div>
