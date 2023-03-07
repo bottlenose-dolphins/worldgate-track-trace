@@ -109,30 +109,40 @@ def getImportContainerNum():
     retrieved_output_from_import = import_ref_num_response_loads['data']['output']
     print(retrieved_output_from_import)
 
-    for a_record in retrieved_output_from_import:
-        single_import_ref_num = a_record['import_ref_n']
+    if not isinstance(retrieved_output_from_import, str):
+        for a_record in retrieved_output_from_import:
+            single_import_ref_num = a_record['import_ref_n']
 
-        data = {
-                    "import_ref_n" : single_import_ref_num
+            data = {
+                        "import_ref_n" : single_import_ref_num
+                    }
+
+            # container_num_response = invoke_http(IMPORT_CONT_URL + "/import_cont/container_num", method="POST", json=data)
+            container_num_response = invoke_http2("core_import_cont", "import_cont/container_num", prod, method="POST", json=data)
+            container_num_response_dumped = json.dumps(container_num_response)
+            container_num_response_loads = json.loads(container_num_response_dumped)
+            retrieved_list_containerNum_output = container_num_response_loads['data']['container_nums']
+
+            if len(retrieved_list_containerNum_output) > 0:
+                retrieved_tuple_containerNum_output = tuple(retrieved_list_containerNum_output)
+                a_record["container_numbers"] = retrieved_tuple_containerNum_output
+                # a_record["type"] = "Import"
+            
+            else:
+                a_record["container_numbers"] = []
+
+        return retrieved_output_from_import
+    
+    else:
+        return jsonify(
+            {
+                "code":200,
+                "data":
+                {
+                    "message" : "No details retrieved with the wguser_id"
                 }
-
-        # container_num_response = invoke_http(IMPORT_CONT_URL + "/import_cont/container_num", method="POST", json=data)
-        container_num_response = invoke_http2("core_import_cont", "import_cont/container_num", prod, method="POST", json=data)
-        container_num_response_dumped = json.dumps(container_num_response)
-        container_num_response_loads = json.loads(container_num_response_dumped)
-        retrieved_list_containerNum_output = container_num_response_loads['data']['container_nums']
-
-        if len(retrieved_list_containerNum_output) > 0:
-            retrieved_tuple_containerNum_output = tuple(retrieved_list_containerNum_output)
-            a_record["container_numbers"] = retrieved_tuple_containerNum_output
-            # a_record["type"] = "Import"
-        
-        else:
-            a_record["container_numbers"] = []
-
-
-
-    return retrieved_output_from_import
+            }
+        ),200 
 
 if __name__ == "__main__":
         # app.run(host='0.0.0.0', port=5010, debug=True)
