@@ -10,7 +10,11 @@ export const getImportShipments = async () => {
                 "wguser_id": userId
             });
             if (res) {
-                return res.data;
+                if (Array.isArray(res.data)) {
+                    return res.data;
+                }
+                return []; // no shipments under this current user
+
             }
             throw new Error("No data returned from backend");
         }
@@ -30,7 +34,10 @@ export const getExportShipments = async () => {
                 "wguser_id": userId
             });
             if (res) {
-                return res.data;
+                if (Array.isArray(res.data)) {
+                    return res.data;
+                }
+                return []; // no shipments under this current user
             }
             throw new Error("No data returned from backend");
         }
