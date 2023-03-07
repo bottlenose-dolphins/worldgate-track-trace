@@ -8,7 +8,7 @@ cd ..
 echo "Going into infra backend"
 cd infrastructure/backend 
 
-echo "init deployment env for frontend"
+echo "init deployment env for backend"
 terraform init
 
 echo "Deploying backend infra & apps, outputing DNS Name to .env"
