@@ -55,30 +55,40 @@ def getExportContainerNum():
     export_ref_num_loads = json.loads(export_ref_num_dumped)
     retrieved_output_from_export = export_ref_num_loads['data']['output']
 
+    if not isinstance(retrieved_output_from_export, str):
+        for a_record in retrieved_output_from_export:
+            single_export_ref_num = a_record['export_ref_n']
 
-    for a_record in retrieved_output_from_export:
-        single_export_ref_num = a_record['export_ref_n']
+            data = {
+                        "export_ref_n" : single_export_ref_num
+                    }
 
-        data = {
-                    "export_ref_n" : single_export_ref_num
+            # container_num_response = invoke_http(EXPORT_CONT_URL + "/export_cont/container_num", method="POST", json=data)
+            container_num_response = invoke_http2("core_export_cont", "export_cont/container_num", prod, method="POST", json=data)
+            container_num_response_dumped = json.dumps(container_num_response)
+            container_num_response_loads = json.loads(container_num_response_dumped)
+            retrieved_list_containerNum_output = container_num_response_loads['data']['container_nums']
+            
+            if len(retrieved_list_containerNum_output) > 0:
+                retrieved_tuple_containerNum_output = tuple(retrieved_list_containerNum_output)
+                a_record["container_numbers"] = retrieved_tuple_containerNum_output
+                # a_record["type"] = "Export"
+            
+            else:
+                a_record["container_numbers"] = []
+
+        return retrieved_output_from_export
+    
+    else:
+        return jsonify(
+            {
+                "code":200,
+                "data":
+                {
+                    "message" : "No details retrieved with the wguser_id"
                 }
-
-        # container_num_response = invoke_http(EXPORT_CONT_URL + "/export_cont/container_num", method="POST", json=data)
-        container_num_response = invoke_http2("core_export_cont", "export_cont/container_num", prod, method="POST", json=data)
-        container_num_response_dumped = json.dumps(container_num_response)
-        container_num_response_loads = json.loads(container_num_response_dumped)
-        retrieved_list_containerNum_output = container_num_response_loads['data']['container_nums']
-        
-        if len(retrieved_list_containerNum_output) > 0:
-            retrieved_tuple_containerNum_output = tuple(retrieved_list_containerNum_output)
-            a_record["container_numbers"] = retrieved_tuple_containerNum_output
-            # a_record["type"] = "Export"
-        
-        else:
-            a_record["container_numbers"] = []
-
-
-    return retrieved_output_from_export
+            }
+        ),200 
 
 
 
