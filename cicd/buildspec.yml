@@ -24,10 +24,13 @@ phases:
 
       - ./configure-named-profile.sh # configure named profile
 
+  build:
+    commands:
+      -  - ./terraform-destroy.sh #destroy
 
 #toggle between build and destroy
 
-#build
+# build
   # build:
   #   commands:
   #     - cd ../services/backend/core/
@@ -36,9 +39,3 @@ phases:
   #     - ./buildandpush.sh #scraper backend images
   #     - cd ../../../cicd 
   #     - ./terraform-deploy.sh #deploy all infra & apps
-
-
-#destroy 
-  build:
-    commands:
-    -  - ./terraform-destroy.sh #destroy
