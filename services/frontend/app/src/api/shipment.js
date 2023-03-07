@@ -1,13 +1,22 @@
 import axios from "axios";
 import { VIEW_ALL_SHIPMENTS_ENDPOINT, COMPLEX_SCRAPER_ENDPOINT, authenticate } from "./config";
 
-export const searchShipmentStatus = async (shippingLine, identifier, identifierType, direction) => {
+const axiosShipmentsInstance = axios.create({
+    baseURL: VIEW_ALL_SHIPMENTS_ENDPOINT,
+    timeout: 10000,
+});
+
+const axiosComplexInstance = axios.create({
+    baseURL: COMPLEX_SCRAPER_ENDPOINT,
+    timeout: 20000,
+});
+
+export const searchShipmentStatus = async (identifier, identifierType, direction) => {
     try {
-        const authRes = await authenticate()
+        const authRes = await authenticate();
 
         if (authRes.code === 200) {
-            const res = await axios.post(`${COMPLEX_SCRAPER_ENDPOINT}/scrape`, {
-                "shipping_line": shippingLine,
+            const res = await axiosComplexInstance.post("/scrape", {
                 "identifier": identifier,
                 "identifier_type": identifierType,
                 "direction": direction
@@ -19,6 +28,7 @@ export const searchShipmentStatus = async (shippingLine, identifier, identifierT
         }
         throw new Error("Request Unauthorised");
     } catch (error) {
+        console.log(error.response.data.message);
         return error.response.data;
     }
 }
@@ -28,7 +38,7 @@ export const getImportShipments = async () => {
         const authRes = await authenticate();
         if (authRes.code === 200) {
             const userId = authRes.userId;
-            const res = await axios.post(`${VIEW_ALL_SHIPMENTS_ENDPOINT}/getImportContainerNum`, {
+            const res = await axiosShipmentsInstance.post("/getImportContainerNum", {
                 "wguser_id": userId
             });
             if (res) {
@@ -48,7 +58,7 @@ export const getExportShipments = async () => {
         const authRes = await authenticate();
         if (authRes.code === 200) {
             const userId = authRes.userId;
-            const res = await axios.post(`${VIEW_ALL_SHIPMENTS_ENDPOINT}/getExportContainerNum`, {
+            const res = await axiosShipmentsInstance.post("/getExportContainerNum", {
                 "wguser_id": userId
             });
             if (res) {

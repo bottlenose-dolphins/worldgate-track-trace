@@ -7,36 +7,36 @@ import locationWhite from "../../img/locationWhite.png";
 
 export default function Status() {
   const location = useLocation();
-  const { arrival } = location.state;
-  const { discharge } = location.state;
+  const { eta } = location.state;
+  const { portOfDischarge } = location.state;
   const { status } = location.state;
-  const { vessel } = location.state;
-  const { bl } = location.state;
-  const { shipline } = location.state;
-  const { loading } = location.state;
+  const { vesselName } = location.state;
+  const { blNo } = location.state;
+  const { shippingLine } = location.state;
+  const { portOfLoading } = location.state;
 
-  const eta = dateFormat(arrival, "d mmm yyyy");
+  const etaFormatted = dateFormat(eta, "d mmm yyyy");
 
   return (
     <div className="bg-gradient-to-r from-white via-sky-100 to-sky-200 w-screen">
       <div className="grid grid-cols-2 gap-10 p-2">
-        <ShipmentCard eta={eta} pod={discharge} vesselName={vessel} blNo={bl} />
+        <ShipmentCard eta={etaFormatted} pod={portOfDischarge} vesselName={vesselName} blNo={blNo} />
 
         <div className="p-2 mt-3">
           <h2 className="text-3xl">Tracking Status</h2>
           <div className="grid grid-cols-2 my-7 font-bold text-xl justify-start">
-            <h2 className="">B/L: {bl}</h2>
+            <h2 className="">B/L: {blNo}</h2>
             <h1 className="">ETA: {eta}</h1>
           </div>
-          
+
           <div >
             <ul className="step-progress">
-              <li className="step-progress-item is-done"><strong>Shipment Origin</strong><br /><h2 className="text-xl">{loading}</h2></li>
-              <li className="step-progress-item is-done"><strong>Shipment In Progress Via</strong><br /><h2 className="text-xl">{shipline}</h2></li>
-              <li className="step-progress-item is-done"><strong>Shipment Disembarked</strong><br /><h2 className="text-xl">{discharge}</h2></li>
+              <li className="step-progress-item is-done"><strong>Shipment Origin</strong><br /><h2 className="text-xl">{portOfLoading}</h2></li>
+              <li className="step-progress-item is-done"><strong>Shipment In Progress Via</strong><br /><h2 className="text-xl">{shippingLine}</h2></li>
+              <li className="step-progress-item is-done"><strong>Shipment Disembarked</strong><br /><h2 className="text-xl">{portOfDischarge}</h2></li>
               <li className="step-progress-item current"><strong>Shipment Status</strong><br /><h2 className="text-xl">{status}</h2></li>
 
-              <h1 className="ml-80">ETA:{arrival}</h1>
+              <h1 className="ml-80">ETA:{eta}</h1>
 
             </ul>
           </div>

@@ -28,7 +28,7 @@ export default function ViewShipmentComponent({ title, data }) {
         <div className="flex flex-col mt-5">
           {items.map((item, index) => {
             return (
-              <ShipmentCard item={item} index={index} />
+              <ShipmentCard key={index} item={item} index={index} />
             );
           })}
         </div>
