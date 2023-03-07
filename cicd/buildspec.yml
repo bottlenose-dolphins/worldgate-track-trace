@@ -10,7 +10,18 @@ phases:
       - cd cicd # change directory
       - chmod +x install-terraform.sh configure-named-profile.sh terraform-deploy.sh ../services/backend/core/buildandpush.sh  ../services/backend/scrapers/buildandpush.sh ../services/frontend/buildandpush.sh # make all scripts executable
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com #ecr login
-      - ./install-terraform.sh # install terraform
+
+
+      # install terraform binary
+      - curl -s -qL -o terraform_install.zip https://releases.hashicorp.com/terraform/1.3.8/terraform_1.3.8_linux_arm64.zip
+      - unzip terraform_install.zip -d /usr/bin/
+      - chmod +x /usr/bin/terraform
+      #check if terraform is installed
+      - terraform --version
+
+      #commented out due to failures
+      # - ./install-terraform.sh # install terraform
+
       - ./configure-named-profile.sh # configure named profile
 
   build:
