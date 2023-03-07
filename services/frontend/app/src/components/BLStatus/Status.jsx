@@ -26,17 +26,17 @@ export default function Status() {
           <h2 className="text-3xl">Tracking Status</h2>
           <div className="grid grid-cols-2 my-7 font-bold text-xl justify-start">
             <h2 className="">B/L: {blNo}</h2>
-            <h1 className="">ETA: {eta}</h1>
+            <h1 className="">ETA: {!eta ? "Unknown ETA" : eta}</h1>
           </div>
 
           <div >
             <ul className="step-progress">
-              <li className="step-progress-item is-done"><strong>Shipment Origin</strong><br /><h2 className="text-xl">{portOfLoading}</h2></li>
-              <li className="step-progress-item is-done"><strong>Shipment In Progress Via</strong><br /><h2 className="text-xl">{shippingLine}</h2></li>
-              <li className="step-progress-item is-done"><strong>Shipment Disembarked</strong><br /><h2 className="text-xl">{portOfDischarge}</h2></li>
-              <li className="step-progress-item current"><strong>Shipment Status</strong><br /><h2 className="text-xl">{status}</h2></li>
+              <li className="step-progress-item is-done"><strong>Shipment Origin</strong><br /><h2 className="text-xl">{!portOfLoading ? "Unknown POL" : portOfLoading}</h2></li>
+              <li className="step-progress-item is-done"><strong>Shipment In Progress Via</strong><br /><h2 className="text-xl">{!shippingLine ? "Unknown Shipping Line" : shippingLine}</h2></li>
+              <li className="step-progress-item is-done"><strong>Shipment Disembarked</strong><br /><h2 className="text-xl">{!portOfDischarge ? "Unknown POD" : portOfDischarge}</h2></li>
+              <li className="step-progress-item current"><strong>Shipment Status</strong><br /><h2 className="text-xl">{!status ? "Unknown Status" : status}</h2></li>
 
-              <h1 className="ml-80">ETA:{eta}</h1>
+              <h1 className="ml-80">ETA:{!eta ? "Unknown ETA" : eta}</h1>
 
             </ul>
           </div>

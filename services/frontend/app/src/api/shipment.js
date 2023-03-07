@@ -49,7 +49,8 @@ export const getImportShipments = async () => {
         throw new Error("Request Unauthorised");
     }
     catch (error) {
-        return error.response.data;
+        console.log(error.response.data);
+        return [];
     }
 }
 
@@ -68,6 +69,7 @@ export const getExportShipments = async () => {
         }
         throw new Error("Request Unauthorised");
     } catch (error) {
-        return error.response.data;
+        console.log(error.response.data);
+        return [];
     }
 }
