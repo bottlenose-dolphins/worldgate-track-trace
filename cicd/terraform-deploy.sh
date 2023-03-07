@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# fail on any error
+set -eu
+
 cd ..
 
 echo "Going into infra backend"
