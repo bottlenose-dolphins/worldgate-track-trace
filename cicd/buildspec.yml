@@ -9,6 +9,7 @@ phases:
     commands:
       - cd cicd # change directory
       - chmod +x install-terraform.sh configure-named-profile.sh terraform-deploy.sh ../services/backend/core/buildandpush.sh  ../services/backend/scrapers/buildandpush.sh ../services/frontend/buildandpush.sh # make all scripts executable
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com #ecr login
       - ./install-terraform.sh # install terraform
       - ./configure-named-profile.sh # configure named profile
 
