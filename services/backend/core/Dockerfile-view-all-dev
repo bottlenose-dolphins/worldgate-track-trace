@@ -29,7 +29,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
             && ldconfig
 
 WORKDIR /app
-ARG CACHEBUST=7
+ARG CACHEBUST=8
 COPY requirements.txt .
 COPY viewAllShipments.py .
 RUN mv viewAllShipments.py app.py
