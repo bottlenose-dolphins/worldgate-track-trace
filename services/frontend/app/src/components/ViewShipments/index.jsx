@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getExportShipments, getImportShipments } from "src/api/shipment";
+import dateFormat from "dateformat";
 import ClipLoader from "react-spinners/ClipLoader";
 import ViewShipmentComponent from "./ViewShipmentComponent";
 
@@ -29,10 +30,25 @@ export default function ToggleTab() {
       const exportShipments = await getExportShipments();
       setExportShipments(exportShipments);
 
-      // TODO (Charmaine): Refactor to extract upcoming shipments from import and export shipments
-      setUpcomingShipments(importShipments);
-      const todayDate = new Date();
-
+      const todayDateString = new Date().toLocaleDateString("en-ZA"); // YYYY/MM/DD
+      console.log(todayDateString);
+      const upcomingShipments = [];
+      for (let i = 0; i < importShipments.length; i +=1 ) {
+        if (dateFormat(importShipments[i].arrival_date, "yyyy/mm/dd") >= todayDateString) {
+          upcomingShipments.push(importShipments[i]);
+        } else {
+          break;
+        }
+      }
+      for (let i = 0; i < exportShipments.length; i +=1 ) {
+        if (dateFormat(exportShipments[i].delivery_date, "yyyy/mm/dd") >= todayDateString) {
+          upcomingShipments.push(exportShipments[i]);
+        } else {
+          break;
+        }
+      }
+      setUpcomingShipments(upcomingShipments); // TODO (Charmaine): Sort by date 
+      
       setLoading(false);
     };
 
