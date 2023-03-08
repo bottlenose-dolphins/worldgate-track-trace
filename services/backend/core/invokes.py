@@ -13,7 +13,7 @@ DEV_IP = {
 "scraper_kmtc": "scraper_kmtc:8082",
 "scraper_one": "scraper_one:8083",
 "scraper_cord": "scraper_cord:8084",
-"scraper_cosc": "scraper_cosc:8084",
+"scraper_cosc": "scraper_cosc:8085",
 
 "core_user" : "core_user:5002",
 "core_import" : "core_import:5003",
