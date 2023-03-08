@@ -14,3 +14,4 @@ cd ../../infrastructure/frontend
 echo "Deploying frontend"
 terraform apply --auto-approve
 echo "Done"
+echo"test"
