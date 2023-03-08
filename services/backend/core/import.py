@@ -25,20 +25,18 @@ class Import(db.Model):
     wguser_id = db.Column(db.String, nullable=True)
     delivery_d = db.Column(db.Date, nullable=True)
 
-    def __init__(self, import_ref_n, cust_id, hbl_n, wguser_id, delivery_d):
+    def __init__(self, import_ref_n, cust_id, hbl_n, wguser_id):
         self.import_ref_n = import_ref_n
         self.cust_id = cust_id
         self.hbl_n = hbl_n
         self.wguser_id = wguser_id
-        self.delivery_d = delivery_d
 
     def json(self):
         return {
             "import_ref_n": self.import_ref_n,
             "cust_id": self.cust_id,
             "hbl_n": self.hbl_n,
-            "wguser_id": self.wguser_id,
-            "delivery_d": self.delivery_d
+            "wguser_id": self.wguser_id
         }
 
 # Retrieve IMPORT_REF_N by House B/L
@@ -72,55 +70,48 @@ def health_check():
 # Retrieve IMPORT_REF_N using WGUSER_ID -> Returning all the IMPORT_REF_N according to WGUSER_ID and sorted by latest to earliest using DELIVERY_D
 @app.route("/import/import_ref_n/wguser_id", methods=['POST'])
 def get_import_ref_n_using_wguser_id():
-    data = request.get_json()
-    wguser_id = data['wguser_id']
-    output = Import.query.filter_by(wguser_id=wguser_id).order_by(Import.delivery_d.desc()).all()
+    try:
+        data = request.get_json()
+        wguser_id = data['wguser_id']
+        output = Import.query.filter_by(wguser_id=wguser_id).all()
 
-    if len(output):
-        result = [
+        if len(output):
+            result = [
+                    {
+                        "import_ref_n": a_row.import_ref_n,
+                        "import_destination": "Singapore",
+                        "type": "import"
+                    }
+            for a_row in output]
+
+            return jsonify(
                 {
-                    "import_ref_n": a_row.import_ref_n,
-                    "import_destination": "Singapore",
-                    "arrival_date": str(a_row.delivery_d),
-                    "type": "Import"
+                    "code":200,
+                    "data":
+                    {
+                        "output" : result
+                    }
                 }
-        for a_row in output]
+            ),200
+        
+        else:
+            return jsonify(
+                {
+                    "code":200,
+                    "data":
+                    {
+                        "output" : "No details retrieved with the wguser_id : " + wguser_id
+                    }
+                }
+            ),200
 
-        for a_record in result:
-            date_str = a_record["arrival_date"]
-            dt_obj = datetime.strptime(date_str, '%Y-%m-%d')
-            formatted_date_str = dt_obj.strftime('%d %b %Y')
-            a_record["arrival_date"] = formatted_date_str
-
+    except Exception as e:
         return jsonify(
             {
-                "code":200,
-                "data":
-                {
-                    "output" : result
-                }
+                "code": 500,
+                "message": "Failed to retrieve shipment information: " + str(e)
             }
-        ),200
-    
-    else:
-        return jsonify(
-            {
-                "code":200,
-                "data":
-                {
-                    "output" : "No details retrieved with the wguser_id : " + wguser_id
-                }
-            }
-        ),200
-
-
-    
-    return jsonify(
-        {
-            "code": 500,
-            "message": "Failed to retrieve import_ref_n"
-        }
-    ), 500
+        ), 500
 
 if __name__ == "__main__":
     # app.run(host='0.0.0.0', port=5003, debug=True)
