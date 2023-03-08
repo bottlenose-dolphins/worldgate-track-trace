@@ -30,7 +30,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = getenv(
     'JWT_SECRET', default='secret_local_testing_only')
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=0.5)
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
 # app.config['JWT_COOKIE_SECURE'] = True # for prod
 
 jwt = JWTManager(app)
@@ -220,7 +220,7 @@ def refresh_expiring_jwt(response):
     try:
         exp_timestamp = get_jwt()["exp"]
         now = datetime.now(timezone.utc)
-        target_timestamp = datetime.timestamp(now + timedelta(minutes=15))
+        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
         if target_timestamp > exp_timestamp:
             access_token = create_access_token(identity=get_jwt_identity())
             set_access_cookies(response, access_token)
