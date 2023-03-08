@@ -1,5 +1,5 @@
 FROM python:3.11
-
+ARG CACHEBUST=69
 #change arch to amd64 or arm64
 ARG VERSION=109.0.5414.74-0ubuntu0.18.04.14
 ARG ARCH=arm64
@@ -9,19 +9,19 @@ RUN mkdir app
 WORKDIR /chromium
 
 #download and install
-RUN wget ${URLBASE}/chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb 
-RUN wget ${URLBASE}/chromium-codecs-ffmpeg-extra_${VERSION}_${ARCH}.deb 
-RUN wget ${URLBASE}/chromium-browser_${VERSION}_${ARCH}.deb 
-RUN wget ${URLBASE}/chromium-chromedriver_${VERSION}_${ARCH}.deb 
-RUN apt-get update 
-RUN apt-get install -y ./chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb 
-RUN apt-get install -y ./chromium-codecs-ffmpeg-extra_${VERSION}_${ARCH}.deb 
-RUN apt-get install -y ./chromium-browser_${VERSION}_${ARCH}.deb 
-RUN apt-get install -y ./chromium-chromedriver_${VERSION}_${ARCH}.deb 
-RUN rm -rf /var/lib/apt/lists/*
+RUN wget ${URLBASE}/chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb \
+&& wget ${URLBASE}/chromium-codecs-ffmpeg-extra_${VERSION}_${ARCH}.deb \
+&& wget ${URLBASE}/chromium-browser_${VERSION}_${ARCH}.deb \
+&& wget ${URLBASE}/chromium-chromedriver_${VERSION}_${ARCH}.deb \
+&& apt-get update \
+&& apt-get install -y ./chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb \
+&& apt-get install -y ./chromium-codecs-ffmpeg-extra_${VERSION}_${ARCH}.deb \
+&& apt-get install -y ./chromium-browser_${VERSION}_${ARCH}.deb \
+&& apt-get install -y ./chromium-chromedriver_${VERSION}_${ARCH}.deb \
+&& rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-ARG CACHEBUST=67
+ARG CACHEBUST2=69
 # copying the neccessary script
 COPY requirements.txt .
 COPY coscoScraper.py .

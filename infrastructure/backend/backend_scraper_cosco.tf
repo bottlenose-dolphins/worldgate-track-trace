@@ -58,6 +58,6 @@ resource "aws_ecs_service" "tracktrace_scraper_cosco_service" {
     }
 
     service_registries {
-    registry_arn = "${aws_service_discovery_service.scraper_cosco.arn}"
+    registry_arn = "${aws_service_discovery_service.scraper_cosc.arn}"
     }
 }
