@@ -73,9 +73,9 @@ export default function ToggleTab() {
           </div>
 
           <div className="border border-black w-3/4 bg-white">
-            {activeTab === "Import" && <div><ViewShipmentComponent title="Incoming Shipments" data={importShipments} /></div>}
-            {activeTab === "Export" && <div><ViewShipmentComponent title="Outgoing Shipments" data={exportShipments} /></div>}
-            {activeTab === "Upcoming" && <div><ViewShipmentComponent title="Upcoming Shipments" data={upcomingShipments} /></div>}
+            {activeTab === "Import" && <div><ViewShipmentComponent title="Incoming Shipments" data={importShipments} setLoading={setLoading} /></div>}
+            {activeTab === "Export" && <div><ViewShipmentComponent title="Outgoing Shipments" data={exportShipments} setLoading={setLoading}/></div>}
+            {activeTab === "Upcoming" && <div><ViewShipmentComponent title="Upcoming Shipments" data={upcomingShipments} setLoading={setLoading}/></div>}
           </div>
         </div>
       }

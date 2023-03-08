@@ -1,5 +1,4 @@
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import React from "react";
 import "../../index.css";
 import Navbar from "src/layout/Navbar";
 
