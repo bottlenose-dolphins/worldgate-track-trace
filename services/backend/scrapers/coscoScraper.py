@@ -18,7 +18,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # identifier_type = "bl"
 
 # prefix: COAU, COSU, PASU, CCLU, OOCL
-@app.route("/cosco", methods=["POST"])
+@app.route("/cosc", methods=["POST"])
 def coscoScraper():
     try:
         data = request.get_json()
