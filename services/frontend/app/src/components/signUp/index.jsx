@@ -45,7 +45,7 @@ export default function SignUp() {
         }
 
         if (password.length < 8){ // AC 4
-            setError("Error: Password length too short");
+            setError("Error: Password must be at least 8 characters long");
             return;
         }
 
