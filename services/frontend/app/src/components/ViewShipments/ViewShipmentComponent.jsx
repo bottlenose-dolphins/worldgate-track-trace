@@ -1,10 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card } from "react-bootstrap";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { searchShipmentStatus } from "src/api/shipment";
+
+import dateFormat from "dateformat";
 import locationWhite from "../../img/locationWhite.png";
 
 export default function ViewShipmentComponent({ title, data, setLoading }) {
+
+  useMemo(() => {
+    data.sort((s1, s2) => {
+      if (s1.arrival_date) {
+        if (s1.arrival_date > s2.arrival_date) {
+          return -1; //
+        }
+        if (s1.arrival_date < s2.arrival_date) {
+          return 1;
+        }
+        return 0;
+      }
+      if (s1.delivery_date > s2.delivery_date) {
+        return -1;
+      }
+      if (s1.delivery_date < s2.delivery_date) {
+        return 1;
+      }
+      return 0;
+    });
+  }, [])
+
   const [isLatestOnTop, setIsLatestOnTop] = useState(true);
   const [items, setItems] = useState(data);
 
@@ -15,7 +39,7 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
 
   const handleShipmentCardClick = () => {
     setLoading(true);
-    
+
   }
 
   return (
@@ -46,14 +70,17 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
 };
 
 function ShipmentCard({ item, index, handleClick }) {
+
+  const eta = item.arrival_date ? dateFormat(item.arrival_date, "d mmm yyyy") : dateFormat(item.delivery_date, "d mmm yyyy");
+
   return (
     <div role="button" className="mb-2" onClick={handleClick} onKeyDown={handleClick} tabIndex={0}>
-      <Card className="w-full 2xl:w-3/5 bg-[#217BF4] hover:bg-blue-700 hover:cursor-pointer" style={{ borderRadius: "10px" }} key={index}>
+      <Card className="mb-2 w-full 2xl:w-3/5" style={{ backgroundColor: "#217BF4", borderRadius: "10px" }} key={index}>
         <Card.Body>
           <div className="grid grid-cols-2 text-white p-4">
             <div className="flex flex-col justify-center">
-              <Card.Title className="text-5xl justify-start mb-2">{item.arrival_date ? item.arrival_date.slice(0, 6) : item.delivery_date.slice(0, 6)}</Card.Title>
-              <Card.Subtitle className="text-xl justify-start">{item.arrival_date ? item.arrival_date.slice(-4) : item.delivery_date.slice(-4)}</Card.Subtitle>
+              <Card.Title className="text-5xl justify-start mb-2">{eta.slice(0, 6)}</Card.Title>
+              <Card.Subtitle className="text-xl justify-start">{eta.slice(-4)}</Card.Subtitle>
             </div>
             <div className="flex flex-col justify-center">
               <Card.Title className="flex justify-end mb-2" style={{ alignItems: "center" }}>

@@ -131,8 +131,8 @@ resource "aws_service_discovery_service" "scraper_cord" {
   }
 }
 
-resource "aws_service_discovery_service" "scraper_cosco" {
-  name = "scraper_cosco"
+resource "aws_service_discovery_service" "scraper_cosc" {
+  name = "scraper_cosc"
   dns_config {
     namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
 

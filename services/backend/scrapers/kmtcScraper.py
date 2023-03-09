@@ -76,7 +76,7 @@ def track():
                     "code": 200,
                     "data": {
                         "status": status,
-                        "arrival_date": arrival_datetime,
+                        "arrival_date": arrival_datetime[:10],
                         "port_of_discharge": port_of_discharge,
                         "vessel_name": vessel_name
                     }
