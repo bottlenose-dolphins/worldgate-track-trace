@@ -18,9 +18,7 @@ export default function Status() {
   const shipmentStatus = !status ? "UNKNOWN STATUS" : status.toUpperCase();
 
   const { type } = location.state;
-  console.log(type);
   const etaFormatted = dateFormat(eta, "d mmm yyyy");
-
   function hasShipmentArrived() {
     const todayDateString = new Date().toLocaleDateString("en-ZA");
     if (todayDateString > eta) {

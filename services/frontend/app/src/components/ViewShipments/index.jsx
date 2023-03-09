@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getExportShipments, getImportShipments } from "src/api/shipment";
+import dateFormat from "dateformat";
 import ClipLoader from "react-spinners/ClipLoader";
 import ViewShipmentComponent from "./ViewShipmentComponent";
 
@@ -29,10 +30,24 @@ export default function ToggleTab() {
       const exportShipments = await getExportShipments();
       setExportShipments(exportShipments);
 
-      // TODO (Charmaine): Refactor to extract upcoming shipments from import and export shipments
-      setUpcomingShipments(importShipments);
-      const todayDate = new Date();
-
+      const todayDateString = new Date().toLocaleDateString("en-ZA"); // YYYY/MM/DD
+      const upcomingShipments = [];
+      for (let i = 0; i < importShipments.length; i +=1 ) {
+        if (importShipments[i].arrival_date >= todayDateString) {
+          upcomingShipments.push(importShipments[i]);
+        } else {
+          break;
+        }
+      }
+      for (let i = 0; i < exportShipments.length; i +=1 ) {
+        if (exportShipments[i].delivery_date >= todayDateString) {
+          upcomingShipments.push(exportShipments[i]);
+        } else {
+          break;
+        }
+      }
+      setUpcomingShipments(upcomingShipments); 
+      
       setLoading(false);
     };
 
@@ -57,9 +72,9 @@ export default function ToggleTab() {
           </div>
 
           <div className="border border-black w-3/4 bg-white">
-            {activeTab === "Import" && <div><ViewShipmentComponent title="Incoming Shipments" data={importShipments} /></div>}
-            {activeTab === "Export" && <div><ViewShipmentComponent title="Outgoing Shipments" data={exportShipments} /></div>}
-            {activeTab === "Upcoming" && <div><ViewShipmentComponent title="Upcoming Shipments" data={upcomingShipments} /></div>}
+            {activeTab === "Import" && <div><ViewShipmentComponent title="Incoming Shipments" data={importShipments} setLoading={setLoading} /></div>}
+            {activeTab === "Export" && <div><ViewShipmentComponent title="Outgoing Shipments" data={exportShipments} setLoading={setLoading}/></div>}
+            {activeTab === "Upcoming" && <div><ViewShipmentComponent title="Upcoming Shipments" data={upcomingShipments} setLoading={setLoading}/></div>}
           </div>
         </div>
       }
