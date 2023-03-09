@@ -2,8 +2,8 @@ import React, { useState, useMemo } from "react";
 import { Card } from "react-bootstrap";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { searchShipmentStatus } from "src/api/shipment";
-
 import dateFormat from "dateformat";
+import { useNavigate } from "react-router-dom";
 import locationWhite from "../../img/locationWhite.png";
 
 export default function ViewShipmentComponent({ title, data, setLoading }) {
@@ -12,7 +12,7 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
     data.sort((s1, s2) => {
       if (s1.arrival_date) {
         if (s1.arrival_date > s2.arrival_date) {
-          return -1; //
+          return -1;
         }
         if (s1.arrival_date < s2.arrival_date) {
           return 1;
@@ -37,11 +37,6 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
     setItems(items.reverse());
   };
 
-  const handleShipmentCardClick = () => {
-    setLoading(true);
-
-  }
-
   return (
     <div className="p-9 w-3/4">
       <h1 className="text-2xl font-medium text-blue-700 mb-1">{title}</h1>
@@ -59,7 +54,7 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
           {items.length === 0 && <div className="mx-1">No shipments found</div>}
           {items.length > 0 && items.map((item, index) => {
             return (
-              <ShipmentCard key={index} item={item} index={index} handleClick={handleShipmentCardClick} />
+              <ShipmentCard key={index} item={item} index={index} setLoading={setLoading} />
             );
           })}
         </div>
@@ -69,9 +64,43 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
   )
 };
 
-function ShipmentCard({ item, index, handleClick }) {
+function ShipmentCard({ item, index, setLoading }) {
+  const navigate= useNavigate();
 
   const eta = item.arrival_date ? dateFormat(item.arrival_date, "d mmm yyyy") : dateFormat(item.delivery_date, "d mmm yyyy");
+
+  const handleClick = async () => {
+    setLoading(true);
+    const directionType = item.type.toLowerCase();
+    const containerNumber = item.container_numbers[0];
+    const searchType = "ctr";
+    try {
+      const response = await searchShipmentStatus(containerNumber, searchType, directionType);
+      if (response.code !== 200) {
+        throw new Error("No status found");
+      }
+      else if (response.code === 200) {
+        const result = response.data;
+        navigate("/Status", {
+          state: {
+            blNo: containerNumber,
+            type: searchType,
+            eta: result.arrival_date,
+            portOfDischarge: result.port_of_discharge,
+            vesselName: result.vessel_name,
+            status: result.delay_status,
+            portOfLoading: result.port_of_loading,
+            shippingLine: result.shipping_line
+          }
+        })
+      }
+    }
+    catch (err) {
+      navigate("/error", { state: { identifier: containerNumber, direction: directionType, type: searchType } })
+    }
+    setLoading(false);
+
+  }
 
   return (
     <div role="button" className="mb-2" onClick={handleClick} onKeyDown={handleClick} tabIndex={0}>
@@ -87,7 +116,7 @@ function ShipmentCard({ item, index, handleClick }) {
                 <img className="h-10 mr-2" src={locationWhite} alt="shipping-icon" />
                 <span>{item.import_destination ? item.import_destination : item.export_destination}</span>
               </Card.Title>
-              <Card.Subtitle className="text-xl flex justify-end">{item.container_numbers}</Card.Subtitle>
+              <Card.Subtitle className="text-xl flex justify-end">{item.container_numbers[0]}</Card.Subtitle>
             </div>
           </div>
         </Card.Body>

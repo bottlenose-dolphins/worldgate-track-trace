@@ -31,23 +31,22 @@ export default function ToggleTab() {
       setExportShipments(exportShipments);
 
       const todayDateString = new Date().toLocaleDateString("en-ZA"); // YYYY/MM/DD
-      console.log(todayDateString);
       const upcomingShipments = [];
       for (let i = 0; i < importShipments.length; i +=1 ) {
-        if (dateFormat(importShipments[i].arrival_date, "yyyy/mm/dd") >= todayDateString) {
+        if (importShipments[i].arrival_date >= todayDateString) {
           upcomingShipments.push(importShipments[i]);
         } else {
           break;
         }
       }
       for (let i = 0; i < exportShipments.length; i +=1 ) {
-        if (dateFormat(exportShipments[i].delivery_date, "yyyy/mm/dd") >= todayDateString) {
+        if (exportShipments[i].delivery_date >= todayDateString) {
           upcomingShipments.push(exportShipments[i]);
         } else {
           break;
         }
       }
-      setUpcomingShipments(upcomingShipments); // TODO (Charmaine): Sort by date 
+      setUpcomingShipments(upcomingShipments); 
       
       setLoading(false);
     };
