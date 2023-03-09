@@ -26,7 +26,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip
             RUN ldconfig
 
 WORKDIR /app
-ARG CACHEBUST=5
+ARG CACHEBUST=8
 COPY user.py .
 COPY requirements.txt .
 COPY obtainIp.py . 
@@ -41,10 +41,9 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
 ENV PYTHONUNBUFFERED=1
-ENV prod=false
 
-EXPOSE 80
+EXPOSE 5002
 
 # start the server
 # CMD [ "python", "app.py" ]
-CMD [ "python", "-m", "flask", "run", "--host=0.0.0.0",  "--port=80"]
+CMD [ "python", "-m", "flask", "run", "--host=0.0.0.0",  "--port=5002"]

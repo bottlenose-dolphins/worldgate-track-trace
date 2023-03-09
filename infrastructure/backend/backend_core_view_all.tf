@@ -12,8 +12,8 @@ resource "aws_ecs_task_definition" "tracktrace_core_view_all" {
         "essential": true,
         "portMappings": [
             {
-            "containerPort": 80,
-            "hostPort": 80
+            "containerPort": 5010,
+            "hostPort": 5010
             }
         ],
         "memory": 512,
@@ -63,7 +63,7 @@ resource "aws_ecs_service" "tracktrace_core_view_all_service" {
     load_balancer {
     target_group_arn = "${aws_lb_target_group.target_group_core_view_all.arn}" # Referencing our target group
     container_name   = "${aws_ecs_task_definition.tracktrace_core_view_all.family}"
-    container_port   = 80 # Specifying the container port
+    container_port   = 5010 # Specifying the container port
     }
 
     service_registries {
@@ -72,14 +72,18 @@ resource "aws_ecs_service" "tracktrace_core_view_all_service" {
 }
 
 resource "aws_lb_target_group" "target_group_core_view_all" {
-    name        = "target-group"
-    port        = 80
+    name        = "tg-core-view-all"
+    port        = 5010
     protocol    = "HTTP"
     target_type = "ip"
     vpc_id      = "${aws_default_vpc.default_vpc.id}" # Referencing the default VPC
     health_check {
         matcher = "200,301,302"
         path = "/ping"
+    }
+
+    lifecycle {
+        create_before_destroy = false
     }
 }
 
@@ -92,3 +96,13 @@ resource "aws_lb_listener" "listener_core_view_all" {
         target_group_arn = "${aws_lb_target_group.target_group_core_view_all.arn}" # Referencing our tagrte group
     }
 }
+
+# resource "aws_lb_listener" "listener_core_view_all2" {
+#     load_balancer_arn = "${aws_alb.internal_load_balancer.arn}" # Referencing our load balancer
+#     port              = "5010"
+#     protocol          = "HTTP"
+#     default_action {
+#         type             = "forward"
+#         target_group_arn = "${aws_lb_target_group.target_group_core_view_all.arn}" # Referencing our tagrte group
+#     }
+# }

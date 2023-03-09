@@ -12,8 +12,8 @@ resource "aws_ecs_task_definition" "tracktrace_core_complex_scraper" {
         "essential": true,
         "portMappings": [
             {
-            "containerPort": 80,
-            "hostPort": 80
+            "containerPort": 5009,
+            "hostPort": 5009
             }
         ],
         "memory": 512,
@@ -63,7 +63,7 @@ resource "aws_ecs_service" "tracktrace_core_complex_scraper_service" {
     load_balancer {
     target_group_arn = "${aws_lb_target_group.target_group_core_complex_scraper.arn}" # Referencing our target group
     container_name   = "${aws_ecs_task_definition.tracktrace_core_complex_scraper.family}"
-    container_port   = 80 # Specifying the container port
+    container_port   = 5009 # Specifying the container port
     }
 
     service_registries {
@@ -72,14 +72,18 @@ resource "aws_ecs_service" "tracktrace_core_complex_scraper_service" {
 }
 
 resource "aws_lb_target_group" "target_group_core_complex_scraper" {
-    name        = "target-group"
-    port        = 80
+    name        = "tg-core-complex-scraper"
+    port        = 5009
     protocol    = "HTTP"
     target_type = "ip"
     vpc_id      = "${aws_default_vpc.default_vpc.id}" # Referencing the default VPC
     health_check {
         matcher = "200,301,302"
         path = "/ping"
+    }
+
+    lifecycle {
+        create_before_destroy = false
     }
 }
 
