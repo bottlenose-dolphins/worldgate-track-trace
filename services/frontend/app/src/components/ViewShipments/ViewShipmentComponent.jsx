@@ -1,9 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card } from "react-bootstrap";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import dateFormat from "dateformat";
 import locationWhite from "../../img/locationWhite.png";
 
 export default function ViewShipmentComponent({ title, data }) {
+
+  useMemo(() => {
+    data.sort((s1, s2) => {
+      if (s1.arrival_date) {
+        if (s1.arrival_date > s2.arrival_date) {
+          return -1; //
+        }
+        if (s1.arrival_date < s2.arrival_date) {
+          return 1;
+        }
+        return 0;
+      }
+      if (s1.delivery_date > s2.delivery_date) {
+        return -1;
+      }
+      if (s1.delivery_date < s2.delivery_date) {
+        return 1;
+      }
+      return 0;
+    });
+  }, [])
+
   const [isLatestOnTop, setIsLatestOnTop] = useState(true);
   const [items, setItems] = useState(data);
 
@@ -40,13 +63,16 @@ export default function ViewShipmentComponent({ title, data }) {
 };
 
 function ShipmentCard({ item, index }) {
+
+  const eta = item.arrival_date ? dateFormat(item.arrival_date, "d mmm yyyy") : dateFormat(item.delivery_date, "d mmm yyyy");
+
   return (
     <Card className="mb-2 w-full 2xl:w-3/5" style={{ backgroundColor: "#217BF4", borderRadius: "10px" }} key={index}>
       <Card.Body>
         <div className="grid grid-cols-2 text-white p-4">
           <div className="flex flex-col justify-center">
-            <Card.Title className="text-5xl justify-start mb-2">{item.arrival_date ? item.arrival_date.slice(0, 6) : item.delivery_date.slice(0, 6)}</Card.Title>
-            <Card.Subtitle className="text-xl justify-start">{item.arrival_date ? item.arrival_date.slice(-4) : item.delivery_date.slice(-4)}</Card.Subtitle>
+            <Card.Title className="text-5xl justify-start mb-2">{eta.slice(0, 6)}</Card.Title>
+            <Card.Subtitle className="text-xl justify-start">{eta.slice(-4)}</Card.Subtitle>
           </div>
           <div className="flex flex-col justify-center">
             <Card.Title className="flex justify-end mb-2" style={{ alignItems: "center" }}>

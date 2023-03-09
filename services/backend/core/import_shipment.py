@@ -96,11 +96,35 @@ def get_master_bl():
         }
     ), 500
 
+# Retrieve ETA by IMPORT_REF_N
+@app.route("/import_shipment/retrieve_import_ref_n", methods=['POST'])
+def retrieve_shipment_import_ref_n():
+    data = request.get_json()
+    import_ref_n = data["import_ref_n"]
+    response = ImportShipment.query.filter_by(import_ref_n=import_ref_n).first()
+    
+    if response:
+        return jsonify(
+                {
+                "code": 200,
+                "data": {
+                    "eta": response.eta.strftime("%Y/%m/%d")
+                    }
+                }
+            ), 200
+    
+    return jsonify(
+        {
+            "code": 500,
+            "message": "Failed to retrieve shipment information"
+        }
+    ), 500
+
 # Update latest shipment information (BL)
 @app.route("/import_shipment/update", methods=['POST'])
 def update_shipment():
     data = request.get_json()
-    eta = datetime.strptime(data["arrival_date"], '%Y/%m/%d')
+    eta = datetime.strptime(data["arrival_date"].replace("-","/"), '%Y/%m/%d')
     vessel_name = data["vessel_name"]
     master_bl = data["master_bl"]
 
@@ -131,7 +155,7 @@ def update_shipment():
 def update_shipment_cont():
     data = request.get_json()
     import_ref_n = data["import_ref_n"]
-    eta = datetime.strptime(data["arrival_date"], '%Y/%m/%d')
+    eta = datetime.strptime(data["arrival_date"].replace("-","/"), '%Y/%m/%d')
     port_of_discharge = data["port_of_discharge"]
     vessel_name = data["vessel_name"]
 

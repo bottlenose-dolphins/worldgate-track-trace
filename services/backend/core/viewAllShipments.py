@@ -72,10 +72,14 @@ def getExportContainerNum():
             if len(retrieved_list_containerNum_output) > 0:
                 retrieved_tuple_containerNum_output = tuple(retrieved_list_containerNum_output)
                 a_record["container_numbers"] = retrieved_tuple_containerNum_output
-                # a_record["type"] = "Export"
             
             else:
                 a_record["container_numbers"] = []
+
+            res = invoke_http2("core_export_shipment", "export_shipment/retrieve_export_ref_n", prod, method="POST", json=data)
+            if res:
+                eta = res["data"]["eta"]
+                a_record["arrival_date"] = eta
 
         return retrieved_output_from_export
     
@@ -126,10 +130,14 @@ def getImportContainerNum():
             if len(retrieved_list_containerNum_output) > 0:
                 retrieved_tuple_containerNum_output = tuple(retrieved_list_containerNum_output)
                 a_record["container_numbers"] = retrieved_tuple_containerNum_output
-                # a_record["type"] = "Import"
-            
+
             else:
                 a_record["container_numbers"] = []
+
+            res = invoke_http2("core_import_shipment", "import_shipment/retrieve_import_ref_n", prod, method="POST", json=data)
+            if res:
+                eta = res["data"]["eta"]
+                a_record["arrival_date"] = eta
 
         return retrieved_output_from_import
     
