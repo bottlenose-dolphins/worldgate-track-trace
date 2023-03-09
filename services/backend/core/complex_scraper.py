@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 import json
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",
-     supports_credentials=True, expose_headers="Set-Cookie")
+# CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000", supports_credentials=True, expose_headers="Set-Cookie")
+CORS(app, resources={r"/*": {"origins": "http://worldgatetracktrace.click, http://127.0.0.1"}}, supports_credentials=True, expose_headers="Set-Cookie")
 
 load_dotenv()
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)

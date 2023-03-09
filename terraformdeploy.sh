@@ -1,3 +1,10 @@
+#!/bin/bash
+
+#for deployment for local machine
+cd services/backend/core/
+./buildandpush.sh #core backend images
+cd ../scrapers
+./buildandpush.sh #scraper backend images
 echo "Going into infra backend"
 cd infrastructure/backend 
 echo "Deploying backend infra & apps, outputing DNS Name to .env"

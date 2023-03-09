@@ -5,9 +5,10 @@ from selenium.webdriver.chrome.options import Options
 from flask import Flask, jsonify, request
 import time
 import subprocess
+from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "http://worldgatetracktrace.click, http://127.0.0.1"}})
 
 # CTR Test
 # identifier = "OOLU4299134"

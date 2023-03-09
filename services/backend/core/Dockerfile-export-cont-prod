@@ -28,7 +28,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
             && ldconfig
 
 WORKDIR /app
-ARG CACHEBUST=3
+ARG CACHEBUST=122
 COPY requirements.txt .
 COPY export_cont.py .
 RUN mv export_cont.py app.py

@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import subprocess
 from os import getenv
+from flask_cors import CORS
 
 #server related
 # server related
@@ -15,6 +16,7 @@ from flask import Flask, jsonify, request
 import time
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "http://worldgatetracktrace.click, http://127.0.0.1"}})
 username = getenv("cordUsername")
 password = getenv("cordPassword")
 

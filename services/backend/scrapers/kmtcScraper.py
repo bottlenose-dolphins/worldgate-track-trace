@@ -5,11 +5,13 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import Select
 import time
 import subprocess
+from flask_cors import CORS
 
 #server related
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "http://worldgatetracktrace.click, http://127.0.0.1"}})
 
 @app.route("/ping", methods=['GET'])
 def ping():

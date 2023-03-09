@@ -1,7 +1,6 @@
 # for complex_scraper.py
 
 FROM python:3.11
-ARG CACHEBUST=8
 
 #cx-Oracle fails to install via alpine (smaller image)
 # FROM python:3.12.0a4-alpine3.17
@@ -30,6 +29,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
             && ldconfig
 
 WORKDIR /app
+ARG CACHEBUST=9734
 COPY requirements.txt .
 COPY complex_scraper.py .
 RUN mv complex_scraper.py app.py

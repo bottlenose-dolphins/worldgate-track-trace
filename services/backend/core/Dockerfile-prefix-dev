@@ -30,7 +30,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
 
 WORKDIR /app
 COPY requirements.txt .
-ARG CACHEBUST=5
+ARG CACHEBUST=522
 COPY prefix.py .
 RUN mv prefix.py app.py
 

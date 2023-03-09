@@ -7,7 +7,7 @@ import time
 import subprocess
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "http://worldgatetracktrace.click, http://127.0.0.1"}})
 
 # CTR Test
 # identifier = "YMLU3434431"

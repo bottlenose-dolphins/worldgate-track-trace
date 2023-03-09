@@ -4,12 +4,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import subprocess
 from os import getenv
+from flask_cors import CORS
 
 #server related
 from flask import Flask, jsonify, request
 
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "http://worldgatetracktrace.click, http://127.0.0.1"}})
 
 username = getenv("goodUsername")
 password = getenv("goodPassword")
