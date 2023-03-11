@@ -14,7 +14,6 @@ const axiosComplexInstance = axios.create({
 export const searchShipmentStatus = async (identifier, identifierType, direction) => {
     try {
         const authRes = await authenticate();
-
         if (authRes.code === 200) {
             const res = await axiosComplexInstance.post("/scrape", {
                 "identifier": identifier,
@@ -46,7 +45,6 @@ export const getImportShipments = async () => {
                     return res.data;
                 }
                 return []; // no shipments under this current user
-
             }
             throw new Error("No data returned from backend");
         }
