@@ -23,7 +23,7 @@ import uuid
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://worldgatetracktrace.click, http://127.0.0.1"}}, supports_credentials=True, expose_headers="Set-Cookie")
+CORS(app, resources={r"/*": {"origins": ["worldgatetracktrace.click", "http://www.worldgatetracktrace.click", "http://127.0.0.1", "http://worldgatetracktrace.click", "localhost", "www.worldgatetracktrace.click"]}}, supports_credentials=True, expose_headers=["Set-Cookie", "X-CRSF-TOKEN"])
 
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -31,6 +31,7 @@ app.config['JWT_SECRET_KEY'] = getenv(
     'JWT_SECRET', default='secret_local_testing_only')
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=0.5)
+app.config['JWT_COOKIE_DOMAIN'] = 'worldgatetracktrace.click'
 # app.config['JWT_COOKIE_SECURE'] = True # for prod
 
 jwt = JWTManager(app)
@@ -194,6 +195,7 @@ def sign_in():
             "username": found_user.username
         })
         set_access_cookies(response, access_token)
+        # set_access_cookies(response, access_token, domain=["worldgatetracktrace.click", "http://www.worldgatetracktrace.click", "http://127.0.0.1", "http://worldgatetracktrace.click", "localhost"])
         return response
 
     except Exception as err:

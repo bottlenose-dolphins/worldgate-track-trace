@@ -22,6 +22,7 @@ RUN apt-get install -y ./chromium-chromedriver_${VERSION}_${ARCH}.deb
 RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+ARG CACHEBUST=5
 # copying the neccessary script
 COPY requirements.txt .
 COPY coscoScraper.py .

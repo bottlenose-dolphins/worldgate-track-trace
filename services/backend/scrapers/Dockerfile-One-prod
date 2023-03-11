@@ -20,6 +20,7 @@ RUN wget ${URLBASE}/chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb \
 && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+ARG CACHEBUST=56
 # copying the neccessary scripts
 COPY requirements.txt .
 COPY oneScraper.py .
