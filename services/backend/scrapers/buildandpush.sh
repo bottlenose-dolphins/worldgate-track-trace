@@ -1,7 +1,9 @@
 # aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 283879969377.dkr.ecr.ap-southeast-1.amazonaws.com
 # images=('Ymlu' 'Cosco' 'Kmtc' 'One' 'Good' 'Cord')
 
-images=('Ymlu' 'Cosco' 'Kmtc' 'One')
+# images=('Ymlu' 'Cosco' 'Kmtc' 'One')
+
+images=('One')
 
 for image in "${images[@]}"
 do
