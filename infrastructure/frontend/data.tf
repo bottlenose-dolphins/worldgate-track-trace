@@ -16,7 +16,6 @@ data "aws_ecs_cluster" "tracktrace_cluster" {
 
 
 
-
 #networking
 resource "aws_default_vpc" "default_vpc" {
     enable_dns_support   = true

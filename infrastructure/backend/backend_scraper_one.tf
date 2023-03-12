@@ -16,8 +16,8 @@ resource "aws_ecs_task_definition" "tracktrace_scraper_one" {
             "hostPort": 80
             }
         ],
-        "memory": 512,
-        "cpu": 256,
+        "memory": 1024,
+        "cpu": 512,
         "runtimePlatform": {
         "operatingSystemFamily": "LINUX",
         "cpuArchitecture": "ARM64"
@@ -39,8 +39,8 @@ resource "aws_ecs_task_definition" "tracktrace_scraper_one" {
     }
     requires_compatibilities = ["FARGATE"] # Stating that we are using ECS Fargate
     network_mode             = "awsvpc"    # Using awsvpc as our network mode as this is required for Fargate
-    memory                   = 512         # Specifying the memory our container requires
-    cpu                      = 256        # Specifying the CPU our container requires
+    memory                   = 1024         # Specifying the memory our container requires
+    cpu                      = 512        # Specifying the CPU our container requires
     execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole2.arn}"
 }
 

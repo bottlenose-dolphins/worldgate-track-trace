@@ -4,8 +4,10 @@ from selenium.webdriver.chrome.options import Options
 import time
 from flask import Flask, jsonify, request
 import subprocess
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": ["http://www.worldgatetracktrace.click", "http://127.0.0.1", "http://worldgatetracktrace.click", "localhost"]}})
 
 @app.route("/ping", methods=['GET'])
 def ping():
@@ -89,7 +91,7 @@ def oneScraper():
 
                         "port_of_discharge": destinationPort,
 
-                        "arrival_date": expectedArrivalTime[8:18]
+                        "arrival_date": expectedArrivalTime[7:17]
 
                     }
 

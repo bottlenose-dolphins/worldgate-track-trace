@@ -5,23 +5,23 @@ resource "aws_service_discovery_private_dns_namespace" "tracktrace" {
   
 }
 
-resource "aws_service_discovery_service" "frontend" {
-  name = "frontend"
-  dns_config {
-    namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
+# resource "aws_service_discovery_service" "frontend" {
+#   name = "frontend"
+#   dns_config {
+#     namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
 
-    dns_records {
-      ttl  = 10
-      type = "A"
-    }
+#     dns_records {
+#       ttl  = 10
+#       type = "A"
+#     }
 
-    routing_policy = "MULTIVALUE"
-  }
+#     routing_policy = "MULTIVALUE"
+#   }
 
-  health_check_custom_config {
-    failure_threshold = 5
-  }
-}
+#   health_check_custom_config {
+#     failure_threshold = 5
+#   }
+# }
 
 resource "aws_service_discovery_service" "core_user" {
   name = "core_user"

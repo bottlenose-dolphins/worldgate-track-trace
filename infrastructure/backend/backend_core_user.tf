@@ -12,8 +12,8 @@ resource "aws_ecs_task_definition" "tracktrace_core_user" {
         "essential": true,
         "portMappings": [
             {
-            "containerPort": 80,
-            "hostPort": 80
+            "containerPort": 5002,
+            "hostPort": 5002
             }
         ],
         "memory": 512,
@@ -48,13 +48,12 @@ resource "aws_ecs_task_definition" "tracktrace_core_user" {
     execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole2.arn}"
 }
 
-
 resource "aws_ecs_service" "tracktrace_core_user_service" {
     name            = "tracktrace_core_user_service"                             # Naming our first service
     cluster         = "${aws_ecs_cluster.tracktrace_cluster.id}"             # Referencing our created Cluster
     task_definition = "${aws_ecs_task_definition.tracktrace_core_user.arn}" # Referencing the task our service will spin up
     launch_type     = "FARGATE"
-    desired_count   = 2 # Setting the number of containers we want deployed to 2
+    desired_count   = 1 # Setting the number of containers we want deployed to 2
 
     network_configuration {
     subnets          = ["${aws_default_subnet.default_subnet_a.id}", "${aws_default_subnet.default_subnet_b.id}", "${aws_default_subnet.default_subnet_c.id}"]
@@ -64,11 +63,36 @@ resource "aws_ecs_service" "tracktrace_core_user_service" {
     load_balancer {
     target_group_arn = "${aws_lb_target_group.target_group_core_user.arn}" # Referencing our target group
     container_name   = "${aws_ecs_task_definition.tracktrace_core_user.family}"
-    container_port   = 80 # Specifying the container port
+    container_port   = 5002 # Specifying the container port
     }
-
 
     service_registries {
     registry_arn = "${aws_service_discovery_service.core_user.arn}"
+    }
+}
+
+resource "aws_lb_target_group" "target_group_core_user" {
+    name        = "tg-core-user"
+    port        = 5002
+    protocol    = "HTTP"
+    target_type = "ip"
+    vpc_id      = "${aws_default_vpc.default_vpc.id}" # Referencing the default VPC
+    health_check {
+        matcher = "200,301,302"
+        path = "/ping"
+    }
+
+    lifecycle {
+        create_before_destroy = false
+    }
+}
+
+resource "aws_lb_listener" "listener_core_user" {
+    load_balancer_arn = "${aws_alb.internal_load_balancer.arn}" # Referencing our load balancer
+    port              = "5002"
+    protocol          = "HTTP"
+    default_action {
+        type             = "forward"
+        target_group_arn = "${aws_lb_target_group.target_group_core_user.arn}" # Referencing our tagrte group
     }
 }

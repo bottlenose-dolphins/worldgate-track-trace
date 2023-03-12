@@ -1,3 +1,4 @@
+# ARG CACHEBUST=3
 FROM python:3.11
 
 #change arch to amd64 or arm64
@@ -21,6 +22,7 @@ RUN apt-get install -y ./chromium-chromedriver_${VERSION}_${ARCH}.deb
 RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+ARG CACHEBUST=5
 # copying the neccessary script
 COPY requirements.txt .
 COPY coscoScraper.py .
