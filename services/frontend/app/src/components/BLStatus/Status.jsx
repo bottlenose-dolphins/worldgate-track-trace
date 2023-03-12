@@ -20,8 +20,11 @@ export default function Status() {
   const { type } = location.state;
   const etaFormatted = dateFormat(eta, "d mmm yyyy");
   function hasShipmentArrived() {
-    const todayDateString = new Date().toLocaleDateString("fr-CA");
-    if (todayDateString > eta) { // YYYY-MM-DD
+    const todayDateString = new Date().toLocaleDateString("en-ZA");
+    console.log(todayDateString);
+    const etaConverted = eta.replaceAll("-", "/");
+    console.log(etaConverted);
+    if (todayDateString > etaConverted) { // YYYY/MM/DD
       return true;
     }
     return false;
