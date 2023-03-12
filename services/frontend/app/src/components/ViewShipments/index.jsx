@@ -32,22 +32,18 @@ export default function ToggleTab() {
 
       const todayDateString = new Date().toLocaleDateString("en-ZA"); // YYYY/MM/DD
       const upcomingShipments = [];
-      for (let i = 0; i < importShipments.length; i +=1 ) {
+      for (let i = 0; i < importShipments.length; i += 1) {
         if (importShipments[i].arrival_date >= todayDateString) {
           upcomingShipments.push(importShipments[i]);
-        } else {
-          break;
         }
       }
-      for (let i = 0; i < exportShipments.length; i +=1 ) {
-        if (exportShipments[i].delivery_date >= todayDateString) {
+      for (let i = 0; i < exportShipments.length; i += 1) {
+        if (exportShipments[i].arrival_date >= todayDateString) {
           upcomingShipments.push(exportShipments[i]);
-        } else {
-          break;
         }
       }
-      setUpcomingShipments(upcomingShipments); 
-      
+      setUpcomingShipments(upcomingShipments);
+
       setLoading(false);
     };
 
@@ -73,8 +69,8 @@ export default function ToggleTab() {
 
           <div className="border border-black w-3/4 bg-white">
             {activeTab === "Import" && <div><ViewShipmentComponent title="Incoming Shipments" data={importShipments} setLoading={setLoading} /></div>}
-            {activeTab === "Export" && <div><ViewShipmentComponent title="Outgoing Shipments" data={exportShipments} setLoading={setLoading}/></div>}
-            {activeTab === "Upcoming" && <div><ViewShipmentComponent title="Upcoming Shipments" data={upcomingShipments} setLoading={setLoading}/></div>}
+            {activeTab === "Export" && <div><ViewShipmentComponent title="Outgoing Shipments" data={exportShipments} setLoading={setLoading} /></div>}
+            {activeTab === "Upcoming" && <div><ViewShipmentComponent title="Upcoming Shipments" data={upcomingShipments} setLoading={setLoading} /></div>}
           </div>
         </div>
       }

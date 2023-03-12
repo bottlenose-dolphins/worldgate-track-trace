@@ -10,19 +10,10 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
 
   useMemo(() => {
     data.sort((s1, s2) => {
-      if (s1.arrival_date) {
-        if (s1.arrival_date > s2.arrival_date) {
-          return -1;
-        }
-        if (s1.arrival_date < s2.arrival_date) {
-          return 1;
-        }
-        return 0;
-      }
-      if (s1.delivery_date > s2.delivery_date) {
+      if (s1.arrival_date > s2.arrival_date) {
         return -1;
       }
-      if (s1.delivery_date < s2.delivery_date) {
+      if (s1.arrival_date < s2.arrival_date) {
         return 1;
       }
       return 0;
