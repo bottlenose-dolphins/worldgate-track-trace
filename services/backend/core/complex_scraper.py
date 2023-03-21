@@ -80,6 +80,7 @@ def scrape():
                 arrival_date = shipment_info["data"]["arrival_date"]
                 port_of_discharge = shipment_info["data"]["port_of_discharge"]
                 vessel_name = shipment_info["data"]["vessel_name"]
+                status = shipment_info["data"]["status"]
 
                 # Update DB with latest shipment information
                 if identifier_type == "bl":
@@ -110,7 +111,8 @@ def scrape():
                                 "vessel_name": vessel_name,
                                 "shipping_line": vendor_name,
                                 "port_of_loading": origin,
-                                "delay_status": delay_status
+                                "delay_status": delay_status,
+                                "status": status
                             }
                     }
                 ), 200
