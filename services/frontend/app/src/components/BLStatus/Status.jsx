@@ -21,9 +21,7 @@ export default function Status() {
   const etaFormatted = dateFormat(eta, "d mmm yyyy");
   function hasShipmentArrived() {
     const todayDateString = new Date().toLocaleDateString("en-ZA");
-    console.log(todayDateString);
     const etaConverted = eta.replaceAll("-", "/");
-    console.log(etaConverted);
     if (todayDateString > etaConverted) { // YYYY/MM/DD
       return true;
     }
