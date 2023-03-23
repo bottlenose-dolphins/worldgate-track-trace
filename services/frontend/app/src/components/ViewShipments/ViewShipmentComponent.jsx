@@ -58,8 +58,16 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
 function ShipmentCard({ item, index, setLoading }) {
   const navigate= useNavigate();
 
-  const eta = item.arrival_date ? dateFormat(item.arrival_date, "d mmm yyyy") : dateFormat(item.delivery_date, "d mmm yyyy");
+  const shipmentStatusColours = {
+    "unknown" : "bg-gray-400",
+    "early" : "bg-green-400",
+    "on time" : "bg-cyan-500",
+    "delayed" : "bg-red-400"
+  }
 
+  const eta = item.arrival_date ? dateFormat(item.arrival_date, "d mmm yyyy") : dateFormat(item.delivery_date, "d mmm yyyy");
+  const status = item.delay_status;
+  
   const handleClick = async () => {
     setLoading(true);
     const directionType = item.type.toLowerCase();
@@ -95,7 +103,7 @@ function ShipmentCard({ item, index, setLoading }) {
 
   return (
     <div role="button" className="mb-2" onClick={handleClick} onKeyDown={handleClick} tabIndex={0}>
-      <Card className="mb-2 w-full 2xl:w-3/5" style={{ backgroundColor: "#217BF4", borderRadius: "10px" }} key={index}>
+      <Card className={`mb-2 w-full 2xl:w-3/5 ${shipmentStatusColours[status]}`} style={{ borderRadius: "10px" }} key={index}>
         <Card.Body>
           <div className="grid grid-cols-2 text-white p-4">
             <div className="flex flex-col justify-center">
