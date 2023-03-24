@@ -148,6 +148,19 @@ services:
     ports:
       - 5012:5012
 
+  core_unloading_status:
+    container_name: core_unloading_status
+    build:
+      context: ./services/backend/core
+      dockerfile: dockerfiles/Dockerfile-unloading-status-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      # - PYTHONUNBUFFERED=1
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
+    ports:
+      - 5013:5013
+
 #  ____  ____   __   __ _  ____  ____  __ _  ____ 
 # (  __)(  _ \ /  \ (  ( \(_  _)(  __)(  ( \(    \
 #  ) _)  )   /(  O )/    /  )(   ) _) /    / ) D (
