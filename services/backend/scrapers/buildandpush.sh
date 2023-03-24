@@ -19,6 +19,6 @@ docker build -t "tracktrace_repo:scraper_Good" --file "Dockerfile-Good-prod" --b
 docker tag "tracktrace_repo:scraper_Good" "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper_Good"
 docker push "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper_Good"
 
-docker build -t "tracktrace_repo:scraper_Cord" --file "Dockerfile-Cord-prod" --build-arg CORD_UN=$CORD_UN --build-arg CORD_PW=$CORD_PW . 
-docker tag "tracktrace_repo:scraper_Cord" "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper_Cord"
-docker push "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper_Cord"
+# docker build -t "tracktrace_repo:scraper_Cord" --file "Dockerfile-Cord-prod" --build-arg CORD_UN=$CORD_UN --build-arg CORD_PW=$CORD_PW . 
+# docker tag "tracktrace_repo:scraper_Cord" "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper_Cord"
+# docker push "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper_Cord"
