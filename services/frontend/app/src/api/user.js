@@ -7,7 +7,7 @@ const axiosUserInstance = axios.create({
     timeout: 5000,
 });
 
-export const signIn = async (username, password) => {
+export const signIn = async(username, password) => {
     try {
         const res = await axiosUserInstance.post("/signin", {
             "username": username,
@@ -22,7 +22,7 @@ export const signIn = async (username, password) => {
     }
 }
 
-export const signOut = async () => {
+export const signOut = async() => {
     try {
         const res = await axiosUserInstance.post(`${USER_ENDPOINT}/signout`);
         if (res) {
@@ -36,7 +36,7 @@ export const signOut = async () => {
 
 // original
 // email: <str:email>, name: <str:name>, password: <str:password> , phone: <int:phone>, company: <str:company>
-export const signUp = async (username, email, password, phone, company) => {
+export const signUp = async(username, email, password, phone, company) => {
     try {
         const res = await axios.post(`${USER_ENDPOINT}/signup`, {
             "username": username,

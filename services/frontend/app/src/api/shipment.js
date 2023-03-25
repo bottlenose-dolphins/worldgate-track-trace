@@ -11,7 +11,7 @@ const axiosComplexInstance = axios.create({
     timeout: 20000,
 });
 
-export const searchShipmentStatus = async (identifier, identifierType, direction) => {
+export const searchShipmentStatus = async(identifier, identifierType, direction) => {
     try {
         const authRes = await authenticate();
         if (authRes.code === 200) {
@@ -31,8 +31,28 @@ export const searchShipmentStatus = async (identifier, identifierType, direction
         return error.response.data;
     }
 }
+export const addsubscription = async(userid, containerid, status) => {
+    try {
+        const authRes = await authenticate();
+        if (authRes.code === 200) {
+            const res = await axiosComplexInstance.post("/addsubscription", {
+                "userid": userid,
+                "containerid": containerid,
+                "status": status
+            });
+            if (res) {
+                return res.data;
+            }
+            throw new Error("No data returned from backend");
+        }
+        throw new Error("Request Unauthorised");
+    } catch (error) {
+        console.log(error.response.data.message);
+        return error.response.data;
+    }
+}
 
-export const getImportShipments = async () => {
+export const getImportShipments = async() => {
     try {
         const authRes = await authenticate();
         if (authRes.code === 200) {
@@ -49,14 +69,13 @@ export const getImportShipments = async () => {
             throw new Error("No data returned from backend");
         }
         throw new Error("Request Unauthorised");
-    }
-    catch (error) {
+    } catch (error) {
         console.log(error.response.data);
         return [];
     }
 }
 
-export const getExportShipments = async () => {
+export const getExportShipments = async() => {
     try {
         const authRes = await authenticate();
         if (authRes.code === 200) {

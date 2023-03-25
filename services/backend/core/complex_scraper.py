@@ -37,6 +37,44 @@ db = SQLAlchemy(app)
 def health_check():
     return("complex_scraper")
 
+@app.route("/addsubscription", methods=['POST'])
+def addsubscription():
+     if request.is_json:
+        try:
+            data = request.get_json()
+            user_id = data["userid"]
+            containerid=data["containerid"]
+            status=data["status"]
+
+            jsondata={
+                "userid":user_id,
+                "containerid":containerid,
+                "status":status
+            }
+            response = invoke_http2("core_subscription", "subscription/add",prod, method='POST', json=jsondata)
+            print(response)
+        except Exception as e:
+            return jsonify(
+            {
+                "code": 500,
+                "message": e
+            }
+        ), 500
+    
+        return response
+@app.route("/sendsms", methods=['POST'])
+def sendsms():
+    response = invoke_http2("core_subscription", "subscription/getsubscriptions",prod, method='POST')
+    status=[]
+    for row in response:
+        containerid="OOLU4299134"
+        type="ctr"
+        direction="import"
+        scrape=scrapesubscription(containerid,type,direction)
+        status.append(scrape)
+
+    return status
+
 @app.route('/scrape', methods=['POST'])
 def scrape():
     if request.is_json:
@@ -132,6 +170,88 @@ def scrape():
         }
     ), 400
 
+
+
+def scrapesubscription(identifier_number,type,shipment_direction):
+   
+    try:
+        
+        identifier = identifier_number
+        identifier_type = type
+        direction = shipment_direction
+
+        print("\nReceived details in JSON:", data)
+
+        if direction == "export":
+            origin = "SINGAPORE"
+
+        # Retrieve Master BL from House BL
+        if identifier_type == "bl":
+            if direction == "import":
+                master_bl, origin, import_ref_n = get_import_master_bl(identifier)
+            elif direction == "export":
+                master_bl, export_ref_n = get_export_master_bl(identifier)            
+
+            data = {
+                        "identifier": master_bl,
+                        "identifier_type": "bl"
+                    }
+        
+        if identifier_type == "ctr":
+            if direction == "import":
+                master_bl, origin, import_ref_n = get_import_master_bl_ctr(identifier)
+            elif direction == "export":
+                master_bl, export_ref_n = get_export_master_bl_ctr(identifier)   
+        
+        # Retrieve shipping line's prefix
+        prefix, vendor_name = get_prefix(master_bl, direction)
+
+        # Invoke scraper microservice
+        # shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
+        shipment_info = invoke_http2("scraper_"+ prefix, prefix, prod, method="POST", json=data)
+        
+        if shipment_info:
+            arrival_date = shipment_info["data"]["arrival_date"]
+            port_of_discharge = shipment_info["data"]["port_of_discharge"]
+            vessel_name = shipment_info["data"]["vessel_name"]
+            status = shipment_info["data"]["status"]
+
+            # Update DB with latest shipment information
+            if identifier_type == "bl":
+                update_shipment_info_bl(master_bl, arrival_date, port_of_discharge, vessel_name, direction)
+            elif identifier_type == "ctr":
+                update_shipment_info_cont(identifier, arrival_date, port_of_discharge, vessel_name, direction)
+            
+            # TODO: extract to function
+            if direction == "import":
+                import_delay_data = {
+                    "import_ref_n": import_ref_n
+                }
+                delay_res = invoke_http2("core_import_shipment", "import_shipment/delay", prod, method='POST', json=import_delay_data)
+                delay_status = delay_res["data"]["status"]
+            elif direction == "export":
+                export_delay_data = {
+                    "export_ref_n": export_ref_n
+                }
+                delay_res = invoke_http2("core_export_shipment", "export_shipment/delay", prod, method='POST', json=export_delay_data)
+                delay_status = delay_res["data"]["status"]
+
+            return status
+
+    except Exception as e:
+        return jsonify(
+        {
+            "code": 500,
+            "message": "Failed to scrape for shipment information because " + str(e)
+        }
+    ), 500
+
+    return jsonify(
+        {
+            "code": 400,
+            "message": "Invalid JSON input: " + str(request.get_data())
+        }
+    ), 400
 # Retrieve prefix for respective shipping line
 def get_prefix(master_bl, direction):
     data = {
@@ -210,7 +330,7 @@ def update_shipment_info_cont(container_number, arrival_date, port_of_discharge,
         response = invoke_http2("core_import_shipment", "import_shipment/update_cont", prod, method='POST', json=data)
 
     elif direction == "export":
-        # Invoke export_cont microservice
+        # Invoke `export_cont` microservice
         # response = invoke_http(export_cont_url + "export_cont/export_ref_n", method='POST', json=data)
         response = invoke_http2("core_export_cont", "export_cont/export_ref_n", prod, method='POST', json=data)
         export_ref_n = response["data"]["export_ref_n"]

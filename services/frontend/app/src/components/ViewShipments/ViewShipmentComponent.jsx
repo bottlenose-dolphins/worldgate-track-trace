@@ -1,12 +1,78 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { searchShipmentStatus } from "src/api/shipment";
+import { searchShipmentStatus ,addsubscription} from "src/api/shipment";
+import {authenticate} from "src/api/config"
 import dateFormat from "dateformat";
 import { useNavigate } from "react-router-dom";
 import locationWhite from "../../img/locationWhite.png";
 
+
 export default function ViewShipmentComponent({ title, data, setLoading }) {
+  function ShipmentButton({item}) {
+    const subscribe = async () => {
+      let userid=user;
+      const directionType = item.type.toLowerCase();
+      const containerNumber = item.container_numbers[0];
+      console.log(directionType);
+      console.log(containerNumber);
+      const searchType = "ctr";
+      try {
+      
+        const response = await searchShipmentStatus(containerNumber, searchType, directionType);
+        if (response.code !== 200) {
+          throw new Error("No status found");
+        }
+        else if (response.code === 200) {
+          const result = response.data;
+          const status=result.status
+          const response2 = await addsubscription(userid, containerNumber,status);
+          if (response2.code !== 200) {
+            throw new Error("No status found");
+        }
+          else if (response2.code === 200) {
+          const result = response2.data;
+          console.log(result)
+         
+        }
+        }
+      }
+      catch{
+
+      }
+      
+
+    }
+  
+    return(
+      <button onClick={subscribe} type="button" className="inline-flex items-center px-5 py-2.5 text-xs  text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> 
+          <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="h-5 w-5">
+        <path
+          fillRule="evenodd"
+          d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
+          clipRule="evenodd" />
+      </svg>
+      Subscribe
+        </button>
+    )
+    
+  }
+  const [user,setuser]=useState("")
+useEffect(() => {
+  const fetchData = async () => {
+    const userdata = await authenticate();
+    setuser(userdata.userId);
+  
+  };
+
+  fetchData();
+}, []);
+
+console.log(user)
 
   useMemo(() => {
     data.sort((s1, s2) => {
@@ -45,7 +111,10 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
           {items.length === 0 && <div className="mx-1">No shipments found</div>}
           {items.length > 0 && items.map((item, index) => {
             return (
+              <div>
               <ShipmentCard key={index} item={item} index={index} setLoading={setLoading} />
+              <ShipmentButton item={item}/>
+              </div>
             );
           })}
         </div>
@@ -53,7 +122,10 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
       </div>
     </div>
   )
+  
 };
+
+
 
 function ShipmentCard({ item, index, setLoading }) {
   const navigate= useNavigate();
@@ -93,9 +165,10 @@ function ShipmentCard({ item, index, setLoading }) {
 
   }
 
+
   return (
-    <div role="button" className="mb-2" onClick={handleClick} onKeyDown={handleClick} tabIndex={0}>
-      <Card className="mb-2 w-full 2xl:w-3/5" style={{ backgroundColor: "#217BF4", borderRadius: "10px" }} key={index}>
+    <div role="button" className="mb-2" tabIndex={0}>
+      <Card onClick={handleClick} onKeyDown={handleClick} className="mb-2 w-full 2xl:w-3/5" style={{ backgroundColor: "#217BF4", borderRadius: "10px" }} key={index}>
         <Card.Body>
           <div className="grid grid-cols-2 text-white p-4">
             <div className="flex flex-col justify-center">
@@ -110,8 +183,10 @@ function ShipmentCard({ item, index, setLoading }) {
               <Card.Subtitle className="text-xl flex justify-end">{item.container_numbers[0]}</Card.Subtitle>
             </div>
           </div>
+          
         </Card.Body>
       </Card>
+      
     </div>
   )
 }

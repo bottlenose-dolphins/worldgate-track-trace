@@ -1,5 +1,4 @@
-# for export.py
-
+#  For export_cont.py
 FROM python:3.11
 
 #cx-Oracle fails to install via alpine (smaller image)
@@ -31,15 +30,16 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
 WORKDIR /app
 ARG CACHEBUST=5
 COPY requirements.txt .
-COPY export.py .
-RUN mv export.py app.py
+COPY subscription.py .
+RUN mv subscription.py app.py
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
 ENV PYTHONUNBUFFERED=1
 
-EXPOSE 5006
+
+EXPOSE 5013
 
 # start the server
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5006"]
+CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5013"]
