@@ -5,6 +5,9 @@ phases:
       python: 3.10
   pre_build:
     commands:
+      - pip install --upgrade pip
+      - pip install -r services/backend/core/requirements.txt
+      - pip install -r services/backend/scrapers/requirements.txt
       - mv services/backend/core/complex_scraper.py tests/complex_scraper.py
       - mv services/backend/scrapers/Cordelia.py tests/Cordelia.py
       - mv services/backend/scrapers/coscoScraper.py tests/coscoScraper.py
