@@ -1,16 +1,33 @@
 #!/bin/bash
 
-# Download and Install chromedriver
-wget -N https://chromedriver.storage.googleapis.com/71.0.3578.80/chromedriver_linux64.zip -P ~/
-unzip ~/chromedriver_linux64.zip -d ~/
-rm ~/chromedriver_linux64.zip
-sudo mv -f ~/chromedriver /usr/local/bin/chromedriver
-sudo chown root:root /usr/local/bin/chromedriver
-sudo chmod 0755 /usr/local/bin/chromedriver
+#download and install
+wget https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files/chromium-codecs-ffmpeg_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
+&& wget https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files/chromium-codecs-ffmpeg-extra_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
+&& wget https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files/chromium-browser_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
+&& wget https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files/chromium-chromedriver_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
+&& apt-get update \
+&& apt-get install -y ./chromium-codecs-ffmpeg_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
+&& apt-get install -y ./chromium-codecs-ffmpeg-extra_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
+&& apt-get install -y ./chromium-browser_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
+&& apt-get install -y ./chromium-chromedriver_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
+&& rm -rf /var/lib/apt/lists/*
+
+# Download and Install chromedriver 
+# wget -N https://chromedriver.storage.googleapis.com/100.0.4896.20/chromedriver_linux64.zip -P ~/
+# unzip ~/chromedriver_linux64.zip -d ~/
+# rm ~/chromedriver_linux64.zip
+# sudo mv -f ~/chromedriver /usr/local/bin/chromedriver
+# sudo chown root:root /usr/local/bin/chromedriver
+# sudo chmod 0755 /usr/local/bin/chromedriver
 
 
-# Install chrome broswer
-curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
-apt-get -y update
-apt-get -y install google-chrome-stable
+# # Install chrome broswer
+# curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+# echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+# apt-get -y update
+# apt-get -y install google-chrome-stable
+
+
+# VERSION=109.0.5414.74-0ubuntu0.18.04.14
+# ARCH=arm64
+# URLBASE=https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files
