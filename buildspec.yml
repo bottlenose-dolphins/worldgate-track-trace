@@ -8,6 +8,8 @@ phases:
       - pip install --upgrade pip
       - pip install -r services/backend/core/requirements.txt
       - pip install -r services/backend/scrapers/requirements.txt
+      - export SQLALCHEMY_DATABASE_URI=$DB_URI
+      - export prod=0
       - mv services/backend/core/complex_scraper.py tests/complex_scraper.py
       - mv services/backend/core/invokes.py tests/invokes.py
       - mv services/backend/scrapers/Cordelia.py tests/Cordelia.py
