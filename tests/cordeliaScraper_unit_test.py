@@ -4,7 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-sys.path.insert(1, '/worldgate-track-trace/services/backend/scrapers')
+sys.path.insert(0, '/worldgate-track-trace/services/backend/scrapers')
 import Cordelia
 from Cordelia import app
 

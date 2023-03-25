@@ -1,6 +1,5 @@
 import sys
-sys.path.insert(1, '/worldgate-track-trace/services/backend/core')
-import complex_scraper
+sys.path.insert(0, '/worldgate-track-trace/services/backend/core')
 from complex_scraper import app
 import unittest
 import requests
