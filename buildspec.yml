@@ -6,7 +6,7 @@ phases:
   pre_build:
     commands:
       - chmod +x tests/install_chrome.sh
-      - sh tests/install_driver.sh
+      - sh tests/install_chrome.sh
       - pip install --upgrade pip
       - pip install -r services/backend/core/requirements.txt
       - pip install -r services/backend/scrapers/requirements.txt
