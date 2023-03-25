@@ -5,6 +5,8 @@ phases:
       python: 3.10
   pre_build:
     commands:
+      - ARCH=$(uname -m)
+      - echo "System architecture: $ARCH"
       - chmod +x tests/install_chrome.sh
       - sh tests/install_chrome.sh
       - pip install --upgrade pip
