@@ -1,15 +1,19 @@
 #!/bin/bash
 
+VERSION=109.0.5414.74-0ubuntu0.18.04.14
+ARCH=amd64
+URLBASE=https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files
+
 #download and install
-wget https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files/chromium-codecs-ffmpeg_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
-&& wget https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files/chromium-codecs-ffmpeg-extra_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
-&& wget https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files/chromium-browser_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
-&& wget https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files/chromium-chromedriver_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
+wget ${URLBASE}/chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb \
+&& wget ${URLBASE}/chromium-codecs-ffmpeg-extra_${VERSION}_${ARCH}.deb \
+&& wget ${URLBASE}/chromium-browser_${VERSION}_${ARCH}.deb \
+&& wget ${URLBASE}/chromium-chromedriver_${VERSION}_${ARCH}.deb \
 && apt-get update \
-&& apt-get install -y ./chromium-codecs-ffmpeg_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
-&& apt-get install -y ./chromium-codecs-ffmpeg-extra_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
-&& apt-get install -y ./chromium-browser_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
-&& apt-get install -y ./chromium-chromedriver_109.0.5414.74-0ubuntu0.18.04.14_https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files.deb \
+&& apt-get install -y ./chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb \
+&& apt-get install -y ./chromium-codecs-ffmpeg-extra_${VERSION}_${ARCH}.deb \
+&& apt-get install -y ./chromium-browser_${VERSION}_${ARCH}.deb \
+&& apt-get install -y ./chromium-chromedriver_${VERSION}_${ARCH}.deb \
 && rm -rf /var/lib/apt/lists/*
 
 # Download and Install chromedriver 
@@ -26,8 +30,3 @@ wget https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+fil
 # echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
 # apt-get -y update
 # apt-get -y install google-chrome-stable
-
-
-# VERSION=109.0.5414.74-0ubuntu0.18.04.14
-# ARCH=arm64
-# URLBASE=https://launchpad.net/~canonical-chromium-builds/+archive/ubuntu/stage/+files
