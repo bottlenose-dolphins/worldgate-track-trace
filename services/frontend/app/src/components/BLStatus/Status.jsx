@@ -14,6 +14,10 @@ export default function Status() {
   const { shippingLine } = location.state;
   const { portOfLoading } = location.state;
 
+  const { isFcl } = location.state;
+  const { containerReleaseDateTime } = location.state;
+  const { deliveryTakenDateTime } = location.state;
+
   const { status } = location.state;
   const shipmentStatus = !status ? "UNKNOWN STATUS" : status.toUpperCase();
 
@@ -29,15 +33,15 @@ export default function Status() {
   }
 
   const shipmentStatusColours = {
-    "UNKNOWN STATUS" : "bg-gray-400",
-    "EARLY" : "bg-cyan-500",
-    "ON TIME" : "bg-green-600",
-    "DELAYED" : "bg-red-600"
+    "UNKNOWN STATUS": "bg-gray-400",
+    "EARLY": "bg-cyan-500",
+    "ON TIME": "bg-green-600",
+    "DELAYED": "bg-red-600"
   }
 
   const searchTypes = {
-    "bl" : "B/L NO",
-    "ctr" : "CTR NO"
+    "bl": "B/L NO",
+    "ctr": "CTR NO"
   }
 
   return (
@@ -64,11 +68,25 @@ export default function Status() {
                 <br />
                 <h2 className="text-xl">{!shippingLine ? "Unknown Shipping Line" : shippingLine}</h2>
               </li>
-              <li className={`step-progress-item ${hasShipmentArrived() ? "current" : ""}`}>
+              <li className={`step-progress-item ${hasShipmentArrived() ? (containerReleaseDateTime ? "is-done" : "current") : ""}`}>
                 <strong className={`${hasShipmentArrived() ? "" : "text-gray-400"}`}>Shipment Arrived</strong>
                 <br />
                 <h2 className={`text-xl ${hasShipmentArrived() ? "" : "text-gray-400"}`}>{!portOfDischarge ? "Unknown POD" : portOfDischarge}</h2>
               </li>
+
+              {!isFcl ? "" :
+                <>
+                  <li className={`step-progress-item ${containerReleaseDateTime ? "current" : ""}`}>
+                    <strong className={`${containerReleaseDateTime ? "" : "text-gray-400"}`}>Container Released</strong>
+                    <br />
+                    <h2 className={`text-xl ${containerReleaseDateTime ? "" : "text-gray-400"}`}>{containerReleaseDateTime || "-"}</h2>
+                  </li>
+                  <li className={`step-progress-item ${deliveryTakenDateTime ? "current" : ""}`}>
+                    <strong className={`${deliveryTakenDateTime ? "" : "text-gray-400"}`}>Customer taken Delivery of Container</strong>
+                    <br />
+                    <h2 className={`text-xl ${deliveryTakenDateTime ? "" : "text-gray-400"}`}>{deliveryTakenDateTime || "-"}</h2>
+                  </li>
+                </>}
             </ul>
           </div>
         </div>

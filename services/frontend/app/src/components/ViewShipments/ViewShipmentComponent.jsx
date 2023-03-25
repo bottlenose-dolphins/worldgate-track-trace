@@ -56,18 +56,18 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
 };
 
 function ShipmentCard({ item, index, setLoading }) {
-  const navigate= useNavigate();
+  const navigate = useNavigate();
 
   const shipmentStatusColours = {
-    "unknown" : "bg-gray-400",
-    "early" : "bg-green-400",
-    "on time" : "bg-cyan-500",
-    "delayed" : "bg-red-400"
+    "unknown": "bg-gray-400",
+    "early": "bg-green-400",
+    "on time": "bg-cyan-500",
+    "delayed": "bg-red-400"
   }
 
   const eta = item.arrival_date ? dateFormat(item.arrival_date, "d mmm yyyy") : dateFormat(item.delivery_date, "d mmm yyyy");
   const status = item.delay_status;
-  
+
   const handleClick = async () => {
     setLoading(true);
     const directionType = item.type.toLowerCase();
@@ -89,6 +89,9 @@ function ShipmentCard({ item, index, setLoading }) {
             vesselName: result.vessel_name,
             status: result.delay_status,
             portOfLoading: result.port_of_loading,
+            isFcl: result.is_fcl,
+            containerReleaseDateTime: result.cont_released,
+            deliveryTakenDateTime: result.del_taken,
             shippingLine: result.shipping_line
           }
         })
