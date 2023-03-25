@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(1, '/worldgate-track-trace/services/backend/scrapers')
+sys.path.insert(0, '/worldgate-track-trace/services/backend/scrapers')
 import ymlu_scraper
 from ymlu_scraper import app
 import unittest

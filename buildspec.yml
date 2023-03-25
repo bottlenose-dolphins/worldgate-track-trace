@@ -5,6 +5,14 @@ phases:
       python: 3.10
   pre_build:
     commands:
+      - mv services/backend/core/complex_scraper.py tests/complex_scraper.py
+      - mv services/backend/scraper/Cordelia.py tests/Cordelia.py
+      - mv services/backend/scraper/coscoScraper.py tests/coscoScraper.py
+      - mv services/backend/scraper/kmtcScraper.py tests/kmtcScraper.py
+      - mv services/backend/scraper/oneScraper.py tests/oneScraper.py
+      - mv services/backend/scraper/ymlu_scraper.py tests/scraper/ymlu_scraper.py
+  build:
+    commands:
       - python tests/flask_unit_test.py
       - python tests/complexScraper_unit_test.py
       - python tests/cordeliaScraper_unit_test.py
