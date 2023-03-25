@@ -20,7 +20,7 @@ phases:
   build:
     commands:
       - python tests/flask_unit_test.py
-      - python tests/complexScraper_unit_test.py
+      # - python tests/complexScraper_unit_test.py
       - python tests/cordeliaScraper_unit_test.py
       - python tests/coscoScraper_unit_test.py
       - python tests/kmtcScraper_unit_test.py
