@@ -25,7 +25,8 @@ DEV_IP = {
 "core_complex_scraper" : "core_complex_scraper:5009",
 "core_view_all" : "core_view_all:5010",
 "core_prefix" : "core_prefix:5011",
-"core_vendor_mast" : "core_vendor_mast:5012"
+"core_vendor_mast" : "core_vendor_mast:5012",
+"core_unloading_status" : "core_unloading_status:5013"
 }
 
 
