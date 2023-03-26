@@ -13,7 +13,7 @@ def ping():
 
 @app.route('/maersk', methods=['POST']) 
 
-def oneScraper():
+def maerskScraper():
 
     try:
         data = request.get_json()
