@@ -47,7 +47,8 @@
         "depth": 25
       }],
       "arrow-body-style": "off",
-      "prefer-destructuring": "off"
+      "prefer-destructuring": "off",
+      "no-nested-ternary": "warn"
     }
 }
   
