@@ -17,7 +17,7 @@ def oneScraper():
 
     try:
         data = request.get_json()
-        identifier_type = data["identifier_type"]
+        # identifier_type = data["identifier_type"]
         identifier = data["identifier"]
         
         options = Options()
@@ -25,16 +25,19 @@ def oneScraper():
         options.add_argument('--no-sandbox')
         options.add_argument('--headless')
         options.add_argument('--disable-gpu')
-        # options.add_argument("--window-size=1920,1080")
+        options.add_argument("--window-size=1920,1080")
+
+        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
+        options.add_argument(f'user-agent={user_agent}')
 
         driver = webdriver.Chrome(options=options)
         driver.maximize_window()
 
         driver.get("https://www.maersk.com/tracking/" + identifier)
-        time.sleep(10)
+        time.sleep(3)
         
         driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[1]/div[2]/button[3]').click()
-        time.sleep(5)
+        time.sleep(3)
         # /html/body/div[1]/div/div/div[1]/div[2]/button[3]
 
         startingDestination = driver.find_element(By.XPATH, '//*[@id="main"]/div/div/dl/dd[2]').text
@@ -42,7 +45,7 @@ def oneScraper():
         eta = driver.find_element(By.XPATH, '//*[@id="main"]/div/div/div[2]/dl/dd[1]').text
         lastLocationAndStatus = driver.find_element(By.XPATH, '//*[@id="main"]/div/div/div[2]/dl/dd[2]').text
 
-        time.sleep(10)
+        time.sleep(3)
         
 
         if lastLocationAndStatus != None:
@@ -54,7 +57,8 @@ def oneScraper():
                         "starting destination": startingDestination,
                         "finalDestination": finalDestination,
                         "arrival_date_and_time": eta,
-                        "last_location_and_status": lastLocationAndStatus
+                        "last_location_and_status": lastLocationAndStatus,
+                        "vessel_name": ""
                     }
                 }
             )
@@ -80,5 +84,5 @@ def oneScraper():
     driver.quit()
 
 if __name__ == '__main__':
-    # app.run(host='0.0.0.0', port=8086, debug=True)
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8086, debug=True)
+    # app.run(debug=True)
