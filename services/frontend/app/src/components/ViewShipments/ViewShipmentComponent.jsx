@@ -67,7 +67,12 @@ function ShipmentCard({ item, index, setLoading }) {
   }
   const handleMailClick = (e) => {
     e.stopPropagation();
-    console.log("MAIL CLICKED")
+    console.log("MAIL CLICKED");
+    const emailSubject = "Enquiries Regarding Shipment Container No. " + item.container_numbers[0];
+    const emailBody = `Dear Worldgate,\n\nI would like to enquire about the status of my shipment with container ${item.container_numbers[0]}.\n\n`;
+    const emailTo = "wgate@singnet.com.sg";
+    const mailToLink = `mailto:${emailTo}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+    window.location.href = mailToLink;
   }
 
   const shipmentStatusColours = {
@@ -118,7 +123,7 @@ function ShipmentCard({ item, index, setLoading }) {
 
   return (
     <div role="button" className="mb-2" onClick={handleClick} onKeyDown={handleClick} tabIndex={0}>
-      <Card className={`mb-2 w-11/12 2xl:w-4/5 ${shipmentStatusColours[status]}`} style={{ borderRadius: "10px" }} key={index}>
+      <Card className={`mb-2 w-full 2xl:w-4/5 ${shipmentStatusColours[status]}`} style={{ borderRadius: "10px" }} key={index}>
         <Card.Body>
           <div className="grid grid-cols-2 text-white p-4">
             <div className="flex flex-col">
