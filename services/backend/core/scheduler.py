@@ -27,8 +27,16 @@ print("********")
 
 db = SQLAlchemy(app)
 
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5014, debug=True)
+    # app.run(host='0.0.0.0', debug=True)
+    
 schedule.every(24).hours.do(invoke_http2("core_complex_scraper","complex_scraper/sendsms",prod,method="POST"))
 
 while True:
     schedule.run_pending()
     time.sleep(1)
+
+
+
+    
