@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
+import { DocumentArrowDownIcon } from "@heroicons/react/24/outline";
 import "./bl.scss";
 import { useLocation } from "react-router-dom";
 import dateFormat from "dateformat";
@@ -44,10 +45,21 @@ export default function Status() {
     "ctr": "CTR NO"
   }
 
+  const downloadBLClick = () => {
+    console.log("DOWNLOAD BL CLICK");
+    // TODO (Zhi Hao): download house b/l
+  }
+
   return (
     <div className="bg-gradient-to-r from-white via-sky-100 to-sky-200 w-screen">
       <div className="grid grid-cols-2 gap-10 p-2">
-        <ShipmentCard eta={etaFormatted} pod={portOfDischarge} vesselName={vesselName} blNo={blNo} />
+        <div>
+          <ShipmentCard eta={etaFormatted} pod={portOfDischarge} vesselName={vesselName} blNo={blNo} />
+          <button type="button" className="flex items-end mt-6 ml-2 hover:underline" onClick={downloadBLClick}>
+            <DocumentArrowDownIcon className="w-7 h-7" />
+            <span className="ml-1 text-lg">Download House Bill of Lading</span>
+          </button>
+        </div>
 
         <div className="p-2 mt-2">
           <h2 className={`text-3xl font-bold text-white w-fit py-1 px-3 rounded-md ${shipmentStatusColours[shipmentStatus]}`}>{shipmentStatus}</h2>
@@ -56,7 +68,7 @@ export default function Status() {
             <h1 className="">ETA: {!eta ? "Unknown ETA" : eta}</h1>
           </div>
 
-          <div >
+          <div>
             <ul className="step-progress">
               <li className="step-progress-item is-done">
                 <strong>Shipment Departed</strong>

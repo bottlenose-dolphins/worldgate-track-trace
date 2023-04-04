@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { Card } from "react-bootstrap";
-import { ChevronDownIcon, EnvelopeIcon, EnvelopeOpenIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, EnvelopeIcon, EnvelopeOpenIcon, DocumentArrowDownIcon, DocumentIcon } from "@heroicons/react/24/outline";
 import { searchShipmentStatus } from "src/api/shipment";
 import dateFormat from "dateformat";
 import { useNavigate } from "react-router-dom";
@@ -75,6 +75,19 @@ function ShipmentCard({ item, index, setLoading }) {
     window.location.href = mailToLink;
   }
 
+  const [bLHovered, setBLHovered] = useState(false);
+  const handleMouseEnterBLHovered = () => {
+    setBLHovered(true);
+  }
+  const handleMouseLeaveBLHovered = () => {
+    setBLHovered(false);
+  }
+  const handleDownloadBLClick = (e) => {
+    e.stopPropagation();
+    console.log("DOWNLOAD BL CLICKED");
+    // TODO (Zhi Hao): download B/L 
+  }
+
   const shipmentStatusColours = {
     "unknown": "bg-gray-400",
     "early": "bg-green-400",
@@ -136,6 +149,9 @@ function ShipmentCard({ item, index, setLoading }) {
                 <span>{item.import_destination ? item.import_destination : item.export_destination}</span>
               </Card.Title>
               <Card.Subtitle className="flex justify-end">
+                <div className="w-7 h-7 mr-2" onMouseEnter={handleMouseEnterBLHovered} onMouseLeave={handleMouseLeaveBLHovered}>
+                  {bLHovered ? <DocumentArrowDownIcon className="w-7 h-7" onClick={handleDownloadBLClick} /> : <DocumentIcon className="w-7 h-7" onClick={handleDownloadBLClick} />}
+                </div>
                 <div className="w-7 h-7" onMouseEnter={handleMouseEnterMail} onMouseLeave={handleMouseLeaveMail}>
                   {mailHovered ? <EnvelopeOpenIcon className="w-7 h-7" onClick={handleMailClick} /> : <EnvelopeIcon className="w-7 h-7" onClick={handleMailClick} />}
                 </div>
