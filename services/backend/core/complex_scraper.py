@@ -65,15 +65,28 @@ def addsubscription():
 @app.route("/sendsms", methods=['POST'])
 def sendsms():
     response = invoke_http2("core_subscription", "subscription/getsubscriptions",prod, method='POST')
-    status=[]
-    for row in response:
-        containerid="OOLU4299134"
-        type="ctr"
-        direction="import"
-        scrape=scrapesubscription(containerid,type,direction)
-        status.append(scrape)
+    answer=response[0]["container_id"]
+    shipment_type="ctr"
+    direction="import"
+    data={
+        "identifier":answer,
+        "identifier_type":shipment_type,
+        "direction":direction
 
-    return status
+    }
+    response2 = invoke_http2("core_complex_scraper", "complex_scraper/scrape",prod, method='POST',json=data)
+    status=response2
+    #scrapes=scrapesubscription(answer,shipment_type,direction)
+
+    # status=[]
+    # for row in response:
+    #     containerid="OOLU4299134"
+    #     type="ctr"
+    #     direction="import"
+    #     scrape=scrapesubscription(containerid,type,direction)
+    #     status.append(scrape)
+
+    return  jsonify(status)
 
 @app.route('/scrape', methods=['POST'])
 def scrape():
