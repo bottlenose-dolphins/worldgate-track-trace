@@ -67,74 +67,75 @@ def addsubscription():
 @app.route("/sendsms", methods=['POST'])
 def sendsms():
     response = invoke_http2("core_subscription", "subscription/getsubscriptions",prod, method='POST')
-    answer=response[0]["container_id"]
-    userid=response[0]["wguser_id"]
-    subscription_status=response[0]["status"]
-    shipment_type="ctr"
-    directions="import"
-    data={
-        "identifier":answer,
-        "identifier_type":shipment_type,
-        "direction":directions
+    for i in range(len(response)):
+        container=response[i]["container_id"]
+        userid=response[i]["wguser_id"]
+        subscription_status=response[i]["status"]
+        shipment_type="ctr"
+        directions="import"
+        data={
+            "identifier":container,
+            "identifier_type":shipment_type,
+            "direction":directions
 
-    }
-    identifier = answer
-    identifier_type = shipment_type
-    direction = directions
-
-        # print("\nReceived details in JSON:", data)
-
-    if direction == "export":
-        origin = "SINGAPORE"
-
-    # Retrieve Master BL from House BL
-    if identifier_type == "bl":
-        if direction == "import":
-            master_bl, origin, import_ref_n = get_import_master_bl(identifier)
-        elif direction == "export":
-            master_bl, export_ref_n = get_export_master_bl(identifier)            
-
-        data = {
-                    "identifier": master_bl,
-                    "identifier_type": "bl"
-                }
-    
-    if identifier_type == "ctr":
-        if direction == "import":
-            master_bl, origin, import_ref_n = get_import_master_bl_ctr(identifier)
-        elif direction == "export":
-            master_bl, export_ref_n = get_export_master_bl_ctr(identifier)   
-    
-    # Retrieve shipping line's prefix
-    prefix, vendor_name = get_prefix(master_bl, direction)
-
-    # Invoke scraper microservice
-    # shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
-    shipment_info = invoke_http2("scraper_"+ prefix, prefix, prod, method="POST", json=data)
-    
-    if shipment_info:
-       
-        status = shipment_info["data"]["status"]
-
-        # Update DB with latest shipment information
-        
-
-    response2=status
-    
-    if(subscription_status==response2):
-        useriddata={
-        "wguserid":userid
         }
-        phone_number=invoke_http2("core_user", "user/getnumber",prod, method='POST', json=useriddata)
+        identifier = container
+        identifier_type = shipment_type
+        direction = directions
+
+            # print("\nReceived details in JSON:", data)
+
+        if direction == "export":
+            origin = "SINGAPORE"
+
+        # Retrieve Master BL from House BL
+        if identifier_type == "bl":
+            if direction == "import":
+                master_bl, origin, import_ref_n = get_import_master_bl(identifier)
+            elif direction == "export":
+                master_bl, export_ref_n = get_export_master_bl(identifier)            
+
+            data = {
+                        "identifier": master_bl,
+                        "identifier_type": "bl"
+                    }
         
-        account_sid = "AC7a7b489784baef97d21697b086b468ec"
-        auth_token = "fa59ca1f807aad973544790d9bf8b520"
-        client = Client(account_sid, auth_token)
-        message = client.messages.create(
-            body="There has been a status update in regards to your container",
-            from_="+15674004435",
-            to = "+65"+str(phone_number)
-            )
+        if identifier_type == "ctr":
+            if direction == "import":
+                master_bl, origin, import_ref_n = get_import_master_bl_ctr(identifier)
+            elif direction == "export":
+                master_bl, export_ref_n = get_export_master_bl_ctr(identifier)   
+        
+        # Retrieve shipping line's prefix
+        prefix, vendor_name = get_prefix(master_bl, direction)
+
+        # Invoke scraper microservice
+        # shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
+        shipment_info = invoke_http2("scraper_"+ prefix, prefix, prod, method="POST", json=data)
+        
+        if shipment_info:
+        
+            status = shipment_info["data"]["status"]
+
+            # Update DB with latest shipment information
+            
+
+        response2=status
+        
+        if(subscription_status==response2):
+            useriddata={
+            "wguserid":userid
+            }
+            phone_number=invoke_http2("core_user", "user/getnumber",prod, method='POST', json=useriddata)
+            
+            account_sid = "AC7a7b489784baef97d21697b086b468ec"
+            auth_token = "fa59ca1f807aad973544790d9bf8b520"
+            client = Client(account_sid, auth_token)
+            message = client.messages.create(
+                body="There has been a status update in regards to your container:"+identifier+" Status:"+response2,
+                from_="+15674004435",
+                to = "+65"+str(phone_number)
+                )
         
 
     return "success"
