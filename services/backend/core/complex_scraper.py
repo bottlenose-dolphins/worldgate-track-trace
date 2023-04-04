@@ -5,6 +5,8 @@ from invokes import invoke_http, invoke_http2
 from os import getenv
 from dotenv import load_dotenv
 import json
+import os
+from twilio.rest import Client
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",
@@ -66,27 +68,76 @@ def addsubscription():
 def sendsms():
     response = invoke_http2("core_subscription", "subscription/getsubscriptions",prod, method='POST')
     answer=response[0]["container_id"]
+    userid=response[0]["wguser_id"]
+    subscription_status=response[0]["status"]
     shipment_type="ctr"
-    direction="import"
+    directions="import"
     data={
         "identifier":answer,
         "identifier_type":shipment_type,
-        "direction":direction
+        "direction":directions
 
     }
-    response2 = invoke_http2("core_complex_scraper", "complex_scraper/scrape",prod, method='POST',json=data)
-    status=response2
-    #scrapes=scrapesubscription(answer,shipment_type,direction)
+    identifier = answer
+    identifier_type = shipment_type
+    direction = directions
 
-    # status=[]
-    # for row in response:
-    #     containerid="OOLU4299134"
-    #     type="ctr"
-    #     direction="import"
-    #     scrape=scrapesubscription(containerid,type,direction)
-    #     status.append(scrape)
+        # print("\nReceived details in JSON:", data)
 
-    return  jsonify(status)
+    if direction == "export":
+        origin = "SINGAPORE"
+
+    # Retrieve Master BL from House BL
+    if identifier_type == "bl":
+        if direction == "import":
+            master_bl, origin, import_ref_n = get_import_master_bl(identifier)
+        elif direction == "export":
+            master_bl, export_ref_n = get_export_master_bl(identifier)            
+
+        data = {
+                    "identifier": master_bl,
+                    "identifier_type": "bl"
+                }
+    
+    if identifier_type == "ctr":
+        if direction == "import":
+            master_bl, origin, import_ref_n = get_import_master_bl_ctr(identifier)
+        elif direction == "export":
+            master_bl, export_ref_n = get_export_master_bl_ctr(identifier)   
+    
+    # Retrieve shipping line's prefix
+    prefix, vendor_name = get_prefix(master_bl, direction)
+
+    # Invoke scraper microservice
+    # shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
+    shipment_info = invoke_http2("scraper_"+ prefix, prefix, prod, method="POST", json=data)
+    
+    if shipment_info:
+       
+        status = shipment_info["data"]["status"]
+
+        # Update DB with latest shipment information
+        
+
+    response2=status
+    
+    if(subscription_status==response2):
+        useriddata={
+        "wguserid":userid
+        }
+        phone_number=invoke_http2("core_user", "user/getnumber",prod, method='POST', json=useriddata)
+        
+        account_sid = "AC7a7b489784baef97d21697b086b468ec"
+        auth_token = "fa59ca1f807aad973544790d9bf8b520"
+        client = Client(account_sid, auth_token)
+        message = client.messages.create(
+            body="There has been a status update in regards to your container",
+            from_="+15674004435",
+            to = "+65"+str(phone_number)
+            )
+        
+
+    return "success"
 
 @app.route('/scrape', methods=['POST'])
 def scrape():
@@ -183,88 +234,6 @@ def scrape():
         }
     ), 400
 
-
-
-def scrapesubscription(identifier_number,type,shipment_direction):
-   
-    try:
-        
-        identifier = identifier_number
-        identifier_type = type
-        direction = shipment_direction
-
-        print("\nReceived details in JSON:", data)
-
-        if direction == "export":
-            origin = "SINGAPORE"
-
-        # Retrieve Master BL from House BL
-        if identifier_type == "bl":
-            if direction == "import":
-                master_bl, origin, import_ref_n = get_import_master_bl(identifier)
-            elif direction == "export":
-                master_bl, export_ref_n = get_export_master_bl(identifier)            
-
-            data = {
-                        "identifier": master_bl,
-                        "identifier_type": "bl"
-                    }
-        
-        if identifier_type == "ctr":
-            if direction == "import":
-                master_bl, origin, import_ref_n = get_import_master_bl_ctr(identifier)
-            elif direction == "export":
-                master_bl, export_ref_n = get_export_master_bl_ctr(identifier)   
-        
-        # Retrieve shipping line's prefix
-        prefix, vendor_name = get_prefix(master_bl, direction)
-
-        # Invoke scraper microservice
-        # shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
-        shipment_info = invoke_http2("scraper_"+ prefix, prefix, prod, method="POST", json=data)
-        
-        if shipment_info:
-            arrival_date = shipment_info["data"]["arrival_date"]
-            port_of_discharge = shipment_info["data"]["port_of_discharge"]
-            vessel_name = shipment_info["data"]["vessel_name"]
-            status = shipment_info["data"]["status"]
-
-            # Update DB with latest shipment information
-            if identifier_type == "bl":
-                update_shipment_info_bl(master_bl, arrival_date, port_of_discharge, vessel_name, direction)
-            elif identifier_type == "ctr":
-                update_shipment_info_cont(identifier, arrival_date, port_of_discharge, vessel_name, direction)
-            
-            # TODO: extract to function
-            if direction == "import":
-                import_delay_data = {
-                    "import_ref_n": import_ref_n
-                }
-                delay_res = invoke_http2("core_import_shipment", "import_shipment/delay", prod, method='POST', json=import_delay_data)
-                delay_status = delay_res["data"]["status"]
-            elif direction == "export":
-                export_delay_data = {
-                    "export_ref_n": export_ref_n
-                }
-                delay_res = invoke_http2("core_export_shipment", "export_shipment/delay", prod, method='POST', json=export_delay_data)
-                delay_status = delay_res["data"]["status"]
-
-            return status
-
-    except Exception as e:
-        return jsonify(
-        {
-            "code": 500,
-            "message": "Failed to scrape for shipment information because " + str(e)
-        }
-    ), 500
-
-    return jsonify(
-        {
-            "code": 400,
-            "message": "Invalid JSON input: " + str(request.get_data())
-        }
-    ), 400
 # Retrieve prefix for respective shipping line
 def get_prefix(master_bl, direction):
     data = {

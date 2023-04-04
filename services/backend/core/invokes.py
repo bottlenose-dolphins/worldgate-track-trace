@@ -15,7 +15,7 @@ DEV_IP = {
 "scraper_cord": "scraper_cord:8084",
 "scraper_cosc": "scraper_cosc:8085",
 
-"core_user" : "core_user:5002",
+"core_user" : "core_users:5002",
 "core_import" : "core_import:5003",
 "core_import_cont" : "core_import_cont:5004",
 "core_import_shipment" : "core_import_shipment:5005",
