@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { Card } from "react-bootstrap";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, EnvelopeIcon, EnvelopeOpenIcon } from "@heroicons/react/24/outline";
 import { searchShipmentStatus } from "src/api/shipment";
 import dateFormat from "dateformat";
 import { useNavigate } from "react-router-dom";
@@ -58,6 +58,23 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
 function ShipmentCard({ item, index, setLoading }) {
   const navigate = useNavigate();
 
+  const [mailHovered, setMailHovered] = useState(false);
+  const handleMouseEnterMail = () => {
+    setMailHovered(true);
+  }
+  const handleMouseLeaveMail = () => {
+    setMailHovered(false);
+  }
+  const handleMailClick = (e) => {
+    e.stopPropagation();
+    console.log("MAIL CLICKED");
+    const emailSubject = "Enquiries Regarding Shipment Container No. " + item.container_numbers[0];
+    const emailBody = `Dear Worldgate,\n\nI would like to enquire about the status of my shipment with container ${item.container_numbers[0]}.\n\n`;
+    const emailTo = "wgate@singnet.com.sg";
+    const mailToLink = `mailto:${emailTo}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+    window.location.href = mailToLink;
+  }
+
   const shipmentStatusColours = {
     "unknown": "bg-gray-400",
     "early": "bg-green-400",
@@ -106,19 +123,23 @@ function ShipmentCard({ item, index, setLoading }) {
 
   return (
     <div role="button" className="mb-2" onClick={handleClick} onKeyDown={handleClick} tabIndex={0}>
-      <Card className={`mb-2 w-full 2xl:w-3/5 ${shipmentStatusColours[status]}`} style={{ borderRadius: "10px" }} key={index}>
+      <Card className={`mb-2 w-full 2xl:w-4/5 ${shipmentStatusColours[status]}`} style={{ borderRadius: "10px" }} key={index}>
         <Card.Body>
           <div className="grid grid-cols-2 text-white p-4">
-            <div className="flex flex-col justify-center">
-              <Card.Title className="text-5xl justify-start mb-2">{eta.slice(0, 6)}</Card.Title>
-              <Card.Subtitle className="text-xl justify-start">{eta.slice(-4)}</Card.Subtitle>
+            <div className="flex flex-col">
+              <Card.Title className="text-4xl justify-start mb-2">{eta}</Card.Title>
+              <Card.Subtitle className="text-xl justify-start">{item.container_numbers[0]}</Card.Subtitle>
             </div>
-            <div className="flex flex-col justify-center">
+            <div className="flex flex-col">
               <Card.Title className="flex justify-end mb-2" style={{ alignItems: "center" }}>
                 <img className="h-10 mr-2" src={locationWhite} alt="shipping-icon" />
                 <span>{item.import_destination ? item.import_destination : item.export_destination}</span>
               </Card.Title>
-              <Card.Subtitle className="text-xl flex justify-end">{item.container_numbers[0]}</Card.Subtitle>
+              <Card.Subtitle className="flex justify-end">
+                <div className="w-7 h-7" onMouseEnter={handleMouseEnterMail} onMouseLeave={handleMouseLeaveMail}>
+                  {mailHovered ? <EnvelopeOpenIcon className="w-7 h-7" onClick={handleMailClick} /> : <EnvelopeIcon className="w-7 h-7" onClick={handleMailClick} />}
+                </div>
+              </Card.Subtitle>
             </div>
           </div>
         </Card.Body>
