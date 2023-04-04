@@ -26,7 +26,8 @@ DEV_IP = {
 "core_view_all" : "core_view_all:5010",
 "core_prefix" : "core_prefix:5011",
 "core_vendor_mast" : "core_vendor_mast:5012",
-"core_subscription" : "core_subscription:5013"
+"core_subscription" : "core_subscription:5013",
+"core_scheduler" : "core_scheduler:5014"
 }
 
 
