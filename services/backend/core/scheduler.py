@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import json
 import os
 import time
+import threading
 import schedule
 from twilio.rest import Client
 
@@ -27,15 +28,26 @@ print("********")
 
 db = SQLAlchemy(app)
 
+def call_function_every_24_hours():
+    # Schedule the function_to_call() to run every 24 hours
+    schedule.every(10).seconds.do(invoke_http2("core_complex_scraper","complex_scraper/sendsms",prod,method="POST"))
+
+    while True:
+        # Run the scheduled jobs
+        schedule.run_pending()
+        # Sleep for 1 second to avoid excessive CPU usage
+        time.sleep(1)
+
+# Start the scheduling in a separate thread
+t = threading.Thread(target=call_function_every_24_hours)
+t.daemon = True
+t.start()
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5014, debug=True)
     # app.run(host='0.0.0.0', debug=True)
-    
-schedule.every(24).hours.do(invoke_http2("core_complex_scraper","complex_scraper/sendsms",prod,method="POST"))
 
-while True:
-    schedule.run_pending()
-    time.sleep(1)
 
 
 
