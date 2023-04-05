@@ -150,8 +150,7 @@ def sendsms():
                 "containerid":identifier,
                 "status":response2
             }
-            update = invoke_http2("core_subscription", "subscription/update",prod, method='POST',json=updatedata)
-
+            
             useriddata={
             "wguserid":userid
             }
@@ -165,6 +164,7 @@ def sendsms():
                 from_="+15674004435",
                 to = "+65"+str(phone_number)
                 )
+            update = invoke_http2("core_subscription", "subscription/update",prod, method='POST',json=updatedata)
         
 
     return "success"
