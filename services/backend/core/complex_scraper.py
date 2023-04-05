@@ -64,6 +64,29 @@ def addsubscription():
         ), 500
     
         return response
+
+@app.route("/deletesubscription", methods=['POST'])
+def addsubscription():
+     if request.is_json:
+        try:
+            data = request.get_json()
+            containerid=data["containerid"]
+            jsondata={
+    
+                "containerid":containerid
+             
+            }
+            response = invoke_http2("core_subscription", "subscription/delete",prod, method='POST', json=jsondata)
+            print(response)
+        except Exception as e:
+            return jsonify(
+            {
+                "code": 500,
+                "message": e
+            }
+        ), 500
+    
+        return response
 @app.route("/sendsms", methods=['POST'])
 def sendsms():
     response = invoke_http2("core_subscription", "subscription/getsubscriptions",prod, method='POST')

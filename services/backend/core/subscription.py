@@ -109,49 +109,29 @@ def health_check():
   
 # Retrieve IMPORT_REF_N using WGUSER_ID -> Returning all the IMPORT_REF_N according to WGUSER_ID and sorted by latest to earliest using DELIVERY_D
 @app.route("/subscription/delete", methods=['POST'])
-def get_import_ref_n_using_wguser_id():
-    try:
+def deleteuser():
+    
         data = request.get_json()
-        wguser_id = data['wguser_id']
-        output = Import.query.filter_by(wguser_id=wguser_id).all()
-
-        if len(output):
-            result = [
-                    {
-                        "import_ref_n": a_row.import_ref_n,
-                        "import_destination": "Singapore",
-                        "type": "import"
-                    }
-            for a_row in output]
-
-            return jsonify(
-                {
-                    "code":200,
-                    "data":
-                    {
-                        "output" : result
-                    }
-                }
-            ),200
-        
-        else:
-            return jsonify(
-                {
-                    "code":200,
-                    "data":
-                    {
-                        "output" : "No details retrieved with the wguser_id : " + wguser_id
-                    }
-                }
-            ),200
-
-    except Exception as e:
-        return jsonify(
-            {
+        containerid = data['containerid']
+        subscription = Subscription.query.filter_by(container_id=containerid).first()
+       
+        try:
+             db.session.delete(subscription)
+             db.session.commit()
+             return jsonify({
+                "code": 201,
+                "message": " Subscription removed "
+            }), 201
+       
+        except Exception as err:
+            return jsonify({
                 "code": 500,
-                "message": "Failed to retrieve shipment information: " + str(e)
-            }
-        ), 500
+                "message": "Subscription removal unsuccessful",
+                "data": str(err)
+            }), 500
+
+      
+        
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5013, debug=True)

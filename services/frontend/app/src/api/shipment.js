@@ -51,6 +51,26 @@ export const addsubscription = async(userid, containerid, status) => {
         return error.response.data;
     }
 }
+export const deletesubscription = async( containerid) => {
+    try {
+        const authRes = await authenticate();
+        if (authRes.code === 200) {
+            const res = await axiosComplexInstance.post("/deletesubscription", {
+              
+                "containerid": containerid
+               
+            });
+            if (res) {
+                return res.data;
+            }
+            throw new Error("No data returned from backend");
+        }
+        throw new Error("Request Unauthorised");
+    } catch (error) {
+        console.log(error.response.data.message);
+        return error.response.data;
+    }
+}
 
 export const getImportShipments = async() => {
     try {
