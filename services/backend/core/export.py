@@ -71,7 +71,7 @@ def get_export_ref_n():
 
 # Retrieve House B/L by EXPORT_REF_N
 @app.route("/export/hbl", methods=['POST'])
-def get_export_ref_n():
+def get_hbl():
     data = request.get_json()
     export_ref_n = data["export_ref_n"]
     hbl_n = Export.query.filter_by(export_ref_n=export_ref_n).first().hbl_n

@@ -65,7 +65,7 @@ def get_import_ref_n():
 
 # Retrieve House B/L by IMPORT_REF_N
 @app.route("/import/hbl", methods=['POST'])
-def get_import_ref_n():
+def get_hbl():
     data = request.get_json()
     import_ref_n = data["import_ref_n"]
     hbl_n = Import.query.filter_by(import_ref_n=import_ref_n).first().hbl_n
