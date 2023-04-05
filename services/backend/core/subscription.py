@@ -130,6 +130,29 @@ def deleteuser():
                 "data": str(err)
             }), 500
 
+@app.route("/subscription/update", methods=['POST'])
+def updateuser():
+    
+        data = request.get_json()
+        containerid = data['containerid']
+        status=data["status"]
+        subscription = Subscription.query.filter_by(container_id=containerid).first()
+        subscription.status=status
+       
+        try:
+             db.session.commit()
+             return jsonify({
+                "code": 201,
+                "message": " status updated "
+            }), 201
+       
+        except Exception as err:
+            return jsonify({
+                "code": 500,
+                "message": "Subscription status update unsuccessful",
+                "data": str(err)
+            }), 500
+
       
         
 

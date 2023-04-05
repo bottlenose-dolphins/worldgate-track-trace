@@ -145,7 +145,13 @@ def sendsms():
 
         response2=status
         
-        if(subscription_status==response2):
+        if(subscription_status!=response2):
+            updatedata={
+                "containerid":identifier,
+                "status":response2
+            }
+            update = invoke_http2("core_subscription", "subscription/update",prod, method='POST',json=updatedata)
+
             useriddata={
             "wguserid":userid
             }
