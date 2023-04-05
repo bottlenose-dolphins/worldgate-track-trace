@@ -160,6 +160,18 @@ services:
     ports:
       - 5013:5013
 
+  core_scheduler:
+    container_name: core_scheduler
+    build:
+      context: ./services/backend/core
+      dockerfile: Dockerfile-scheduler-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
+    ports:
+      - 5014:5014
+
 #  ____  ____   __   __ _  ____  ____  __ _  ____ 
 # (  __)(  _ \ /  \ (  ( \(_  _)(  __)(  ( \(    \
 #  ) _)  )   /(  O )/    /  )(   ) _) /    / ) D (

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { searchShipmentStatus ,addsubscription} from "src/api/shipment";
+import { searchShipmentStatus ,addsubscription, deletesubscription} from "src/api/shipment";
 import {authenticate} from "src/api/config"
 import dateFormat from "dateformat";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ import locationWhite from "../../img/locationWhite.png";
 export default function ViewShipmentComponent({ title, data, setLoading }) {
   function ShipmentButton({item}) {
     const subscribe = async () => {
-      let userid=user;
+      const userid=user;
       const directionType = item.type.toLowerCase();
       const containerNumber = item.container_numbers[0];
       console.log(directionType);
@@ -37,15 +37,33 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
         }
         }
       }
-      catch{
-
+      catch (err) {
+        console.log(err);
+      }  
+    }
+    const unsubscribe = async () => {
+      const directionType = item.type.toLowerCase();
+      const containerNumber = item.container_numbers[0];
+      try {
+          const response2 = await deletesubscription(containerNumber);
+          if (response2.code !== 200) {
+            throw new Error("No status found");
+        }
+          else if (response2.code === 200) {
+          const result = response2.data;
+          console.log(result)
+        }
+      }
+      catch (err) {
+        console.log(err);
       }
       
 
     }
   
     return(
-      <button onClick={subscribe} type="button" className="inline-flex items-center px-5 py-2.5 text-xs  text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> 
+      <div className="">
+      <button onClick={subscribe} type="button" className="mt-2 ml-2 mb-2 inline-flex items-center px-5 py-2.5 text-xs  text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> 
           <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -58,6 +76,17 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
       </svg>
       Subscribe
         </button>
+        <br/>
+        <button onClick={unsubscribe} type="button" className="mt-2 ml-2 mb-2 inline-flex items-center px-5 py-2.5 text-xs  text-center text-white bg-red-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"> 
+        <svg className="mr-2" fill="#FFFFFF" height="20px" width="20px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" 
+        xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 283.194 283.194" 
+        xmlSpace="preserve"><g id="SVGRepo_bgCarrier" strokeWidth="0"/><g id="SVGRepo_tracerCarrier" 
+        strokeLinecap="round" strokeLinejoin="round"/><g id="SVGRepo_iconCarrier"> <g> 
+          <path d="M141.597,32.222c-60.31,0-109.375,49.065-109.375,109.375s49.065,109.375,109.375,109.375s109.375-49.065,109.375-109.375 S201.907,32.222,141.597,32.222z M50.222,141.597c0-50.385,40.991-91.375,91.375-91.375c22.268,0,42.697,8.01,58.567,21.296 L71.517,200.164C58.232,184.293,50.222,163.865,50.222,141.597z M141.597,232.972c-21.648,0-41.558-7.572-57.232-20.2 L212.772,84.366c12.628,15.674,20.2,35.583,20.2,57.231C232.972,191.982,191.981,232.972,141.597,232.972z"/>
+          <path d="M141.597,0C63.52,0,0,63.52,0,141.597s63.52,141.597,141.597,141.597s141.597-63.52,141.597-141.597S219.674,0,141.597,0z M141.597,265.194C73.445,265.194,18,209.749,18,141.597S73.445,18,141.597,18s123.597,55.445,123.597,123.597 S209.749,265.194,141.597,265.194z"/> </g> </g></svg>
+       Unsubscribe
+        </button>
+        </div>
     )
     
   }
@@ -111,7 +140,7 @@ console.log(user)
           {items.length === 0 && <div className="mx-1">No shipments found</div>}
           {items.length > 0 && items.map((item, index) => {
             return (
-              <div>
+              <div className="inline-flex">
               <ShipmentCard key={index} item={item} index={index} setLoading={setLoading} />
               <ShipmentButton item={item}/>
               </div>
@@ -168,7 +197,7 @@ function ShipmentCard({ item, index, setLoading }) {
 
   return (
     <div role="button" className="mb-2" tabIndex={0}>
-      <Card onClick={handleClick} onKeyDown={handleClick} className="mb-2 w-full 2xl:w-3/5" style={{ backgroundColor: "#217BF4", borderRadius: "10px" }} key={index}>
+      <Card onClick={handleClick} onKeyDown={handleClick} className="mb-2 w-full" style={{ backgroundColor: "#217BF4", borderRadius: "10px" }} key={index}>
         <Card.Body>
           <div className="grid grid-cols-2 text-white p-4">
             <div className="flex flex-col justify-center">

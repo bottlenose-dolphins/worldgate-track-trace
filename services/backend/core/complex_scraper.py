@@ -66,7 +66,7 @@ def addsubscription():
         return response
 
 @app.route("/deletesubscription", methods=['POST'])
-def addsubscription():
+def deletesubscription():
      if request.is_json:
         try:
             data = request.get_json()
@@ -135,7 +135,7 @@ def sendsms():
         # Invoke scraper microservice
         # shipment_info = invoke_http(scraper_url + prefix, method='POST', json=data)
         shipment_info = invoke_http2("scraper_"+ prefix, prefix, prod, method="POST", json=data)
-        
+        status=""
         if shipment_info:
         
             status = shipment_info["data"]["status"]
@@ -167,7 +167,10 @@ def sendsms():
             update = invoke_http2("core_subscription", "subscription/update",prod, method='POST',json=updatedata)
         
 
-    return "success"
+    return jsonify({
+                "code": 200,
+                "message": "success"
+            }),200
 
 @app.route('/scrape', methods=['POST'])
 def scrape():
@@ -444,6 +447,24 @@ def get_export_master_bl_ctr(container_number):
     master_bl = export_ref_res["data"]["master_bl"]
 
     return master_bl, export_ref_n
+
+
+
+# def call_function_every_24_hours():
+#     # Schedule the function_to_call() to run every 24 hours
+#     # schedule.every(10).seconds.do(invoke_http2("core_complex_scraper","complex_scraper/sendsms",prod,method="POST"))
+#     schedule.every(10).seconds.do(sendsms())
+
+#     while True:
+#         # Run the scheduled jobs
+#         schedule.run_pending()
+#         # Sleep for 1 second to avoid excessive CPU usage
+#         time.sleep(1)
+
+# # Start the scheduling in a separate thread
+# t = threading.Thread(target=call_function_every_24_hours)
+# t.daemon = True
+# t.start()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5009, debug=True)

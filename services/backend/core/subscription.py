@@ -6,6 +6,8 @@ from datetime import datetime
 from os import getenv
 from sqlalchemy.exc import IntegrityError
 from dotenv import load_dotenv
+# import cx_Oracle
+# cx_Oracle.init_oracle_client(lib_dir=r"D:\oracle\instantclient_21_8") #point this to your local installation of the oracle DB files
 
 load_dotenv()
 app = Flask(__name__)
@@ -38,6 +40,15 @@ class Subscription(db.Model):
             "status": self.status,
             "wguser_id": self.wguser_id
         }
+    
+def validate_subscription(containerid):
+    existing_subscription = Subscription.query.filter_by(container_id=containerid).first()
+    if existing_subscription:
+        return jsonify({
+            "code": 401,
+            "message": "Already Subscribed to this Container Number!"
+        }), 404
+    return None
 
 # Retrieve IMPORT_REF_N by House B/L
 @app.route("/subscription/add", methods=['POST'])
@@ -46,6 +57,10 @@ def insert_subscription():
     user_id = data["userid"]
     containerid=data["containerid"]
     status=data["status"]
+
+    if validate_subscription(containerid) is not None:
+        return validate_subscription(containerid)
+    
     new_subscription = Subscription(user_id,containerid,status)
 
     try:
@@ -119,9 +134,9 @@ def deleteuser():
              db.session.delete(subscription)
              db.session.commit()
              return jsonify({
-                "code": 201,
+                "code": 200,
                 "message": " Subscription removed "
-            }), 201
+            }), 200
        
         except Exception as err:
             return jsonify({

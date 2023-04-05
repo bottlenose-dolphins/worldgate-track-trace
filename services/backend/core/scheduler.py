@@ -15,33 +15,46 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",
      supports_credentials=True, expose_headers="Set-Cookie")
 
-load_dotenv()
-app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# load_dotenv()
+# app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-print(getenv('SQLALCHEMY_DATABASE_URI'))
+# print(getenv('SQLALCHEMY_DATABASE_URI'))
 
-prod = getenv("prod")
+prod = "0"
 print("prod type: ", type(prod))
 
-print("********")
+# print("********")
 
-db = SQLAlchemy(app)
+# db = SQLAlchemy(app)
 
-def call_function_every_24_hours():
-    # Schedule the function_to_call() to run every 24 hours
-    schedule.every(10).seconds.do(invoke_http2("core_complex_scraper","complex_scraper/sendsms",prod,method="POST"))
+def function_to_call():
+    status=invoke_http2("core_complex_scraper","/sendsms",prod,method="POST")
+    t=threading.Timer(24*60*60, function_to_call)
+    t.daemon = True
+    t.start()
 
-    while True:
-        # Run the scheduled jobs
-        schedule.run_pending()
-        # Sleep for 1 second to avoid excessive CPU usage
-        time.sleep(1)
 
-# Start the scheduling in a separate thread
-t = threading.Thread(target=call_function_every_24_hours)
+t = threading.Timer(0, function_to_call)
 t.daemon = True
 t.start()
+
+# def call_function_every_24_hours():
+#     # Schedule the function_to_call() to run every 24 hours
+#     schedule.every(10).seconds.do(invoke_http2("core_complex_scraper","complex_scraper/sendsms",prod,method="POST"))
+
+#     while True:
+#         # Run the scheduled jobs
+#         schedule.run_pending()
+#         # Sleep for 1 second to avoid excessive CPU usage
+#         time.sleep(1)
+
+# # Start the scheduling in a separate thread
+# t = threading.Thread(target=call_function_every_24_hours)
+# t.daemon = True
+# t.start()
+
+
 
 
 if __name__ == '__main__':
