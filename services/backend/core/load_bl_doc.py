@@ -73,7 +73,7 @@ def get_container_hbl(data):
     identifier_type = data["identifier_type"]
     direction = data["direction"]
 
-    if identifier_type == "cont":
+    if identifier_type == "ctr":
         if direction == "import":
             # find IMPORT_REF_N by CONT_N in IMPORT_REF_CONT
             data = {
