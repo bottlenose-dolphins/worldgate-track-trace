@@ -6,6 +6,7 @@ import { DocumentArrowDownIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/2
 import "./bl.scss";
 import { useLocation } from "react-router-dom";
 import dateFormat from "dateformat";
+import { toast } from "react-toastify";
 import locationWhite from "../../img/locationWhite.png";
 
 export default function Status() {
@@ -137,6 +138,7 @@ function ShipmentCard({ eta, pod, vesselName, blNo }) {
 function ExpandableDocument({ identifier, identifierType, direction }) { // blNo, type, direction
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
   const [previewUrl, setPreviewUrl] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     getPreviewUrl();
@@ -147,13 +149,13 @@ function ExpandableDocument({ identifier, identifierType, direction }) { // blNo
         const mockIdentifer = "YMLU3434431";
         const mockIdentifierType = "cont";
         const mockDirection = "export";
-        const res = await getBLPreviewUrl(mockIdentifer, mockIdentifierType, mockDirection);
-        // const res = await getBLPreviewUrl(identifier, identifierType, direction);
+        // const res = await getBLPreviewUrl(mockIdentifer, mockIdentifierType, mockDirection);
+        const res = await getBLPreviewUrl(identifier, identifierType, direction);
 
         console.log(res);
         setPreviewUrl(res);
       } catch (err) {
-        console.log(err);
+        setError("Error: Failed to retrieve House Bill of Lading document.");
       }
     }
   }, []);
@@ -168,14 +170,17 @@ function ExpandableDocument({ identifier, identifierType, direction }) { // blNo
       const mockIdentifer = "SMU-1234";
       const mockIdentifierType = "bl";
       const mockDirection = "import";
-      const response = await downloadBL(mockIdentifer, mockIdentifierType, mockDirection);
-      // const response = await downloadBL(identifier, identifierType, direction);
+      // const response = await downloadBL(mockIdentifer, mockIdentifierType, mockDirection);
+      const response = await downloadBL(identifier, identifierType, direction);
 
       const blob = new Blob([response], { type: "application/pdf" });
       FileSaver.saveAs(blob, "houseBL.pdf");
       return response;
     } catch (err) {
       console.log(err);
+      toast.error(
+        "Error: Failed to retrieve House Bill of Lading document.",
+      );
       return err;
     }
   }
@@ -189,7 +194,8 @@ function ExpandableDocument({ identifier, identifierType, direction }) { // blNo
           {isPreviewVisible ? <EyeSlashIcon className="ml-1 w-7 h-7" /> : <EyeIcon className="ml-1 w-7 h-7" />}
         </button>
       </div>
-      {isPreviewVisible && <EmbeddedDocument documentUrl={previewUrl} />}
+      {error !== null && isPreviewVisible && <div className="mt-4 ml-2 text-red-600">{error}</div>}
+      {error == null && isPreviewVisible && <EmbeddedDocument documentUrl={previewUrl} />}
     </div>
   )
 }

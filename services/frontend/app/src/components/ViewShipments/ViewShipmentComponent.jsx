@@ -4,6 +4,9 @@ import { ChevronDownIcon, EnvelopeIcon, EnvelopeOpenIcon, DocumentArrowDownIcon,
 import { searchShipmentStatus } from "src/api/shipment";
 import dateFormat from "dateformat";
 import { useNavigate } from "react-router-dom";
+import FileSaver from "file-saver";
+import { downloadBL } from "src/api/blDocument";
+import { toast } from "react-toastify";
 import locationWhite from "../../img/locationWhite.png";
 
 export default function ViewShipmentComponent({ title, data, setLoading }) {
@@ -82,10 +85,26 @@ function ShipmentCard({ item, index, setLoading }) {
   const handleMouseLeaveBLHovered = () => {
     setBLHovered(false);
   }
-  const handleDownloadBLClick = (e) => {
+  const handleDownloadBLClick = async (e) => {
     e.stopPropagation();
-    console.log("DOWNLOAD BL CLICKED");
-    // TODO (Zhi Hao): download B/L 
+    try {
+      // TODO (Charmaine): remove dummy data
+      const mockIdentifer = "SMU-1234";
+      const mockIdentifierType = "bl";
+      const mockDirection = "import";
+      // const response = await downloadBL(mockIdentifer, mockIdentifierType, mockDirection);
+      const response = await downloadBL(item.container_numbers[0], "ctr", item.type);
+
+      const blob = new Blob([response], { type: "application/pdf" });
+      FileSaver.saveAs(blob, "houseBL.pdf");
+      return response;
+    } catch (err) {
+      console.log(err);
+      toast.error(
+        "Error: Failed to retrieve House Bill of Lading document.",
+      );
+      return err;
+    }
   }
 
   const shipmentStatusColours = {

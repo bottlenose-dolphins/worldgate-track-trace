@@ -20,8 +20,7 @@ export const downloadBL = async (identifier, identifierType, direction) => {
         }
         throw new Error("No data returned from backend");
     } catch (error) {
-        console.log(error.response.data.message);
-        return error.response.data;
+        throw new Error();
     }
 }
 
@@ -42,6 +41,6 @@ export const getBLPreviewUrl = async (identifier, identifierType, direction) => 
         }
         throw new Error("No data returned from backend");
     } catch (error) {
-        return error.response.data;
+        throw new Error();
     }
 }
