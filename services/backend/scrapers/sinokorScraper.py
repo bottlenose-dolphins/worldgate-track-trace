@@ -42,7 +42,7 @@ def sinokorScraper():
         driver.find_element(By.XPATH, '/html/body/div[3]/div/div[3]/div[2]/div[2]/div/div[2]/div/span[2]/button').click()
         time.sleep(5)
 
-        if identifier_type == "CTR":
+        if identifier_type == "ctr":
             time.sleep(5)
             driver.find_element(By.XPATH, '/html/body/div[5]/div/div/div[2]/div/div[2]/div/table/tbody/tr/td[1]/a').click()
             time.sleep(5)
