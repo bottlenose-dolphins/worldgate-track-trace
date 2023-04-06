@@ -4,9 +4,11 @@ from flask_sqlalchemy import SQLAlchemy
 from invokes import invoke_http, invoke_http2
 from os import getenv
 from dotenv import load_dotenv
+from flask_cors import CORS
 import boto3
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 s3 = boto3.client('s3')
 
