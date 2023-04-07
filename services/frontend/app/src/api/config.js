@@ -5,6 +5,8 @@ const { REACT_APP_API_ENDPOINT } = process.env;
 export const USER_ENDPOINT = `http://${REACT_APP_API_ENDPOINT}:5002/user`;
 export const COMPLEX_SCRAPER_ENDPOINT = `http://${REACT_APP_API_ENDPOINT}:5009`;
 export const VIEW_ALL_SHIPMENTS_ENDPOINT = `http://${REACT_APP_API_ENDPOINT}:5010`;
+export const SHIPMENT_UNLOADING_STATUS_ENDPOINT = `http://${REACT_APP_API_ENDPOINT}:5013`;
+export const BL_DOCUMENT_ENDPOINT = `http://${REACT_APP_API_ENDPOINT}:5014/bl_doc`;
 
 // to extract csrf_access_token, which should then be put into request header ("X-CSRF-TOKEN")
 export function getCookie(name) {

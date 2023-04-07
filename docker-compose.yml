@@ -15,7 +15,7 @@ services:
     container_name: core_users
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-user-dev
+      dockerfile: dockerfiles/Dockerfile-user-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -27,7 +27,7 @@ services:
     container_name: core_import
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-import-dev
+      dockerfile: dockerfiles/Dockerfile-import-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -39,7 +39,7 @@ services:
     container_name: core_import_cont
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-import-cont-dev
+      dockerfile: dockerfiles/Dockerfile-import-cont-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -51,7 +51,7 @@ services:
     container_name: core_import_shipment
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-import-shipment-dev
+      dockerfile: dockerfiles/Dockerfile-import-shipment-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -63,7 +63,7 @@ services:
     container_name: core_export
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-export-dev
+      dockerfile: dockerfiles/Dockerfile-export-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -75,7 +75,7 @@ services:
     container_name: core_export_cont
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-export-cont-dev
+      dockerfile: dockerfiles/Dockerfile-export-cont-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -87,7 +87,7 @@ services:
     container_name: core_export_shipment
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-export-shipment-dev
+      dockerfile: dockerfiles/Dockerfile-export-shipment-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -100,7 +100,7 @@ services:
     container_name: core_complex_scraper
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-complex-scraper-dev
+      dockerfile: dockerfiles/Dockerfile-complex-scraper-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -113,7 +113,7 @@ services:
     container_name: core_view_all
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-view-all-dev
+      dockerfile: dockerfiles/Dockerfile-view-all-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -126,7 +126,7 @@ services:
     container_name: core_prefix
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-prefix-dev
+      dockerfile: dockerfiles/Dockerfile-prefix-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -139,7 +139,7 @@ services:
     container_name: core_vendor_mast
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-vendor-mast-dev
+      dockerfile: dockerfiles/Dockerfile-vendor-mast-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -147,6 +147,32 @@ services:
       - SQLALCHEMY_DATABASE_URI=${DB_URI}
     ports:
       - 5012:5012
+
+  core_unloading_status:
+    container_name: core_unloading_status
+    build:
+      context: ./services/backend/core
+      dockerfile: dockerfiles/Dockerfile-unloading-status-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      # - PYTHONUNBUFFERED=1
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
+    ports:
+      - 5013:5013
+
+  core_load_bl_doc:
+    container_name: core_load_bl_doc
+    build:
+      context: ./services/backend/core
+      dockerfile: dockerfiles/Dockerfile-load-bl-doc-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      # - PYTHONUNBUFFERED=1
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
+    ports:
+      - 5014:5014
 
 #  ____  ____   __   __ _  ____  ____  __ _  ____ 
 # (  __)(  _ \ /  \ (  ( \(_  _)(  __)(  ( \(    \
@@ -157,7 +183,7 @@ services:
     container_name: web
     build:
       context: ./services/frontend
-      dockerfile: Dockerfile-dev
+      dockerfile: dockerfiles/Dockerfile-dev
       args:
         - NODE_ENV=development
     networks:
@@ -185,7 +211,7 @@ services:
     container_name: scraper_ymlu
     build:
       context: ./services/backend/scrapers
-      dockerfile: Dockerfile-Ymlu-dev
+      dockerfile: dockerfiles/Dockerfile-Ymlu-dev
       shm_size: '300mb'
     networks:
       - tracktrace_test_network
@@ -199,7 +225,7 @@ services:
     container_name: scraper_good
     build:
       context: ./services/backend/scrapers
-      dockerfile: Dockerfile-Good-dev
+      dockerfile: dockerfiles/Dockerfile-Good-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -214,7 +240,7 @@ services:
     build:
       context: ./services/backend/scrapers
       shm_size: '1gb'
-      dockerfile: Dockerfile-Kmtc-dev
+      dockerfile: dockerfiles/Dockerfile-Kmtc-dev
     shm_size: '1gb'
     networks:
       - tracktrace_test_network
@@ -228,7 +254,7 @@ services:
     build:
       context: ./services/backend/scrapers
       shm_size: '1gb'
-      dockerfile: Dockerfile-One-dev
+      dockerfile: dockerfiles/Dockerfile-One-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -242,7 +268,7 @@ services:
     build:
       context: ./services/backend/scrapers
       shm_size: '1gb'
-      dockerfile: Dockerfile-Cosco-dev
+      dockerfile: dockerfiles/Dockerfile-Cosco-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -256,7 +282,7 @@ services:
     build:
       context: ./services/backend/scrapers
       shm_size: '1gb'
-      dockerfile: Dockerfile-Cord-dev
+      dockerfile: dockerfiles/Dockerfile-Cord-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -280,5 +306,4 @@ services:
     shm_size: '1gb'
     ports:
       - 8086:8086
-
 
