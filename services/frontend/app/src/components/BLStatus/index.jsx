@@ -55,7 +55,8 @@ export default function BLStatus() {
           isFcl: result.is_fcl,
           containerReleaseDateTime: result.cont_released,
           deliveryTakenDateTime: result.del_taken,
-          shippingLine: result.shipping_line } })
+          shippingLine: result.shipping_line,
+          direction: directionType } })
       }
     }
     catch (err) {

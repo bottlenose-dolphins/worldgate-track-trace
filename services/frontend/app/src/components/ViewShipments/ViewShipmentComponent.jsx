@@ -1,9 +1,12 @@
 import React, { useState, useMemo } from "react";
 import { Card } from "react-bootstrap";
-import { ChevronDownIcon, EnvelopeIcon, EnvelopeOpenIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, EnvelopeIcon, EnvelopeOpenIcon, DocumentArrowDownIcon, DocumentIcon } from "@heroicons/react/24/outline";
 import { searchShipmentStatus } from "src/api/shipment";
 import dateFormat from "dateformat";
 import { useNavigate } from "react-router-dom";
+import FileSaver from "file-saver";
+import { downloadBL } from "src/api/blDocument";
+import { toast } from "react-toastify";
 import locationWhite from "../../img/locationWhite.png";
 
 export default function ViewShipmentComponent({ title, data, setLoading }) {
@@ -75,6 +78,35 @@ function ShipmentCard({ item, index, setLoading }) {
     window.location.href = mailToLink;
   }
 
+  const [bLHovered, setBLHovered] = useState(false);
+  const handleMouseEnterBLHovered = () => {
+    setBLHovered(true);
+  }
+  const handleMouseLeaveBLHovered = () => {
+    setBLHovered(false);
+  }
+  const handleDownloadBLClick = async (e) => {
+    e.stopPropagation();
+    try {
+      // TODO (Charmaine): remove dummy data
+      const mockIdentifer = "SMU-1234";
+      const mockIdentifierType = "bl";
+      const mockDirection = "import";
+      // const response = await downloadBL(mockIdentifer, mockIdentifierType, mockDirection);
+      const response = await downloadBL(item.container_numbers[0], "ctr", item.type);
+
+      const blob = new Blob([response], { type: "application/pdf" });
+      FileSaver.saveAs(blob, "houseBL.pdf");
+      return response;
+    } catch (err) {
+      console.log(err);
+      toast.error(
+        "Error: Failed to retrieve House Bill of Lading document.",
+      );
+      return err;
+    }
+  }
+
   const shipmentStatusColours = {
     "unknown": "bg-gray-400",
     "early": "bg-green-400",
@@ -136,6 +168,9 @@ function ShipmentCard({ item, index, setLoading }) {
                 <span>{item.import_destination ? item.import_destination : item.export_destination}</span>
               </Card.Title>
               <Card.Subtitle className="flex justify-end">
+                <div className="w-7 h-7 mr-2" onMouseEnter={handleMouseEnterBLHovered} onMouseLeave={handleMouseLeaveBLHovered}>
+                  {bLHovered ? <DocumentArrowDownIcon className="w-7 h-7" onClick={handleDownloadBLClick} /> : <DocumentIcon className="w-7 h-7" onClick={handleDownloadBLClick} />}
+                </div>
                 <div className="w-7 h-7" onMouseEnter={handleMouseEnterMail} onMouseLeave={handleMouseLeaveMail}>
                   {mailHovered ? <EnvelopeOpenIcon className="w-7 h-7" onClick={handleMailClick} /> : <EnvelopeIcon className="w-7 h-7" onClick={handleMailClick} />}
                 </div>
