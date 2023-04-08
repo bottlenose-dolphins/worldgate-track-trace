@@ -56,10 +56,9 @@ export default function BLStatus() {
           containerReleaseDateTime: result.cont_released,
           deliveryTakenDateTime: result.del_taken,
           shippingLine: result.shipping_line,
+          direction: directionType,
           cords: result.cords,
           destinationCords: result.destination_cords} })
-
-
           console.log("*** appended values")
           console.log(result.cords)
           console.log(result.destination_cords)
