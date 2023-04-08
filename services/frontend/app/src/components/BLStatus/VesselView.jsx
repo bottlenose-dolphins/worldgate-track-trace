@@ -1,4 +1,5 @@
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";
+import shippingIcon from "../../img/freight.png";
 
 const { REACT_APP_GMAPS_KEY } = process.env;
 
@@ -6,6 +7,12 @@ const containerStyle = {
   width: "800px",
   height: "600px"
 };
+
+const icon = {
+  url: "../../img/freight.png", // url
+};
+
+// "https://cdn-icons-png.flaticon.com/128/1656/1656475.png"
 
 const center = {
   lat: -3.745,
@@ -23,13 +30,12 @@ function VesselView({ originCords, destinationCords }) {
     <LoadScript googleMapsApiKey={REACT_APP_GMAPS_KEY}>
       <GoogleMap
         mapContainerStyle={containerStyle}
-        // center={center}
-        zoom={1}
+        zoom={5}
         center={{ lat: originLat, lng: originLong }}
       >
-        <Marker position={{ lat: originLat, lng: originLong }} />
-        {/* <Marker position={center} /> */}
-        {/* <Marker position={{ lat: destinationLat, lng: destinationLong }} />  */}
+        <MarkerF position={{ lat: originLat, lng: originLong }} 
+        icon={shippingIcon}/> 
+        <MarkerF position={{ lat: destLat, lng: destLong }} /> 
         { /* Child components, such as markers, info windows, etc. */}
       </GoogleMap>
     </LoadScript>
