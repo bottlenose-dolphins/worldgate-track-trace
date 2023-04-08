@@ -160,6 +160,20 @@ services:
       - SQLALCHEMY_DATABASE_URI=${DB_URI}
     ports:
       - 5013:5013
+  
+  core_vessel_location:
+    container_name: core_vessel_location
+    build:
+      context: ./services/backend/core
+      dockerfile: dockerfiles/Dockerfile-vessel-location-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      # - PYTHONUNBUFFERED=1
+      - VESSEL_API_KEY=${VESSEL_API_KEY}
+      - LOCATION_API_KEY=${LOCATION_API_KEY}
+    ports:
+      - 5014:5014
 
 #  ____  ____   __   __ _  ____  ____  __ _  ____ 
 # (  __)(  _ \ /  \ (  ( \(_  _)(  __)(  ( \(    \
@@ -177,6 +191,7 @@ services:
       - tracktrace_test_network
     environment:
         - REACT_APP_API_ENDPOINT=${REACT_APP_API_ENDPOINT}
+        - REACT_APP_GMAPS_KEY=${REACT_APP_GMAPS_KEY}
     ports:
       - 80:80
     stdin_open: true

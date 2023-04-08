@@ -4,6 +4,7 @@ import "./bl.scss";
 import { useLocation } from "react-router-dom";
 import dateFormat from "dateformat";
 import locationWhite from "../../img/locationWhite.png";
+import VesselView from "./VesselView";
 
 export default function Status() {
   const location = useLocation();
@@ -13,7 +14,8 @@ export default function Status() {
   const { blNo } = location.state;
   const { shippingLine } = location.state;
   const { portOfLoading } = location.state;
-
+  const { cords } = location.state;
+  const { destinationCords } = location.state;
   const { isFcl } = location.state;
   const { containerReleaseDateTime } = location.state;
   const { deliveryTakenDateTime } = location.state;
@@ -90,7 +92,7 @@ export default function Status() {
             </ul>
           </div>
         </div>
-
+      <div><VesselView cords={cords} destination_cords={destinationCords}/></div>
       </div>
       <svg xmlns="http://www.w3.org/2000/svg" className="block" viewBox="0 0 1440 320"><path fill="#a2d9ff" fillOpacity="0.8" d="M0,96L40,80C80,64,160,32,240,53.3C320,75,400,149,480,165.3C560,181,640,139,720,117.3C800,96,880,96,960,106.7C1040,117,1120,139,1200,133.3C1280,128,1360,96,1400,80L1440,64L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z" />
         <svg xmlns="http://www.w3.org/2000/svg" className="block" viewBox="0 0 1440 320"><path fill="#0099ff" fillOpacity="0.2" d="M0,96L80,122.7C160,149,320,203,480,202.7C640,203,800,149,960,128C1120,107,1280,117,1360,122.7L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z" />
@@ -126,4 +128,3 @@ function ShipmentCard({ eta, pod, vesselName, blNo }) {
     </Card>
   )
 }
-

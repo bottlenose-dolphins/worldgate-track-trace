@@ -55,8 +55,17 @@ export default function BLStatus() {
           isFcl: result.is_fcl,
           containerReleaseDateTime: result.cont_released,
           deliveryTakenDateTime: result.del_taken,
-          shippingLine: result.shipping_line } })
+          shippingLine: result.shipping_line,
+          cords: result.cords,
+          destinationCords: result.destination_cords} })
+
+
+          console.log("*** appended values")
+          console.log(result.cords)
+          console.log(result.destination_cords)
+
       }
+      
     }
     catch (err) {
       navigate("/error", { state: { identifier: billOfLadingNumber, direction: directionType, type: searchType } })
