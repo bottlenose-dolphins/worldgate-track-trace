@@ -160,6 +160,21 @@ services:
       - SQLALCHEMY_DATABASE_URI=${DB_URI}
     ports:
       - 5013:5013
+
+  core_load_bl_doc:
+    container_name: core_load_bl_doc
+    build:
+      context: ./services/backend/core
+      dockerfile: dockerfiles/Dockerfile-load-bl-doc-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      # - PYTHONUNBUFFERED=1
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
+      - aws_access_key_id=${aws_access_key_id}
+      - aws_secret_access_key=${aws_secret_access_key}
+    ports:
+      - 5014:5014
   
   core_vessel_location:
     container_name: core_vessel_location
@@ -173,20 +188,9 @@ services:
       - VESSEL_API_KEY=${VESSEL_API_KEY}
       - LOCATION_API_KEY=${LOCATION_API_KEY}
     ports:
-      - 5014:5014
+      - 5015:5015
 
-  core_load_bl_doc:
-    container_name: core_load_bl_doc
-    build:
-      context: ./services/backend/core
-      dockerfile: dockerfiles/Dockerfile-load-bl-doc-dev
-    networks:
-      - tracktrace_test_network
-    environment:
-      # - PYTHONUNBUFFERED=1
-      - SQLALCHEMY_DATABASE_URI=${DB_URI}
-    ports:
-      - 5014:5014
+
 
 #  ____  ____   __   __ _  ____  ____  __ _  ____ 
 # (  __)(  _ \ /  \ (  ( \(_  _)(  __)(  ( \(    \
@@ -308,31 +312,31 @@ services:
     ports:
       - 8084:8084
   
-  scraper_maersk:
-    container_name: scraper_maersk
-    build:
-      context: ./services/backend/scrapers
-      shm_size: '1gb'
-      dockerfile: Dockerfile-Maersk-dev
-    networks:
-      - tracktrace_test_network
-    environment:
-      - PYTHONUNBUFFERED=1
-    shm_size: '1gb'
-    ports:
-      - 8086:8086
+  # scraper_maersk:
+  #   container_name: scraper_maersk
+  #   build:
+  #     context: ./services/backend/scrapers
+  #     shm_size: '1gb'
+  #     dockerfile: Dockerfile-Maersk-dev
+  #   networks:
+  #     - tracktrace_test_network
+  #   environment:
+  #     - PYTHONUNBUFFERED=1
+  #   shm_size: '1gb'
+  #   ports:
+  #     - 8086:8086
   
-  scraper_sinokor:
-    container_name: scraper_sinokor
-    build:
-      context: ./services/backend/scrapers
-      shm_size: '1gb'
-      dockerfile: Dockerfile-Sinokor-dev
-    networks:
-      - tracktrace_test_network
-    environment:
-      - PYTHONUNBUFFERED=1
-    shm_size: '1gb'
-    ports:
-      - 8087:8087
+  # scraper_sinokor:
+  #   container_name: scraper_sinokor
+  #   build:
+  #     context: ./services/backend/scrapers
+  #     shm_size: '1gb'
+  #     dockerfile: Dockerfile-Sinokor-dev
+  #   networks:
+  #     - tracktrace_test_network
+  #   environment:
+  #     - PYTHONUNBUFFERED=1
+  #   shm_size: '1gb'
+  #   ports:
+  #     - 8087:8087
 

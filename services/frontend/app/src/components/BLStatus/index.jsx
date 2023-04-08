@@ -39,11 +39,20 @@ export default function BLStatus() {
     try {
       const response = await searchShipmentStatus(billOfLadingNumber, searchType, directionType);
       if (response.code !== 200) {
+        console.log("ERROR OCCURRED");
         throw new Error("No status found");
       }
       else if (response.code === 200) {
         const result = response.data;
-        setTrackingHistory(result);
+
+        const cords = result.cords;
+        const lat = cords.length > 0 ? cords[0] : null;
+        const long = cords.length > 0 ? cords[1] : null;
+
+        const destinationCords = result.destination_cords;
+        const destLat = destinationCords.length > 0 ? destinationCords[0] : null;
+        const destLong = destinationCords.length > 0 ? destinationCords[1] : null;
+        
         navigate("/Status", { state: { 
           blNo: billOfLadingNumber, 
           type: searchType,
@@ -57,16 +66,15 @@ export default function BLStatus() {
           deliveryTakenDateTime: result.del_taken,
           shippingLine: result.shipping_line,
           direction: directionType,
-          cords: result.cords,
-          destinationCords: result.destination_cords} })
-          console.log("*** appended values")
-          console.log(result.cords)
-          console.log(result.destination_cords)
-
+          cordsLat: lat,
+          cordsLong: long,
+          destinationLat: destLat, 
+          destinationLong: destLong } })
       }
       
     }
     catch (err) {
+      console.log(err);
       navigate("/error", { state: { identifier: billOfLadingNumber, direction: directionType, type: searchType } })
     }
     setLoading(false);

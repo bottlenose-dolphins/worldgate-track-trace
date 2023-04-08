@@ -129,6 +129,15 @@ function ShipmentCard({ item, index, setLoading }) {
       }
       else if (response.code === 200) {
         const result = response.data;
+
+        const cords = result.cords;
+        const lat = cords.length > 0 ? cords[0] : null;
+        const long = cords.length > 0 ? cords[1] : null;
+
+        const destinationCords = result.destination_cords;
+        const destLat = destinationCords.length > 0 ? destinationCords[0] : null;
+        const destLong = destinationCords.length > 0 ? destinationCords[1] : null;
+
         navigate("/Status", {
           state: {
             blNo: containerNumber,
@@ -141,9 +150,12 @@ function ShipmentCard({ item, index, setLoading }) {
             isFcl: result.is_fcl,
             containerReleaseDateTime: result.cont_released,
             deliveryTakenDateTime: result.del_taken,
-            shippingLine: result.shipping_line
-          }
-        })
+            shippingLine: result.shipping_line,
+            direction: item.type,
+            cordsLat: lat,
+            cordsLong: long,
+            destinationLat: destLat, 
+            destinationLong: destLong } })
       }
     }
     catch (err) {

@@ -10,7 +10,20 @@ import boto3
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-s3 = boto3.client('s3')
+aws_access_key_id = getenv("aws_access_key_id")
+
+aws_secret_access_key = getenv("aws_secret_access_key")
+
+s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
+
+# client = boto3.client(
+#     's3',
+#     aws_access_key_id=ACCESS_KEY,
+#     aws_secret_access_key=SECRET_KEY,
+#     aws_session_token=SESSION_TOKEN
+# )
+
+
 
 bucket = 'worldgate-tracktrace-docs'
 
