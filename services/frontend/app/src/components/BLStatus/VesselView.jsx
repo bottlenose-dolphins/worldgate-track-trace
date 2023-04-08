@@ -3,45 +3,34 @@ import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 const { REACT_APP_GMAPS_KEY } = process.env;
 
 const containerStyle = {
-    width: "800px",
-    height: "600px"
+  width: "800px",
+  height: "600px"
 };
 
 const center = {
-    lat: -3.745,
-    lng: -38.523
+  lat: -3.745,
+  lng: -38.523
 };
 
-function VesselView({ cordsLat, cordsLong, destinationLat, destinationLong }) {
+function VesselView({ originCords, destinationCords }) {
 
-    // const [cordsLat, cordsLong] = cords;
-    console.log(cordsLat);
-    console.log(cordsLong);
-    console.log(typeof cordsLat);
-    console.log(typeof cordsLong);
+  const originLat = originCords.length > 0 ? originCords[0] : null;
+  const originLong = originCords.length > 0 ? originCords[1] : null;
+  const destLat = destinationCords.length > 0 ? destinationCords[0] : null;
+  const destLong = destinationCords.length > 0 ? destinationCords[1] : null;
 
-    // const cordsLat = cords[0];
-    // const cordsLong = cords[1];
-    // const destinationLat = destinationCords[0];
-    // const destinationLong = destinationCords[1];
-    
-    // console.log(cordsLat)
-    // console.log(cordsLong)
-    // const [destinationCordsLat, destinationCordsLong] = destinationCords;
-    
-
-    return (
+  return (
     <LoadScript googleMapsApiKey={REACT_APP_GMAPS_KEY}>
-        <GoogleMap
-            mapContainerStyle={containerStyle}
-            // center={center}
-            zoom={1}
-            center={{ lat: cordsLat, lng: cordsLong }}
-        >
-        <Marker position={{ lat: cordsLat, lng: cordsLong }} />
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        // center={center}
+        zoom={1}
+        center={{ lat: originLat, lng: originLong }}
+      >
+        <Marker position={{ lat: originLat, lng: originLong }} />
         {/* <Marker position={center} /> */}
         {/* <Marker position={{ lat: destinationLat, lng: destinationLong }} />  */}
-        { /* Child components, such as markers, info windows, etc. */ }
+        { /* Child components, such as markers, info windows, etc. */}
       </GoogleMap>
     </LoadScript>
   )
