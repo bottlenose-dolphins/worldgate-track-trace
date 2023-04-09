@@ -12,14 +12,6 @@ const onLoad = infoBox => {
   console.log("infoBox: ", infoBox)
 };
 
-const divStyle = {
-  background: "white",
-  // border: "1px solid #ccc",
-  padding: 8
-}
-
-// "https://cdn-icons-png.flaticon.com/128/1656/1656475.png"
-
 
 function VesselView({ originCords, destinationCords, portOfDischarge }) {
 
@@ -42,18 +34,20 @@ function VesselView({ originCords, destinationCords, portOfDischarge }) {
         zoom={6}
         center={{ lat: originLat, lng: originLong }}
       >
-        <MarkerF position={{ lat: originLat, lng: originLong }} 
-        icon={shippingIcon}
-      /> 
-        <MarkerF position={{ lat: destLat, lng: destLong }}
+        <MarkerF 
+          position={{ lat: originLat, lng: originLong }} 
+          icon={shippingIcon}
+        /> 
+        <MarkerF 
+          position={{ lat: destLat, lng: destLong }}
         />
         <InfoWindowF
-      onLoad={onLoad}
-      position={{lat: destLat, lng: destLong }}>
-      <div style={divStyle}>
-        <h1>Destination Port: {portOfDischarge}</h1>
-      </div>
-    </InfoWindowF>
+          onLoad={onLoad}
+          position={{lat: destLat, lng: destLong }}>
+          <div className="p-8 bg-white">
+            <h1>Destination Port: {portOfDischarge}</h1>
+          </div>
+        </InfoWindowF>
         { /* Child components, such as markers, info windows, etc. */}
       </GoogleMap>
   )

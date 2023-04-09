@@ -143,7 +143,7 @@ function ShipmentCard({ item, index, setLoading }) {
             containerReleaseDateTime: result.cont_released,
             deliveryTakenDateTime: result.del_taken,
             shippingLine: result.shipping_line,
-            direction: item.type,
+            direction: directionType,
             originCords: result.cords,
             destinationCords: result.destination_cords, } })
       }
