@@ -24,9 +24,10 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
           throw new Error("No status found");
         }
         else if (response.code === 200) {
+          const direction = title === "Incoming Shipments" ? "import" : "export";
           const result = response.data;
-          const status=result.status
-          const response2 = await addsubscription(userid, containerNumber,status);
+          const status=result.status;
+          const response2 = await addsubscription(userid, containerNumber,status, direction);
           if (response2.code !== 200) {
             throw new Error("No status found");
         }
@@ -42,7 +43,6 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
       }  
     }
     const unsubscribe = async () => {
-      const directionType = item.type.toLowerCase();
       const containerNumber = item.container_numbers[0];
       try {
           const response2 = await deletesubscription(containerNumber);
