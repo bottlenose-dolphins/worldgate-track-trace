@@ -69,31 +69,6 @@ def get_export_ref_n():
         }
     ), 500
 
-# Retrieve House B/L by EXPORT_REF_N
-@app.route("/export/hbl", methods=['POST'])
-def get_hbl():
-    data = request.get_json()
-    export_ref_n = data["export_ref_n"]
-    hbl_n = Export.query.filter_by(export_ref_n=export_ref_n).first().hbl_n
-    
-    if hbl_n:
-        return jsonify(
-                {
-                "code": 200,
-                "data": {
-                    "hbl": hbl_n
-                    }
-                }
-            ), 200
-
-    return jsonify(
-        {
-            "code": 500,
-            "message": "Failed to retrieve hbl_n"
-        }
-    ), 500
-
-
 # Retrieve EXPORT_REF_N, PORT_DEL_NAME and DEL_TO using WGUSER_ID and sorted in descending order using DEL_TO
 @app.route("/export/export_ref_n/wguser_id", methods=['POST'])
 def get_export_ref_n_using_wguser_id():

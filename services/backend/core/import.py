@@ -63,30 +63,6 @@ def get_import_ref_n():
         }
     ), 500
 
-# Retrieve House B/L by IMPORT_REF_N
-@app.route("/import/hbl", methods=['POST'])
-def get_hbl():
-    data = request.get_json()
-    import_ref_n = data["import_ref_n"]
-    hbl_n = Import.query.filter_by(import_ref_n=import_ref_n).first().hbl_n
-    
-    if hbl_n:
-        return jsonify(
-                {
-                "code": 200,
-                "data": {
-                    "hbl": hbl_n
-                    }
-                }
-            ), 200
-
-    return jsonify(
-        {
-            "code": 500,
-            "message": "Failed to retrieve hbl_n"
-        }
-    ), 500
-
 @app.route("/ping", methods=['GET'])
 def health_check():
     return("import")

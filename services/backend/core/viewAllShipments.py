@@ -68,11 +68,6 @@ def getExportContainerNum():
             container_num_response_dumped = json.dumps(container_num_response)
             container_num_response_loads = json.loads(container_num_response_dumped)
             retrieved_list_containerNum_output = container_num_response_loads['data']['container_nums']
-
-            # get delay status
-            delay_res = invoke_http2("core_export_shipment", "export_shipment/delay", prod, method='POST', json=data)
-            delay_status = delay_res["data"]["status"]
-            a_record["delay_status"] = delay_status
             
             if len(retrieved_list_containerNum_output) > 0:
                 retrieved_tuple_containerNum_output = tuple(retrieved_list_containerNum_output)
@@ -131,11 +126,6 @@ def getImportContainerNum():
             container_num_response_dumped = json.dumps(container_num_response)
             container_num_response_loads = json.loads(container_num_response_dumped)
             retrieved_list_containerNum_output = container_num_response_loads['data']['container_nums']
-
-            # get delay status
-            delay_res = invoke_http2("core_import_shipment", "import_shipment/delay", prod, method='POST', json=data)
-            delay_status = delay_res["data"]["status"]
-            a_record["delay_status"] = delay_status
 
             if len(retrieved_list_containerNum_output) > 0:
                 retrieved_tuple_containerNum_output = tuple(retrieved_list_containerNum_output)
