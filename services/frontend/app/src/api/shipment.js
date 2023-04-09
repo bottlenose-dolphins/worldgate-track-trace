@@ -36,14 +36,16 @@ export const searchShipmentStatus = async(identifier, identifierType, direction)
         return error.response.data;
     }
 }
-export const addsubscription = async(userid, containerid, status) => {
+export const addsubscription = async(userid, containerid, status,direction) => {
     try {
         const authRes = await authenticate();
         if (authRes.code === 200) {
             const res = await axiosNotificationInstance.post("/addsubscription", {
                 "userid": userid,
                 "containerid": containerid,
-                "status": status
+                "status": status,
+                "direction":direction,
+                "shipment_type":"ctr"
             });
             if (res) {
                 return res.data;
