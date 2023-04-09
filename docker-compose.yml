@@ -326,7 +326,7 @@ services:
     container_name: core_subscription
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-subscription-dev
+      dockerfile: dockerfiles/Dockerfile-subscription-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -338,7 +338,7 @@ services:
     container_name: core_scheduler
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-scheduler-dev
+      dockerfile: dockerfiles/Dockerfile-scheduler-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -350,7 +350,7 @@ services:
     container_name: core_notification_complex
     build:
       context: ./services/backend/core
-      dockerfile: Dockerfile-notification-complex-dev
+      dockerfile: dockerfiles/Dockerfile-notification-complex-dev
     networks:
       - tracktrace_test_network
     environment:
