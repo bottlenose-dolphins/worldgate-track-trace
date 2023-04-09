@@ -190,27 +190,6 @@ services:
 #  ) _)  )   /(  O )/    /  )(   ) _) /    / ) D (
 # (__)  (__\_) \__/ \_)__) (__) (____)\_)__)(____   
 
- web:
-    container_name: web
-    build:
-      context: ./services/frontend
-      dockerfile: dockerfiles/Dockerfile-dev
-      args:
-        - NODE_ENV=development
-    networks:
-      - tracktrace_test_network
-    environment:
-        - REACT_APP_API_ENDPOINT=${REACT_APP_API_ENDPOINT}
-    ports:
-      - 80:80
-    stdin_open: true
-    tty: true
-    # volumes:
-    # # https://stackoverflow.com/questions/30043872/docker-compose-node-modules-not-present-in-a-volume-after-npm-install-succeeds
-    #   - web-app-mount:/app/app
-    #   - web-app-node-modules-mount:/app/app/node_modules
-    depends_on:
-      - core_users
 
 #  ____   ___  ____   __   ____  ____  ____    ____  ____  ____  _  _  __  ___  ____  ____ 
 # / ___) / __)(  _ \ / _\ (  _ \(  __)(  _ \  / ___)(  __)(  _ \/ )( \(  )/ __)(  __)/ ___)
