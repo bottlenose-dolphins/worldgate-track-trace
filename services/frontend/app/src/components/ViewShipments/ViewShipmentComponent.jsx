@@ -6,10 +6,7 @@ import { ChevronDownIcon, EnvelopeIcon, EnvelopeOpenIcon, DocumentArrowDownIcon,
 import dateFormat from "dateformat";
 import { useNavigate } from "react-router-dom";
 import FileSaver from "file-saver";
-<<<<<<< HEAD
-=======
 import { downloadBL } from "src/api/blDocument";
->>>>>>> parent of 47997bd9 (Revert "Merge branch 'main' into bdtt-19-customers-get-notified-of-shipment-status")
 import { toast } from "react-toastify";
 import locationWhite from "../../img/locationWhite.png";
 
