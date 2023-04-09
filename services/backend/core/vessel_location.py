@@ -22,7 +22,11 @@ load_dotenv()
 
 app = Flask(__name__)
 prod = getenv('prod', "0")
+
+#sea routes api key
 VESSEL_API_KEY = getenv('VESSEL_API_KEY', None)
+
+#zyna api key
 LOCATION_API_KEY = getenv('LOCATION_API_KEY', None)
 
 CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",
@@ -34,11 +38,13 @@ print("prod type: ", type(prod))
 def health_check():
     return("vessel location")
 
+# main method
 @app.route('/info', methods=['POST'])
 def info():
     if request.is_json:
 
-        # ONLY for testing purposes, so as not to use API PROVIDER CALLS
+    # ONLY for testing purposes, so as not to use API PROVIDER CALLS
+    # ***************************************************************
         return jsonify(
                 {
                     "code": 200,
@@ -48,6 +54,7 @@ def info():
                     }
                 }
         ), 200
+    # ***************************************************************
         data = request.get_json()
         print("\nReceived details in JSON:", data)
 
@@ -60,8 +67,7 @@ def info():
             print("*** Obtained IMO " + str(imo))
         
         except:
-            #to create dictionary as backup later 
-
+            #may create a dictionary of names to imo mapping in case of failures
             #failure response
             print("*** Failed to get IMO")
             return jsonify(
@@ -71,16 +77,16 @@ def info():
                     } 
                 ), 500
         
-        # try: 
-        #     # sea routes api, low rate limit
-        #     cords, destination_cords = get_vessel_location(imo, VESSEL_API_KEY)
-        #     print("*** Using API provider: SEA ROUTES")
+        try: 
+            # sea routes api, low rate limit
+            cords, destination_cords = get_vessel_location(imo, VESSEL_API_KEY)
+            print("*** Using API provider: SEA ROUTES")
 
-        # except:
-        print("*** Using API provider: ZYLA")
-        #zyla api, seems to be okay but takes way longer
-        cords = get_vessel_location2(imo, LOCATION_API_KEY)
-        destination_cords = []
+        except:
+            print("*** Using API provider: ZYLA")
+            #if sea routes api fails, use zyla api, seems to be okay but takes way longer and does not return destination coords
+            cords = get_vessel_location2(imo, LOCATION_API_KEY)
+            destination_cords = []
 
         #logging
         print( "*** cords returned :")
@@ -98,7 +104,7 @@ def info():
                 }
         ), 200
     
-
+# ************* helper methods *************
 def prepare_vessel_name(vessel_name):
     """ 
     convert: 
@@ -152,7 +158,7 @@ def get_vessel_imo(vessel_name, API_KEY):
     return response_payload[0]["imo"]
 
 
-#sea routes which has a low rate limit (no longer used for now)
+#sea routes which has a low rate limit
 def get_vessel_location(imo, API_KEY):
 
     url = f"https://api.searoutes.com/vessel/v2/{imo}/eta"
@@ -173,7 +179,7 @@ def get_vessel_location(imo, API_KEY):
     destination_position = response_payload["to"]["location"]["geometry"]["coordinates"][::-1]
     return [current_position, destination_position]
 
-#long waiting time zyla api
+#long waiting time zyla api, this additionally uses the method 'string to cords' below, this is done so as to convert the response from zyla to smth similar to sea route's api
 def get_vessel_location2(imo, API_KEY):
     # url = f"https://api.searoutes.com/vessel/v2/{imo}/eta"
     url = f"https://zylalabs.com/api/78/vessel+traffic+information+api/1576/get+position?imoCode={imo}"
@@ -184,7 +190,7 @@ def get_vessel_location2(imo, API_KEY):
     response_payload = invoke_http(url, method="GET", headers=headers)
     return(string_to_cords(response_payload['data']['latitude_longitude']))
 
-#for zyla api
+#for zyla api response formatting, this is used in get_vessel_location2
 def string_to_cords(coord_string):
     coord_list = coord_string.split("° / ")
     return [float(coord_list[0].strip()), float(coord_list[1].strip().rstrip("°"))]
