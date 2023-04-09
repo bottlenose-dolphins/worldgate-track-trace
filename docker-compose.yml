@@ -312,31 +312,31 @@ services:
     ports:
       - 8084:8084
   
-  # scraper_maersk:
-  #   container_name: scraper_maersk
-  #   build:
-  #     context: ./services/backend/scrapers
-  #     shm_size: '1gb'
-  #     dockerfile: Dockerfile-Maersk-dev
-  #   networks:
-  #     - tracktrace_test_network
-  #   environment:
-  #     - PYTHONUNBUFFERED=1
-  #   shm_size: '1gb'
-  #   ports:
-  #     - 8086:8086
+  scraper_maersk:
+    container_name: scraper_maersk
+    build:
+      context: ./services/backend/scrapers
+      shm_size: '1gb'
+      dockerfile: dockerfiles/Dockerfile-Maersk-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - PYTHONUNBUFFERED=1
+    shm_size: '1gb'
+    ports:
+      - 8086:8086
   
-  # scraper_sinokor:
-  #   container_name: scraper_sinokor
-  #   build:
-  #     context: ./services/backend/scrapers
-  #     shm_size: '1gb'
-  #     dockerfile: Dockerfile-Sinokor-dev
-  #   networks:
-  #     - tracktrace_test_network
-  #   environment:
-  #     - PYTHONUNBUFFERED=1
-  #   shm_size: '1gb'
-  #   ports:
-  #     - 8087:8087
+  scraper_sinokor:
+    container_name: scraper_sinokor
+    build:
+      context: ./services/backend/scrapers
+      shm_size: '1gb'
+      dockerfile: dockerfiles/Dockerfile-Sinokor-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - PYTHONUNBUFFERED=1
+    shm_size: '1gb'
+    ports:
+      - 8087:8087
 
