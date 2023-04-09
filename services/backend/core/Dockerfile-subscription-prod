@@ -31,8 +31,8 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
 WORKDIR /app
 ARG CACHEBUST=5
 COPY requirements.txt .
-COPY complex_scraper.py .
-RUN mv complex_scraper.py app.py
+COPY subscription.py .
+RUN mv subscription.py app.py
 
 #for invoking microservice calls within app
 COPY invokes.py .
