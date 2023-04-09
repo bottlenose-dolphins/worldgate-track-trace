@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Card } from "react-bootstrap";
-import { searchShipmentStatus ,addsubscription, deletesubscription} from "src/api/shipment";
+import { searchShipmentStatus ,addsubscription, deletesubscription, getsubscription} from "src/api/shipment";
 import {authenticate} from "src/api/config"
 import { ChevronDownIcon, EnvelopeIcon, EnvelopeOpenIcon, DocumentArrowDownIcon, DocumentIcon } from "@heroicons/react/24/outline";
 import dateFormat from "dateformat";
@@ -11,88 +11,20 @@ import { toast } from "react-toastify";
 import locationWhite from "../../img/locationWhite.png";
 
 
-export default function ViewShipmentComponent({ title, data, setLoading }) {
-  function ShipmentButton({item}) {
-    const subscribe = async () => {
-      const userid=user;
-      const directionType = item.type.toLowerCase();
-      const containerNumber = item.container_numbers[0];
-      console.log(directionType);
-      console.log(containerNumber);
-      const searchType = "ctr";
-      try {
-      
-        const response = await searchShipmentStatus(containerNumber, searchType, directionType);
-        if (response.code !== 200) {
-          throw new Error("No status found");
-        }
-        else if (response.code === 200) {
-          const result = response.data;
-          const status=result.status
-          const response2 = await addsubscription(userid, containerNumber,status);
-          if (response2.code !== 200) {
-            throw new Error("No status found");
-        }
-          else if (response2.code === 200) {
-          const result = response2.data;
-          console.log(result)
-         
-        }
-        }
-      }
-      catch (err) {
-        console.log(err);
-      }  
-    }
-    const unsubscribe = async () => {
-      const directionType = item.type.toLowerCase();
-      const containerNumber = item.container_numbers[0];
-      try {
-          const response2 = await deletesubscription(containerNumber);
-          if (response2.code !== 200) {
-            throw new Error("No status found");
-        }
-          else if (response2.code === 200) {
-          const result = response2.data;
-          console.log(result)
-        }
-      }
-      catch (err) {
-        console.log(err);
-      }
-      
 
-    }
+export default function ViewShipmentComponent({ title, data, setLoading }) {
+  const [subscriptionList, setSubscriptionList] = useState([])
+  useEffect(() => {
+    const fetchData = async () => {
+      const subscriptions = getsubscription();
+      subscriptions.then(data => setSubscriptionList(data.data));
+    };
   
-    return(
-      <div className="">
-      <button onClick={subscribe} type="button" className="mt-2 ml-2 mb-2 inline-flex items-center px-5 py-2.5 text-xs  text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> 
-          <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        className="h-5 w-5">
-        <path
-          fillRule="evenodd"
-          d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
-          clipRule="evenodd" />
-      </svg>
-      Subscribe
-        </button>
-        <br/>
-        <button onClick={unsubscribe} type="button" className="mt-2 ml-2 mb-2 inline-flex items-center px-5 py-2.5 text-xs  text-center text-white bg-red-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"> 
-        <svg className="mr-2" fill="#FFFFFF" height="20px" width="20px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" 
-        xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 283.194 283.194" 
-        xmlSpace="preserve"><g id="SVGRepo_bgCarrier" strokeWidth="0"/><g id="SVGRepo_tracerCarrier" 
-        strokeLinecap="round" strokeLinejoin="round"/><g id="SVGRepo_iconCarrier"> <g> 
-          <path d="M141.597,32.222c-60.31,0-109.375,49.065-109.375,109.375s49.065,109.375,109.375,109.375s109.375-49.065,109.375-109.375 S201.907,32.222,141.597,32.222z M50.222,141.597c0-50.385,40.991-91.375,91.375-91.375c22.268,0,42.697,8.01,58.567,21.296 L71.517,200.164C58.232,184.293,50.222,163.865,50.222,141.597z M141.597,232.972c-21.648,0-41.558-7.572-57.232-20.2 L212.772,84.366c12.628,15.674,20.2,35.583,20.2,57.231C232.972,191.982,191.981,232.972,141.597,232.972z"/>
-          <path d="M141.597,0C63.52,0,0,63.52,0,141.597s63.52,141.597,141.597,141.597s141.597-63.52,141.597-141.597S219.674,0,141.597,0z M141.597,265.194C73.445,265.194,18,209.749,18,141.597S73.445,18,141.597,18s123.597,55.445,123.597,123.597 S209.749,265.194,141.597,265.194z"/> </g> </g></svg>
-       Unsubscribe
-        </button>
-        </div>
-    )
-    
-  }
+    fetchData();
+  }, []);
+  console.log("IMPORTANT");
+  console.log(subscriptionList);
+
   const [user,setuser]=useState("")
 useEffect(() => {
   const fetchData = async () => {
@@ -143,9 +75,8 @@ console.log(user)
           {items.length === 0 && <div className="mx-1">No shipments found</div>}
           {items.length > 0 && items.map((item, index) => {
             return (
-              <div className="inline-flex">
-              <ShipmentCard key={index} item={item} index={index} setLoading={setLoading} />
-              <ShipmentButton item={item}/>
+              <div>
+              <ShipmentCard key={index} item={item} index={index} setLoading={setLoading} user={user} subscriptionList={subscriptionList} />
               </div>
             );
           })}
@@ -157,10 +88,14 @@ console.log(user)
   
 };
 
-
-
-function ShipmentCard({ item, index, setLoading }) {
+function ShipmentCard({ item, index, setLoading, user, subscriptionList }) {
   const navigate = useNavigate();
+  let isMatched = false;
+  subscriptionList.forEach(subscription => {
+    if (item.container_numbers[0] === subscription.container_id){
+      isMatched = true;
+    }
+  })
 
   const [mailHovered, setMailHovered] = useState(false);
   const handleMouseEnterMail = () => {
@@ -254,7 +189,58 @@ function ShipmentCard({ item, index, setLoading }) {
 
   }
 
-
+  const subscribe = async (e) => {
+    e.stopPropagation();
+    const userid=user;
+    const directionType = item.type.toLowerCase();
+    console.log("IMPORTANT");
+    console.log(directionType);
+    const containerNumber = item.container_numbers[0];
+    const searchType = "ctr";
+    try {
+    
+      const response = await searchShipmentStatus(containerNumber, searchType, directionType);
+      if (response.code !== 200) {
+        throw new Error("No status found");
+      }
+      else if (response.code === 200) {
+        const direction = directionType
+        const result = response.data;
+        const status=result.status
+        const response2 = await addsubscription(userid, containerNumber,status, direction);
+        if (response2.code !== 200) {
+          throw new Error("No status found");
+      }
+        else if (response2.code === 200) {
+        const result = response2.data;
+        console.log(result)
+       
+      }
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }  
+    window.location.reload();
+  }
+  const unsubscribe = async (e) => {
+    e.stopPropagation();
+    const containerNumber = item.container_numbers[0];
+    try {
+        const response2 = await deletesubscription(containerNumber);
+        if (response2.code !== 200) {
+          throw new Error("No status found");
+      }
+        else if (response2.code === 200) {
+        const result = response2.data;
+        console.log(result)
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
+    window.location.reload();
+  }
   return (
     <div role="button" className="mb-2" onClick={handleClick} onKeyDown={handleClick} tabIndex={0}>
       <Card className={`mb-2 w-full 2xl:w-4/5 ${shipmentStatusColours[status]}`} style={{ borderRadius: "10px" }} key={index}>
@@ -276,6 +262,29 @@ function ShipmentCard({ item, index, setLoading }) {
                 <div className="w-7 h-7" onMouseEnter={handleMouseEnterMail} onMouseLeave={handleMouseLeaveMail}>
                   {mailHovered ? <EnvelopeOpenIcon className="w-7 h-7" onClick={handleMailClick} /> : <EnvelopeIcon className="w-7 h-7" onClick={handleMailClick} />}
                 </div>
+              </Card.Subtitle>
+              <Card.Subtitle className="flex justify-end">
+                {isMatched ? <button onClick={unsubscribe} type="button" className="mt-2 ml-2 mb-2 inline-flex items-center px-5 py-2.5 text-xs  text-center text-white bg-red-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"> 
+              <svg className="mr-2" fill="#FFFFFF" height="20px" width="20px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" 
+                    xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 283.194 283.194" 
+                    xmlSpace="preserve"><g id="SVGRepo_bgCarrier" strokeWidth="0"/><g id="SVGRepo_tracerCarrier" 
+                    strokeLinecap="round" strokeLinejoin="round"/><g id="SVGRepo_iconCarrier"> <g> 
+                <path d="M141.597,32.222c-60.31,0-109.375,49.065-109.375,109.375s49.065,109.375,109.375,109.375s109.375-49.065,109.375-109.375 S201.907,32.222,141.597,32.222z M50.222,141.597c0-50.385,40.991-91.375,91.375-91.375c22.268,0,42.697,8.01,58.567,21.296 L71.517,200.164C58.232,184.293,50.222,163.865,50.222,141.597z M141.597,232.972c-21.648,0-41.558-7.572-57.232-20.2 L212.772,84.366c12.628,15.674,20.2,35.583,20.2,57.231C232.972,191.982,191.981,232.972,141.597,232.972z"/>
+                <path d="M141.597,0C63.52,0,0,63.52,0,141.597s63.52,141.597,141.597,141.597s141.597-63.52,141.597-141.597S219.674,0,141.597,0z M141.597,265.194C73.445,265.194,18,209.749,18,141.597S73.445,18,141.597,18s123.597,55.445,123.597,123.597 S209.749,265.194,141.597,265.194z"/> </g> </g></svg>
+            Unsubscribe
+              </button> : <button onClick={subscribe} type="button" className="mt-2 ml-2 mb-2 inline-flex items-center px-5 py-2.5 text-xs  text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="h-5 w-5">
+                  <path
+                    fillRule="evenodd"
+                    d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
+                    clipRule="evenodd" />
+                </svg>
+                Subscribe
+              </button>}
               </Card.Subtitle>
             </div>
           </div>

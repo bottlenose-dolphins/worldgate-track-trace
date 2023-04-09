@@ -92,6 +92,23 @@ export const deletesubscription = async( containerid) => {
     }
 }
 
+export const getsubscription = async() => {
+    try {
+        const authRes = await authenticate();
+        if (authRes.code === 200) {
+            const res = await axiosNotificationInstance.post("/getsubscription");
+            if (res) {
+                return res.data;
+            }
+            throw new Error("No data returned from backend");
+        }
+        throw new Error("Request Unauthorised");
+    } catch (error) {
+        console.log(error.response.data.message);
+        return error.response.data;
+    }
+}
+
 const searchShipmentUnloadingStatus = async (identifier, identifierType, direction) => {
     try {
         const res = await axiosShipmentUnloadingInstance.post("/unloading_status", {
