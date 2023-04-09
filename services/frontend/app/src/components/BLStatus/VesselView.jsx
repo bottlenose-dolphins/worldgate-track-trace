@@ -26,8 +26,6 @@ function VesselView({ originCords, destinationCords, portOfDischarge }) {
     libraries: ["geometry", "drawing"],
   });
 
-
-
   return (
       isLoaded && <GoogleMap
         mapContainerStyle={containerStyle}
@@ -35,13 +33,13 @@ function VesselView({ originCords, destinationCords, portOfDischarge }) {
         center={{ lat: originLat, lng: originLong }}
       >
         <MarkerF 
-          position={{ lat: originLat, lng: originLong }} 
+          position={{ lat: originLat, lng: originLong }}
           icon={shippingIcon}
         /> 
-        <MarkerF 
+        ({destLat}!=null) && <MarkerF 
           position={{ lat: destLat, lng: destLong }}
         />
-        <InfoWindowF
+        ({destLat}!=null) &&  <InfoWindowF
           onLoad={onLoad}
           position={{lat: destLat, lng: destLong }}>
           <div className="p-8 bg-white">
