@@ -19,6 +19,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 print(getenv('SQLALCHEMY_DATABASE_URI'))
 
 prod = getenv("prod")
+sid=getenv("twilio_sid")
+token=getenv("twilio_token")
 print("prod type: ", type(prod))
 
 print("********")
@@ -147,8 +149,8 @@ def sendsms():
             }
             phone_number=invoke_http2("core_user", "user/getnumber",prod, method='POST', json=useriddata)
             
-            account_sid = "AC7a7b489784baef97d21697b086b468ec"
-            auth_token = "eed37e9b4744d26ed34a67d4d3efe232"
+            account_sid = sid
+            auth_token = token
             client = Client(account_sid, auth_token)
             message = client.messages.create(
                 body="There has been a status update in regards to your Container Number: "+identifier+" Status:"+response2,
