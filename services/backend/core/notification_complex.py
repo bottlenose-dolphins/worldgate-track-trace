@@ -73,6 +73,7 @@ def deletesubscription():
         ), 500
     
         return response
+        
 @app.route("/sendsms", methods=['POST'])
 def sendsms():
     response = invoke_http2("core_subscription", "subscription/getsubscriptions",prod, method='POST')
