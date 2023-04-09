@@ -73,7 +73,7 @@ def deletesubscription():
         ), 500
     
         return response
-        
+
 @app.route("/sendsms", methods=['POST'])
 def sendsms():
     response = invoke_http2("core_subscription", "subscription/getsubscriptions",prod, method='POST')
@@ -81,8 +81,8 @@ def sendsms():
         container=response[i]["container_id"]
         userid=response[i]["wguser_id"]
         subscription_status=response[i]["status"]
-        shipment_type="ctr"
-        directions="import"
+        shipment_type=response[i]["shipment_type"]
+        directions=response[i]["direction"]
         data={
             "identifier":container,
             "identifier_type":shipment_type,

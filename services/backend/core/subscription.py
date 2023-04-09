@@ -25,12 +25,16 @@ class Subscription(db.Model):
     wguser_id = db.Column(db.String, nullable=False)
     container_id = db.Column(db.String, nullable=False)
     status = db.Column(db.String, nullable=True)
+    direction=db.Column(db.String, nullable=True)
+    shipment_type=db.Column(db.String, nullable=True)
 
-    def __init__(self, wguser_id, container_id, status):
+    def __init__(self, wguser_id, container_id, status,direction,shipment_type):
       
         self.container_id = container_id
         self.status = status
         self.wguser_id = wguser_id
+        self.direction = direction
+        self.shipment_type = shipment_type
         
 
     def json(self):
@@ -38,7 +42,9 @@ class Subscription(db.Model):
            
             "container_id": self.container_id,
             "status": self.status,
-            "wguser_id": self.wguser_id
+            "wguser_id": self.wguser_id,
+            "direction":self.direction,
+            "shipment_type":self.shipment_type
         }
     
 def validate_subscription(containerid):
@@ -57,11 +63,13 @@ def insert_subscription():
     user_id = data["userid"]
     containerid=data["containerid"]
     status=data["status"]
+    direction=data["direction"]
+    shipment_type=data["shipment_type"]
 
     if validate_subscription(containerid) is not None:
         return validate_subscription(containerid)
     
-    new_subscription = Subscription(user_id,containerid,status)
+    new_subscription = Subscription(user_id,containerid,status,direction,shipment_type)
 
     try:
         db.session.add(new_subscription)
@@ -95,7 +103,9 @@ def getsubscriptions():
                 "subscription_id":row.subscription_id,
                 "wguser_id":row.wguser_id,
                 "container_id":row.container_id,
-                "status":row.status
+                "status":row.status,
+                "direction":row.direction,
+                "shipment_type":row.shipment_type
             }
             arr.append(data)
         return arr
