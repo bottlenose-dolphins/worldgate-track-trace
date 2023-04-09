@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { getExportShipments, getImportShipments } from "src/api/shipment";
-import dateFormat from "dateformat";
 import ClipLoader from "react-spinners/ClipLoader";
 import ViewShipmentComponent from "./ViewShipmentComponent";
 
@@ -8,7 +7,7 @@ export default function ToggleTab() {
   const [activeTab, setActiveTab] = useState("Import");
   const [loading, setLoading] = useState(true);
 
-  const tabs = ["Import", "Export", "Upcoming"];
+  const tabs = ["Upcoming", "Import", "Export"];
 
   const renderTabs = tabs.map((tab, index) => (
     <button key={index} type="button"
@@ -68,9 +67,9 @@ export default function ToggleTab() {
           </div>
 
           <div className="border border-black w-3/4 bg-white">
+            {activeTab === "Upcoming" && <div><ViewShipmentComponent title="Upcoming Shipments" data={upcomingShipments} setLoading={setLoading} /></div>}
             {activeTab === "Import" && <div><ViewShipmentComponent title="Incoming Shipments" data={importShipments} setLoading={setLoading} /></div>}
             {activeTab === "Export" && <div><ViewShipmentComponent title="Outgoing Shipments" data={exportShipments} setLoading={setLoading} /></div>}
-            {activeTab === "Upcoming" && <div><ViewShipmentComponent title="Upcoming Shipments" data={upcomingShipments} setLoading={setLoading} /></div>}
           </div>
         </div>
       }
