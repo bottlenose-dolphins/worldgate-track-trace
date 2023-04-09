@@ -20,10 +20,9 @@ RUN wget ${URLBASE}/chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb \
 && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-ARG CACHEBUST=67
 # copying the neccessary scripts
-COPY requirements.txt .
-COPY sinokorScraper.py .
+COPY ../requirements.txt .
+COPY ../sinokorScraper.py .
 RUN mv sinokorScraper.py app.py
 
 # upgrade pip and install requirements
@@ -32,6 +31,6 @@ RUN pip install -r requirements.txt
 
 ENV PYTHONUNBUFFERED=1
 
-EXPOSE 8083
+EXPOSE 80
 
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0",  "--port=8087"]
+CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0",  "--port=80"]
