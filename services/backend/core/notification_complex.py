@@ -18,7 +18,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 print(getenv('SQLALCHEMY_DATABASE_URI'))
 
-prod = "0"
+prod = getenv("prod")
 sid=getenv("twilio_sid")
 token=getenv("twilio_token")
 print("prod type: ", type(prod))

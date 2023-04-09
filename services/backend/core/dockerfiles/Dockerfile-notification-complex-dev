@@ -38,6 +38,7 @@ RUN mv notification_complex.py app.py
 COPY invokes.py .
 COPY obtainIp.py .
 
+
 #local machine inter container communication
 ENV prod=0
 
