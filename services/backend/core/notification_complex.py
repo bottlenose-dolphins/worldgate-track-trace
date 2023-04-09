@@ -33,11 +33,15 @@ def addsubscription():
             user_id = data["userid"]
             containerid=data["containerid"]
             status=data["status"]
+            direction=data["direction"]
+            shipment_type=data["shipment_type"]
 
             jsondata={
                 "userid":user_id,
                 "containerid":containerid,
-                "status":status
+                "status":status,
+                "direction":direction,
+                "shipment_type":shipment_type
             }
             response = invoke_http2("core_subscription", "subscription/add",prod, method='POST', json=jsondata)
             print(response)
