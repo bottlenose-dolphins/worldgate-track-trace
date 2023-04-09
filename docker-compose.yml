@@ -209,19 +209,19 @@ services:
     ports:
       - 8080:8080
 
-  # scraper_good:
-  #   container_name: scraper_good
-  #   build:
-  #     context: ./services/backend/scrapers
-  #     dockerfile: Dockerfile-Good-dev
-  #   networks:
-  #     - tracktrace_test_network
-  #   environment:
-  #     - PYTHONUNBUFFERED=1
-  #     - goodUsername=${goodUsername}
-  #     - goodPassword=${goodPassword}
-  #   ports:
-  #     - 8081:8081
+  scraper_good:
+    container_name: scraper_good
+    build:
+      context: ./services/backend/scrapers
+      dockerfile: Dockerfile-Good-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - PYTHONUNBUFFERED=1
+      - goodUsername=${goodUsername}
+      - goodPassword=${goodPassword}
+    ports:
+      - 8081:8081
 
   scraper_kmtc:
     container_name: scraper_kmtc
@@ -237,19 +237,19 @@ services:
     ports:
       - 8082:8082
   
-  # scraper_one:
-  #   container_name: scraper_one
-  #   build:
-  #     context: ./services/backend/scrapers
-  #     shm_size: '1gb'
-  #     dockerfile: Dockerfile-One-dev
-  #   networks:
-  #     - tracktrace_test_network
-  #   environment:
-  #     - PYTHONUNBUFFERED=1
-  #   shm_size: '1gb'
-  #   ports:
-  #     - 8083:8083
+  scraper_one:
+    container_name: scraper_one
+    build:
+      context: ./services/backend/scrapers
+      shm_size: '1gb'
+      dockerfile: Dockerfile-One-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - PYTHONUNBUFFERED=1
+    shm_size: '1gb'
+    ports:
+      - 8083:8083
 
   scraper_cosc:
     container_name: scraper_cosc
@@ -265,20 +265,20 @@ services:
     ports:
       - 8085:8085
 
-  # scraper_cord:
-  #   container_name: scraper_cord
-  #   build:
-  #     context: ./services/backend/scrapers
-  #     shm_size: '1gb'
-  #     dockerfile: Dockerfile-Cord-dev
-  #   networks:
-  #     - tracktrace_test_network
-  #   environment:
-  #     - PYTHONUNBUFFERED=1
-  #     - cordUsername=${cordUsername}
-  #     - cordPassword=${cordPassword}
-  #   shm_size: '1gb'
-  #   ports:
-  #     - 8084:8084
+  scraper_cord:
+    container_name: scraper_cord
+    build:
+      context: ./services/backend/scrapers
+      shm_size: '1gb'
+      dockerfile: Dockerfile-Cord-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - PYTHONUNBUFFERED=1
+      - cordUsername=${cordUsername}
+      - cordPassword=${cordPassword}
+    shm_size: '1gb'
+    ports:
+      - 8084:8084
 
 
