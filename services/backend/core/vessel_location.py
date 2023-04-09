@@ -26,7 +26,7 @@ prod = getenv('prod', "0")
 #sea routes api key
 VESSEL_API_KEY = getenv('VESSEL_API_KEY', None)
 
-#zyna api key
+#zyla api key
 LOCATION_API_KEY = getenv('LOCATION_API_KEY', None)
 
 CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",
@@ -77,6 +77,7 @@ def info():
                     } 
                 ), 500
         
+        #we try to use sea routes api first in try, if we cant, then except will use zyla api
         try: 
             # sea routes api, low rate limit
             cords, destination_cords = get_vessel_location(imo, VESSEL_API_KEY)
