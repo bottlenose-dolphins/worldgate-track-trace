@@ -355,6 +355,8 @@ services:
       - tracktrace_test_network
     environment:
       - SQLALCHEMY_DATABASE_URI=${DB_URI}
+      - twilio_sid=${twilio_sid}
+      - twilio_token=${twilio_token}
       # - PYTHONUNBUFFERED=1
     ports:
       - 5018:5018
