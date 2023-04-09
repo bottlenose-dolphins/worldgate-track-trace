@@ -29,7 +29,7 @@ print("prod type: ", type(prod))
 # db = SQLAlchemy(app)
 
 def function_to_call():
-    status=invoke_http2("core_complex_scraper","/sendsms",prod,method="POST")
+    status=invoke_http2("core_notification_complex","/sendsms",prod,method="POST")
     t=threading.Timer(24*60*60, function_to_call)
     t.daemon = True
     t.start()

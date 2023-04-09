@@ -1,5 +1,5 @@
 import axios from "axios";
-import { VIEW_ALL_SHIPMENTS_ENDPOINT, COMPLEX_SCRAPER_ENDPOINT, authenticate } from "./config";
+import { VIEW_ALL_SHIPMENTS_ENDPOINT, COMPLEX_SCRAPER_ENDPOINT,NOTIFICATION_COMPLEX_ENDPOINT, authenticate } from "./config";
 
 const axiosShipmentsInstance = axios.create({
     baseURL: VIEW_ALL_SHIPMENTS_ENDPOINT,
@@ -9,6 +9,11 @@ const axiosShipmentsInstance = axios.create({
 const axiosComplexInstance = axios.create({
     baseURL: COMPLEX_SCRAPER_ENDPOINT,
     timeout: 20000,
+});
+
+const axiosNotificationInstance = axios.create({
+    baseURL: NOTIFICATION_COMPLEX_ENDPOINT,
+    timeout: 30000,
 });
 
 export const searchShipmentStatus = async(identifier, identifierType, direction) => {
@@ -35,7 +40,7 @@ export const addsubscription = async(userid, containerid, status) => {
     try {
         const authRes = await authenticate();
         if (authRes.code === 200) {
-            const res = await axiosComplexInstance.post("/addsubscription", {
+            const res = await axiosNotificationInstance.post("/addsubscription", {
                 "userid": userid,
                 "containerid": containerid,
                 "status": status
@@ -55,7 +60,7 @@ export const deletesubscription = async( containerid) => {
     try {
         const authRes = await authenticate();
         if (authRes.code === 200) {
-            const res = await axiosComplexInstance.post("/deletesubscription", {
+            const res = await axiosNotificationInstance.post("/deletesubscription", {
               
                 "containerid": containerid
                
