@@ -49,7 +49,7 @@ export const searchShipmentStatus = async (identifier, identifierType, direction
         return error.response.data;
     }
 }
-export const addsubscription = async(userid, containerid, status,direction) => {
+export const addSubscription = async(userid, containerid, status,direction) => {
     try {
         const authRes = await authenticate();
         if (authRes.code === 200) {
@@ -71,7 +71,7 @@ export const addsubscription = async(userid, containerid, status,direction) => {
         return error.response.data;
     }
 }
-export const deletesubscription = async( containerid) => {
+export const deleteSubscription = async( containerid) => {
     try {
         const authRes = await authenticate();
         if (authRes.code === 200) {
@@ -92,7 +92,7 @@ export const deletesubscription = async( containerid) => {
     }
 }
 
-export const getsubscription = async() => {
+export const getSubscription = async() => {
     try {
         const authRes = await authenticate();
         if (authRes.code === 200) {
