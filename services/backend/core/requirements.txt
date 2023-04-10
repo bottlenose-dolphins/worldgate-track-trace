@@ -23,4 +23,5 @@ zipp==3.11.0
 zope.interface==5.5.2
 #for obtainip.py
 boto3==1.26.68
-
+twilio==7.17.0
+schedule==1.1.0

@@ -21,8 +21,8 @@ RUN wget ${URLBASE}/chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb \
 
 WORKDIR /app
 # copying the neccessary scripts
-COPY ../requirements.txt .
-COPY ../sinokorScraper.py .
+COPY requirements.txt .
+COPY sinokorScraper.py .
 RUN mv sinokorScraper.py app.py
 
 # upgrade pip and install requirements

@@ -341,3 +341,42 @@ services:
     ports:
       - 8087:8087
 
+
+  core_subscription:
+    container_name: core_subscription
+    build:
+      context: ./services/backend/core
+      dockerfile: dockerfiles/Dockerfile-subscription-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
+    ports:
+      - 5016:5016
+
+  core_scheduler:
+    container_name: core_scheduler
+    build:
+      context: ./services/backend/core
+      dockerfile: dockerfiles/Dockerfile-scheduler-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
+    ports:
+      - 5017:5017
+
+  core_notification_complex:
+    container_name: core_notification_complex
+    build:
+      context: ./services/backend/core
+      dockerfile: dockerfiles/Dockerfile-notification-complex-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
+      - twilio_sid=${twilio_sid}
+      - twilio_token=${twilio_token}
+      # - PYTHONUNBUFFERED=1
+    ports:
+      - 5018:5018

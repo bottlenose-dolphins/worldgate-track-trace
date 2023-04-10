@@ -1,15 +1,16 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Card } from "react-bootstrap";
-import { ChevronDownIcon, EnvelopeIcon, EnvelopeOpenIcon, DocumentArrowDownIcon, DocumentIcon } from "@heroicons/react/24/outline";
-import { searchShipmentStatus } from "src/api/shipment";
+import { searchShipmentStatus, addSubscription, deleteSubscription, getSubscriptions } from "src/api/shipment";
+import { ChevronDownIcon, EnvelopeIcon, EnvelopeOpenIcon, DocumentArrowDownIcon, DocumentIcon, BellSlashIcon, BellIcon } from "@heroicons/react/24/outline";
 import dateFormat from "dateformat";
 import { useNavigate } from "react-router-dom";
 import FileSaver from "file-saver";
 import { downloadBL } from "src/api/blDocument";
 import { toast } from "react-toastify";
+import ClipLoader from "react-spinners/ClipLoader";
 import locationWhite from "../../img/locationWhite.png";
 
-export default function ViewShipmentComponent({ title, data, setLoading }) {
+export default function ViewShipmentComponent({ title, userId, data, subscriptions, setSubscriptions, setLoading }) {
 
   useMemo(() => {
     data.sort((s1, s2) => {
@@ -48,7 +49,9 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
           {items.length === 0 && <div className="mx-1">No shipments found</div>}
           {items.length > 0 && items.map((item, index) => {
             return (
-              <ShipmentCard key={index} item={item} index={index} setLoading={setLoading} />
+              <div>
+                <ShipmentCard key={index} item={item} index={index} setSubscriptions={setSubscriptions} setLoading={setLoading} userId={userId} subscriptionList={subscriptions} />
+              </div>
             );
           })}
         </div>
@@ -56,11 +59,33 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
       </div>
     </div>
   )
+
 };
 
-function ShipmentCard({ item, index, setLoading }) {
+function ShipmentCard({ item, index, setSubscriptions, setLoading, userId, subscriptionList }) {
   const navigate = useNavigate();
 
+  const shipmentStatusColours = {
+    "unknown": "bg-gray-400",
+    "early": "bg-green-400",
+    "on time": "bg-cyan-500",
+    "delayed": "bg-red-400"
+  }
+
+  const eta = item.arrival_date ? dateFormat(item.arrival_date, "d mmm yyyy") : dateFormat(item.delivery_date, "d mmm yyyy");
+  const status = item.delay_status;
+
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  useEffect(() => {
+    subscriptionList.forEach(subscription => {
+      if (item.container_numbers[0] === subscription.container_id) {
+        setIsSubscribed(true);
+      }
+    })
+  }, [])
+
+
+  // HANDLE EMAIL
   const [mailHovered, setMailHovered] = useState(false);
   const handleMouseEnterMail = () => {
     setMailHovered(true);
@@ -78,6 +103,7 @@ function ShipmentCard({ item, index, setLoading }) {
     window.location.href = mailToLink;
   }
 
+  // HANDLE B/L DOWNLOAD
   const [bLHovered, setBLHovered] = useState(false);
   const handleMouseEnterBLHovered = () => {
     setBLHovered(true);
@@ -107,15 +133,14 @@ function ShipmentCard({ item, index, setLoading }) {
     }
   }
 
-  const shipmentStatusColours = {
-    "unknown": "bg-gray-400",
-    "early": "bg-green-400",
-    "on time": "bg-cyan-500",
-    "delayed": "bg-red-400"
+  // HANDLE NOTIFICATION
+  const [notificationHovered, setNotificationHovered] = useState(false);
+  const handleMouseEnterNotification = () => {
+    setNotificationHovered(true);
   }
-
-  const eta = item.arrival_date ? dateFormat(item.arrival_date, "d mmm yyyy") : dateFormat(item.delivery_date, "d mmm yyyy");
-  const status = item.delay_status;
+  const handleMouseLeaveNotification = () => {
+    setNotificationHovered(false);
+  }
 
   const handleClick = async () => {
     setLoading(true);
@@ -145,7 +170,9 @@ function ShipmentCard({ item, index, setLoading }) {
             shippingLine: result.shipping_line,
             direction: directionType,
             originCords: result.cords,
-            destinationCords: result.destination_cords, } })
+            destinationCords: result.destination_cords,
+          }
+        })
       }
     }
     catch (err) {
@@ -155,6 +182,88 @@ function ShipmentCard({ item, index, setLoading }) {
     setLoading(false);
 
   }
+
+  const subscribe = async (e) => {
+    e.stopPropagation();
+    setNotificationLoading(true);
+    setNotificationHovered(false);
+
+    const directionType = item.type.toLowerCase();
+    console.log("IMPORTANT");
+    console.log(directionType);
+    const containerNumber = item.container_numbers[0];
+    const searchType = "ctr";
+    try {
+      const response = await searchShipmentStatus(containerNumber, searchType, directionType);
+      if (response.code !== 200) {
+        console.log("SEARCH FAILED");
+        throw new Error("No status found");
+      }
+      else if (response.code === 200) {
+        console.log("SEARCH PASSED");
+        const direction = directionType
+        const result = response.data;
+        const status = result.status
+        const response2 = await addSubscription(userId, containerNumber, status, direction);
+
+        if (response2.code !== 201) {
+          console.log("SUBSCRIPTION FAILED");
+          console.log(response2);
+          throw new Error("No status found");
+        }
+        else if (response2.code === 201) {
+          console.log("SUBSCRIPTION PASSED");
+          const result = response2.data;
+          console.log(result)
+          const subscriptions = await getSubscriptions();
+          setNotificationLoading(false);
+          setIsSubscribed(true);
+          setSubscriptions(subscriptions.data);
+          toast.success("Successfully subscribed to notifications!");
+        }
+      }
+    }
+    catch (err) {
+      console.log(err);
+      setNotificationLoading(false);
+      toast.error(
+        "Error: Failed to subscribe to notifications.",
+      );
+    }
+  }
+
+  const unsubscribe = async (e) => {
+    e.stopPropagation();
+    setNotificationLoading(true);
+    setNotificationHovered(false);
+    
+    const containerNumber = item.container_numbers[0];
+    try {
+      const response2 = await deleteSubscription(containerNumber);
+      if (response2.code !== 200) {
+        console.log(response2);
+        throw new Error("No status found");
+      }
+      else if (response2.code === 200) {
+        const result = response2.message; // "Subscription removed"
+        console.log(result)
+        const subscriptions = await getSubscriptions();
+        setNotificationLoading(false);
+        setIsSubscribed(false);
+        setSubscriptions(subscriptions.data);
+        toast.success("Successfully unsubscribed from notifications!");
+      }
+    }
+    catch (err) {
+      setNotificationLoading(false);
+      toast.error(
+        "Error: Failed to unsubscribe from notifications.",
+      );
+      console.log(err);
+    }
+  }
+
+  const [notificationLoading, setNotificationLoading] = useState(false);
 
   return (
     <div role="button" className="mb-2" onClick={handleClick} onKeyDown={handleClick} tabIndex={0}>
@@ -174,9 +283,33 @@ function ShipmentCard({ item, index, setLoading }) {
                 <div className="w-7 h-7 mr-2" onMouseEnter={handleMouseEnterBLHovered} onMouseLeave={handleMouseLeaveBLHovered}>
                   {bLHovered ? <DocumentArrowDownIcon className="w-7 h-7" onClick={handleDownloadBLClick} /> : <DocumentIcon className="w-7 h-7" onClick={handleDownloadBLClick} />}
                 </div>
-                <div className="w-7 h-7" onMouseEnter={handleMouseEnterMail} onMouseLeave={handleMouseLeaveMail}>
+                <div className="w-7 h-7 mr-2" onMouseEnter={handleMouseEnterMail} onMouseLeave={handleMouseLeaveMail}>
                   {mailHovered ? <EnvelopeOpenIcon className="w-7 h-7" onClick={handleMailClick} /> : <EnvelopeIcon className="w-7 h-7" onClick={handleMailClick} />}
                 </div>
+                {notificationLoading &&
+                  <ClipLoader
+                    color="white"
+                    size={27}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
+                }
+                {!notificationLoading && isSubscribed &&
+                  <div className="group flex relative w-7 h-7" onMouseEnter={handleMouseEnterNotification} onMouseLeave={handleMouseLeaveNotification}>
+                    {notificationHovered ? <BellSlashIcon className="w-7 h-7" onClick={unsubscribe} /> : <BellIcon className="w-7 h-7" onClick={unsubscribe} />}
+                    <span className="group-hover:opacity-100 transition-opacity bg-white px-1 text-sm text-blue-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 m-4 mx-auto">
+                      Unsubscribe
+                    </span>
+                  </div>
+                }
+                {!notificationLoading && !isSubscribed &&
+                  <div className="group flex relative w-7 h-7" onMouseEnter={handleMouseEnterNotification} onMouseLeave={handleMouseLeaveNotification}>
+                    {notificationHovered ? <BellIcon className="w-7 h-7" onClick={subscribe} /> : <BellSlashIcon className="w-7 h-7" onClick={subscribe} />}
+                    <span className="group-hover:opacity-100 transition-opacity bg-white px-1 text-sm text-blue-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 m-4 mx-auto">
+                      Subscribe
+                    </span>
+                  </div>
+                }
               </Card.Subtitle>
             </div>
           </div>

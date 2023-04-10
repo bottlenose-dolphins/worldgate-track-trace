@@ -1,5 +1,5 @@
 import axios from "axios";
-import { VIEW_ALL_SHIPMENTS_ENDPOINT, COMPLEX_SCRAPER_ENDPOINT, SHIPMENT_UNLOADING_STATUS_ENDPOINT, authenticate } from "./config";
+import { VIEW_ALL_SHIPMENTS_ENDPOINT, COMPLEX_SCRAPER_ENDPOINT, NOTIFICATION_COMPLEX_ENDPOINT, SHIPMENT_UNLOADING_STATUS_ENDPOINT, authenticate } from "./config";
 
 const axiosShipmentsInstance = axios.create({
     baseURL: VIEW_ALL_SHIPMENTS_ENDPOINT,
@@ -9,6 +9,11 @@ const axiosShipmentsInstance = axios.create({
 const axiosComplexInstance = axios.create({
     baseURL: COMPLEX_SCRAPER_ENDPOINT,
     timeout: 20000,
+});
+
+const axiosNotificationInstance = axios.create({
+    baseURL: NOTIFICATION_COMPLEX_ENDPOINT,
+    timeout: 10000,
 });
 
 const axiosShipmentUnloadingInstance = axios.create({
@@ -34,6 +39,66 @@ export const searchShipmentStatus = async (identifier, identifierType, direction
                 } else {
                     res.data.data.is_fcl = false
                 }
+                console.log(res.data);
+                return res.data;
+            }
+            throw new Error("No data returned from backend");
+        }
+        throw new Error("Request Unauthorised");
+    } catch (error) {
+        console.log(error.response.data.message);
+        return error.response.data;
+    }
+}
+export const addSubscription = async(userid, containerid, status,direction) => {
+    try {
+        const authRes = await authenticate();
+        if (authRes.code === 200) {
+            const res = await axiosNotificationInstance.post("/addsubscription", {
+                "userid": userid,
+                "containerid": containerid,
+                "status": status,
+                "direction":direction,
+                "shipment_type":"ctr"
+            });
+            if (res) {
+                return res.data;
+            }
+            throw new Error("No data returned from backend");
+        }
+        throw new Error("Request Unauthorised");
+    } catch (error) {
+        console.log(error.response.data.message);
+        return error.response.data;
+    }
+}
+export const deleteSubscription = async( containerid) => {
+    try {
+        const authRes = await authenticate();
+        if (authRes.code === 200) {
+            const res = await axiosNotificationInstance.post("/deletesubscription", {
+              
+                "containerid": containerid
+               
+            });
+            if (res) {
+                return res.data;
+            }
+            throw new Error("No data returned from backend");
+        }
+        throw new Error("Request Unauthorised");
+    } catch (error) {
+        console.log(error.response.data.message);
+        return error.response.data;
+    }
+}
+
+export const getSubscriptions = async() => {
+    try {
+        const authRes = await authenticate();
+        if (authRes.code === 200) {
+            const res = await axiosNotificationInstance.post("/getsubscription");
+            if (res) {
                 console.log(res.data);
                 return res.data;
             }
@@ -83,14 +148,13 @@ export const getImportShipments = async () => {
             throw new Error("No data returned from backend");
         }
         throw new Error("Request Unauthorised");
-    }
-    catch (error) {
+    } catch (error) {
         console.log(error.response.data);
         return [];
     }
 }
 
-export const getExportShipments = async () => {
+export const getExportShipments = async() => {
     try {
         const authRes = await authenticate();
         if (authRes.code === 200) {

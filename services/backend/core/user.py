@@ -267,7 +267,27 @@ def verify_jwt_csrf_validity():
             "username": claims["username"]
         })
 
+@app.route("/user/getnumber", methods=['POST'])
+def get_number():
+    data = request.get_json()
+    userid = data["wguserid"]
+    try:
+        phone = User.query.filter_by(wguser_id=userid).first().phone
+
+        if phone:
+            return str(phone)
+    except:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "This user does not exist!"
+            }
+        ), 404
+
+    # decode jwt to extract the csrf
+   
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
-    # app.run(host='0.0.0.0', port=5002, debug=True) #to work as a local flask app
+    #app.run(debug=True)
+     app.run(host='0.0.0.0', port=5002, debug=True) #to work as a local flask app

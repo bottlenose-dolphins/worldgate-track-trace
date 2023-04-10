@@ -5,5 +5,6 @@ goodUsername=<un>
 goodPassword=<pw>
 cordUsername=<un>
 cordPassword=<pw>
-
+twilio_sid= "<twilio_sid>"
+twilio_token="<twilio_token>"
 REACT_APP_API_ENDPOINT="127.0.0.1"

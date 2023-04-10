@@ -5,6 +5,8 @@ from invokes import invoke_http, invoke_http2
 from os import getenv
 from dotenv import load_dotenv
 import json
+import os
+from twilio.rest import Client
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",
@@ -79,6 +81,7 @@ def scrape():
                 arrival_date = shipment_info["data"]["arrival_date"]
                 port_of_discharge = shipment_info["data"]["port_of_discharge"]
                 vessel_name = shipment_info["data"]["vessel_name"]
+                status = shipment_info["data"]["status"]
 
                 vessel_location_request_payload = {
                     "vessel_name": vessel_name,
@@ -129,6 +132,7 @@ def scrape():
                                 "vessel_name": vessel_name,
                                 "shipping_line": vendor_name,
                                 "port_of_loading": origin,
+                                "status": status,
                                 "delay_status": delay_status, 
                                 "cords": cords, #cords will either be [lat, long] OR [] (cannot get location)
                                 "destination_cords":destination_cords #destination_cords will either be [lat, long] OR [] (cannot get location)
@@ -229,7 +233,7 @@ def update_shipment_info_cont(container_number, arrival_date, port_of_discharge,
         response = invoke_http2("core_import_shipment", "import_shipment/update_cont", prod, method='POST', json=data)
 
     elif direction == "export":
-        # Invoke export_cont microservice
+        # Invoke `export_cont` microservice
         # response = invoke_http(export_cont_url + "export_cont/export_ref_n", method='POST', json=data)
         response = invoke_http2("core_export_cont", "export_cont/export_ref_n", prod, method='POST', json=data)
         export_ref_n = response["data"]["export_ref_n"]
@@ -331,6 +335,24 @@ def get_export_master_bl_ctr(container_number):
     master_bl = export_ref_res["data"]["master_bl"]
 
     return master_bl, export_ref_n
+
+
+
+# def call_function_every_24_hours():
+#     # Schedule the function_to_call() to run every 24 hours
+#     # schedule.every(10).seconds.do(invoke_http2("core_complex_scraper","complex_scraper/sendsms",prod,method="POST"))
+#     schedule.every(10).seconds.do(sendsms())
+
+#     while True:
+#         # Run the scheduled jobs
+#         schedule.run_pending()
+#         # Sleep for 1 second to avoid excessive CPU usage
+#         time.sleep(1)
+
+# # Start the scheduling in a separate thread
+# t = threading.Thread(target=call_function_every_24_hours)
+# t.daemon = True
+# t.start()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5009, debug=True)
