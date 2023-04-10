@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { downloadBL, getBLPreviewUrl } from "src/api/blDocument";
 import FileSaver from "file-saver";
 import Card from "react-bootstrap/Card";
@@ -32,6 +32,7 @@ export default function Status() {
   const { type } = location.state;
   const { direction } = location.state;
   const etaFormatted = dateFormat(eta, "d mmm yyyy");
+
   function hasShipmentArrived() {
     const todayDateString = new Date().toLocaleDateString("en-ZA");
     const etaConverted = eta.replaceAll("-", "/");
@@ -53,12 +54,19 @@ export default function Status() {
     "ctr": "CTR NO"
   }
 
+  const targetRef = useRef(null);
+
+  const handleClick = () => {
+    targetRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+
   return (
     <div className="bg-gradient-to-r from-white via-sky-100 to-sky-200 w-screen">
       <div className="grid grid-cols-2 gap-10 p-2">
         <div className="z-40">
           <ShipmentCard eta={etaFormatted} pod={portOfDischarge} vesselName={vesselName} blNo={blNo} />
-          <ExpandableDocument identifier={blNo} identifierType={type} direction={direction} />
+          <ExpandableDocument handleClick={handleClick} identifier={blNo} identifierType={type} direction={direction} />
         </div>
 
         <div className="p-2 mt-2">
@@ -104,7 +112,7 @@ export default function Status() {
         </div>
       </div>
 
-      <div className="mt-2 flex justify-center items-center items-center">
+      <div ref={targetRef} className="mt-2 flex justify-center items-center items-center">
       <VesselView originCords={originCords} destinationCords={destinationCords} portOfDischarge={portOfDischarge} />
       </div>
 
@@ -143,7 +151,7 @@ function ShipmentCard({ eta, pod, vesselName, blNo }) {
   )
 }
 
-function ExpandableDocument({ identifier, identifierType, direction }) { // blNo, type, direction
+function ExpandableDocument({ handleClick,  identifier, identifierType, direction }) { // blNo, type, direction
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
   const [previewUrl, setPreviewUrl] = useState("");
   const [error, setError] = useState(null);
@@ -195,15 +203,20 @@ function ExpandableDocument({ identifier, identifierType, direction }) { // blNo
 
   return (
     <div className="w-full h-screen">
-      <div className="flex items-end mt-6 ml-2">
-        <span className="text-lg">House Bill of Lading</span>
-        <DocumentArrowDownIcon className="ml-2 w-7 h-7 hover:cursor-pointer" onClick={downloadBLClick} />
-        <button type="button" className="ml-1 w-7 h-7" onClick={handleToggle}>
-          {isPreviewVisible ? <EyeSlashIcon className="ml-1 w-7 h-7" /> : <EyeIcon className="ml-1 w-7 h-7" />}
-        </button>
+      <div className="flex justify-between">
+        <div className="flex justify-between items-end mt-6 ml-2">
+          <span className="text-lg">House Bill of Lading</span>
+          <DocumentArrowDownIcon className="ml-2 w-7 h-7 hover:cursor-pointer" onClick={downloadBLClick} />
+          <button type="button" className="ml-1 w-7 h-7" onClick={handleToggle}>
+            {isPreviewVisible ? <EyeSlashIcon className="ml-1 w-7 h-7" /> : <EyeIcon className="ml-1 w-7 h-7" />}
+          </button>
       </div>
+        <div className="flex justify-end mt-6 mr-2">
+          <button type="button" onClick={handleClick} className="text-lg text-right text-[#217BF4]">Check Vessel Location</button>
+        </div>
       {error !== null && isPreviewVisible && <div className="mt-4 ml-2 text-red-600">{error}</div>}
       {error == null && isPreviewVisible && <EmbeddedDocument documentUrl={previewUrl} />}
+      </div>
     </div>
   )
 }
