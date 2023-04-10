@@ -1,5 +1,5 @@
 import axios from "axios";
-import { VIEW_ALL_SHIPMENTS_ENDPOINT, COMPLEX_SCRAPER_ENDPOINT,NOTIFICATION_COMPLEX_ENDPOINT, SHIPMENT_UNLOADING_STATUS_ENDPOINT, authenticate } from "./config";
+import { VIEW_ALL_SHIPMENTS_ENDPOINT, COMPLEX_SCRAPER_ENDPOINT, NOTIFICATION_COMPLEX_ENDPOINT, SHIPMENT_UNLOADING_STATUS_ENDPOINT, authenticate } from "./config";
 
 const axiosShipmentsInstance = axios.create({
     baseURL: VIEW_ALL_SHIPMENTS_ENDPOINT,
@@ -92,12 +92,13 @@ export const deleteSubscription = async( containerid) => {
     }
 }
 
-export const getSubscription = async() => {
+export const getSubscriptions = async() => {
     try {
         const authRes = await authenticate();
         if (authRes.code === 200) {
             const res = await axiosNotificationInstance.post("/getsubscription");
             if (res) {
+                console.log(res.data);
                 return res.data;
             }
             throw new Error("No data returned from backend");

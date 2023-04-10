@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Card } from "react-bootstrap";
-import { searchShipmentStatus, addSubscription, deleteSubscription, getSubscription } from "src/api/shipment";
+import { searchShipmentStatus, addSubscription, deleteSubscription } from "src/api/shipment";
 import { authenticate } from "src/api/config"
 import { ChevronDownIcon, EnvelopeIcon, EnvelopeOpenIcon, DocumentArrowDownIcon, DocumentIcon, BellSlashIcon, BellIcon } from "@heroicons/react/24/outline";
 import dateFormat from "dateformat";
@@ -10,20 +10,7 @@ import { downloadBL } from "src/api/blDocument";
 import { toast } from "react-toastify";
 import locationWhite from "../../img/locationWhite.png";
 
-export default function ViewShipmentComponent({ title, data, setLoading }) {
-  const [subscriptionList, setSubscriptionList] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const subscriptions = getSubscription();
-      subscriptions.then(data => setSubscriptionList(data.data));
-    };
-
-    fetchData();
-  }, []);
-
-  console.log("IMPORTANT");
-  console.log(subscriptionList);
+export default function ViewShipmentComponent({ title, data, subscriptions, setLoading }) {
 
   const [user, setUser] = useState("")
   useEffect(() => {
@@ -75,7 +62,7 @@ export default function ViewShipmentComponent({ title, data, setLoading }) {
           {items.length > 0 && items.map((item, index) => {
             return (
               <div>
-                <ShipmentCard key={index} item={item} index={index} setLoading={setLoading} user={user} subscriptionList={subscriptionList} />
+                <ShipmentCard key={index} item={item} index={index} setLoading={setLoading} user={user} subscriptionList={subscriptions} />
               </div>
             );
           })}
@@ -102,7 +89,7 @@ function ShipmentCard({ item, index, setLoading, user, subscriptionList }) {
 
   let isMatched = false;
   subscriptionList.forEach(subscription => {
-    if (item.container_numbers[0] === subscription.container_id) { // container number enough to determine whether this shipment is the one subscribed???
+    if (item.container_numbers[0] === subscription.container_id && item.type.toLowerCase() === subscription.direction) {
       isMatched = true;
     }
   })
