@@ -15,18 +15,8 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",
      supports_credentials=True, expose_headers="Set-Cookie")
 
-# load_dotenv()
-# app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# print(getenv('SQLALCHEMY_DATABASE_URI'))
-
 prod = "0"
 print("prod type: ", type(prod))
-
-# print("********")
-
-# db = SQLAlchemy(app)
 
 def function_to_call():
     status=invoke_http2("core_notification_complex","/sendsms",prod,method="POST")

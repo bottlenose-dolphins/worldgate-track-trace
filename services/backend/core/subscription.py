@@ -110,24 +110,6 @@ def getsubscriptions():
             arr.append(data)
         return arr
        
-
-        
-
-        # if vendor_name:
-        #     return jsonify(
-        #         {
-        #         "code": 200,
-        #         "data": vendor_name
-        #         }
-        #     ), 200
-    
-    # except:
-    #     return jsonify(
-    #         {
-    #             "code": 404,
-    #             "message": "No Records!"
-    #         }
-    #     ), 404
 @app.route("/ping", methods=['GET'])
 def health_check():
     return("import")
