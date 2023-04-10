@@ -29,6 +29,9 @@ VESSEL_API_KEY = getenv('VESSEL_API_KEY', None)
 #zyla api key
 LOCATION_API_KEY = getenv('LOCATION_API_KEY', None)
 
+#gmaps api key
+GMAPS_API_KEY = getenv('GMAPS_API_KEY', None)
+
 CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",
     supports_credentials=True, expose_headers="Set-Cookie")
 
@@ -94,6 +97,16 @@ def info():
         print(cords)
         print( "*** dest cords returned :")
         print(destination_cords)
+
+        #guarantee return of coords unless GMAPS cant find coords
+        try: 
+            if len(destination_cords)==0:
+                print( "*** attempting to retrieve coords from gmaps")
+                destination_cords = get_destination_coords_from_port_name_string(port_of_discharge, GMAPS_API_KEY)
+                print( "*** successfully retrieved coords from gmaps")
+        except:
+            print( "*** failed to retrieve coords from gmaps")
+            pass
             
         return jsonify(
                 {
@@ -146,6 +159,9 @@ def get_vessel_imo(vessel_name, API_KEY):
         # "Pelican/0014N" --> Pelican does not work
     ]
     """
+    #to prevent Pelican from failing, return imo
+    if vessel_name == "Pelican":
+        return 9626560 
 
     url = f"https://api.searoutes.com/vessel/v2/{vessel_name}/info"
     headers = {
@@ -195,3 +211,13 @@ def get_vessel_location2(imo, API_KEY):
 def string_to_cords(coord_string):
     coord_list = coord_string.split("° / ")
     return [float(coord_list[0].strip()), float(coord_list[1].strip().rstrip("°"))]
+
+#using a gmap search to get coords for destination
+
+def get_destination_coords_from_port_name_string(port_name, API_KEY):
+    safe_port_name = quote(port_name, safe="")
+    url = f"https://maps.googleapis.com/maps/api/geocode/json?address={safe_port_name}&key={API_KEY}"
+    response_payload = invoke_http(url, method="GET")
+    lat = response_payload["results"][0]["geometry"]["location"]["lat"]
+    lng = response_payload["results"][0]["geometry"]["location"]["lng"]
+    return[lat, lng]

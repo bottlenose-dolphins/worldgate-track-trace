@@ -187,6 +187,7 @@ services:
       # - PYTHONUNBUFFERED=1
       - VESSEL_API_KEY=${VESSEL_API_KEY}
       - LOCATION_API_KEY=${LOCATION_API_KEY}
+      - GMAPS_API_KEY=${REACT_APP_GMAPS_KEY}
     ports:
       - 5015:5015
 

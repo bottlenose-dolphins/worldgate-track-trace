@@ -9,7 +9,7 @@ RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
 ENV PYTHONUNBUFFERED=1
 
-ARG CACHEBUST=1
+ARG CACHEBUST=8888
 
 COPY ../vessel_location.py .
 RUN mv vessel_location.py app.py

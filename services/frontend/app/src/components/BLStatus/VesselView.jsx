@@ -36,16 +36,17 @@ function VesselView({ originCords, destinationCords, portOfDischarge }) {
           position={{ lat: originLat, lng: originLong }}
           icon={shippingIcon}
         /> 
-        ({destLat}!=null) && <MarkerF 
+        {(destLat!==null) && <MarkerF 
           position={{ lat: destLat, lng: destLong }}
-        />
-        ({destLat}!=null) &&  <InfoWindowF
+        />}
+
+        {(destLat!=null) &&  <InfoWindowF
           onLoad={onLoad}
           position={{lat: destLat, lng: destLong }}>
           <div className="p-8 bg-white">
             <h1>Destination Port: {portOfDischarge}</h1>
           </div>
-        </InfoWindowF>
+        </InfoWindowF>}
         { /* Child components, such as markers, info windows, etc. */}
       </GoogleMap>
   )
