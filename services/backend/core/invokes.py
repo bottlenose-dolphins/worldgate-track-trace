@@ -30,7 +30,9 @@ DEV_IP = {
 "core_scheduler" : "core_scheduler:5017",
 "core_notification_complex" : "core_notification_complex:5018",
 "core_unloading_status" : "core_unloading_status:5013",
-"core_load_bl_doc": "core_load_bl_doc:5014"
+"core_load_bl_doc": "core_load_bl_doc:5014",
+"core_vessel_location": "core_vessel_location:5015"
+
 }
 
 

@@ -21,7 +21,6 @@ print(getenv('SQLALCHEMY_DATABASE_URI'))
 prod = getenv("prod")
 print("prod type: ", type(prod))
 
-print("********")
 
 db = SQLAlchemy(app)
 
@@ -217,6 +216,26 @@ def scrape():
                 vessel_name = shipment_info["data"]["vessel_name"]
                 status = shipment_info["data"]["status"]
 
+                vessel_location_request_payload = {
+                    "vessel_name": vessel_name,
+                    "port_of_discharge":port_of_discharge
+                }
+                try:
+                    vessel_location_info = invoke_http2("core_vessel_location", "/info", prod, method="POST", json=vessel_location_request_payload)
+                    print(vessel_location_info)
+                    if vessel_location_info:
+                        print("*** except ***")
+                        cords = vessel_location_info["data"]["cords"]
+                        destination_cords = vessel_location_info["data"]["destination_cords"]
+                    else:
+                        print("*** else ***")
+                        cords=[]
+                        destination_cords=[]
+                except:
+                    print("*** except ***")
+                    cords=[]
+                    destination_cords=[]
+                
                 # Update DB with latest shipment information
                 if identifier_type == "bl":
                     update_shipment_info_bl(master_bl, arrival_date, port_of_discharge, vessel_name, direction)
@@ -246,8 +265,10 @@ def scrape():
                                 "vessel_name": vessel_name,
                                 "shipping_line": vendor_name,
                                 "port_of_loading": origin,
-                                "delay_status": delay_status,
-                                "status": status
+                                "status": status,
+                                "delay_status": delay_status, 
+                                "cords": cords, #cords will either be [lat, long] OR [] (cannot get location)
+                                "destination_cords":destination_cords #destination_cords will either be [lat, long] OR [] (cannot get location)
                             }
                     }
                 ), 200

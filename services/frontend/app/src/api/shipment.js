@@ -39,6 +39,7 @@ export const searchShipmentStatus = async (identifier, identifierType, direction
                 } else {
                     res.data.data.is_fcl = false
                 }
+                console.log(res.data);
                 return res.data;
             }
             throw new Error("No data returned from backend");

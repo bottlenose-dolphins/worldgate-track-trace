@@ -163,6 +163,7 @@ function ShipmentCard({ item, index, setLoading, user, subscriptionList }) {
       }
       else if (response.code === 200) {
         const result = response.data;
+
         navigate("/Status", {
           state: {
             blNo: containerNumber,
@@ -175,12 +176,14 @@ function ShipmentCard({ item, index, setLoading, user, subscriptionList }) {
             isFcl: result.is_fcl,
             containerReleaseDateTime: result.cont_released,
             deliveryTakenDateTime: result.del_taken,
-            shippingLine: result.shipping_line
-          }
-        })
+            shippingLine: result.shipping_line,
+            direction: directionType,
+            originCords: result.cords,
+            destinationCords: result.destination_cords, } })
       }
     }
     catch (err) {
+      console.log(err);
       navigate("/error", { state: { identifier: containerNumber, direction: directionType, type: searchType } })
     }
     setLoading(false);

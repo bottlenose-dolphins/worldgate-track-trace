@@ -28,7 +28,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
             && ldconfig
 
 WORKDIR /app
-ARG CACHEBUST=6
+ARG CACHEBUST=7
 COPY ../unloading_status.py .
 COPY ../requirements.txt .
 RUN mv unloading_status.py app.py
