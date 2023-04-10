@@ -1,28 +1,16 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Card } from "react-bootstrap";
-import { searchShipmentStatus, addSubscription, deleteSubscription } from "src/api/shipment";
-import { authenticate } from "src/api/config"
+import { searchShipmentStatus, addSubscription, deleteSubscription, getSubscriptions } from "src/api/shipment";
 import { ChevronDownIcon, EnvelopeIcon, EnvelopeOpenIcon, DocumentArrowDownIcon, DocumentIcon, BellSlashIcon, BellIcon } from "@heroicons/react/24/outline";
 import dateFormat from "dateformat";
 import { useNavigate } from "react-router-dom";
 import FileSaver from "file-saver";
 import { downloadBL } from "src/api/blDocument";
 import { toast } from "react-toastify";
+import ClipLoader from "react-spinners/ClipLoader";
 import locationWhite from "../../img/locationWhite.png";
 
-export default function ViewShipmentComponent({ title, data, subscriptions, setLoading }) {
-
-  const [user, setUser] = useState("")
-  useEffect(() => {
-    const fetchData = async () => {
-      const userData = await authenticate();
-      setUser(userData.userId);
-    };
-
-    fetchData();
-  }, []);
-
-  console.log(user)
+export default function ViewShipmentComponent({ title, userId, data, subscriptions, setSubscriptions, setLoading }) {
 
   useMemo(() => {
     data.sort((s1, s2) => {
@@ -62,7 +50,7 @@ export default function ViewShipmentComponent({ title, data, subscriptions, setL
           {items.length > 0 && items.map((item, index) => {
             return (
               <div>
-                <ShipmentCard key={index} item={item} index={index} setLoading={setLoading} user={user} subscriptionList={subscriptions} />
+                <ShipmentCard key={index} item={item} index={index} setSubscriptions={setSubscriptions} setLoading={setLoading} userId={userId} subscriptionList={subscriptions} />
               </div>
             );
           })}
@@ -74,7 +62,7 @@ export default function ViewShipmentComponent({ title, data, subscriptions, setL
 
 };
 
-function ShipmentCard({ item, index, setLoading, user, subscriptionList }) {
+function ShipmentCard({ item, index, setSubscriptions, setLoading, userId, subscriptionList }) {
   const navigate = useNavigate();
 
   const shipmentStatusColours = {
@@ -87,12 +75,15 @@ function ShipmentCard({ item, index, setLoading, user, subscriptionList }) {
   const eta = item.arrival_date ? dateFormat(item.arrival_date, "d mmm yyyy") : dateFormat(item.delivery_date, "d mmm yyyy");
   const status = item.delay_status;
 
-  let isMatched = false;
-  subscriptionList.forEach(subscription => {
-    if (item.container_numbers[0] === subscription.container_id && item.type.toLowerCase() === subscription.direction) {
-      isMatched = true;
-    }
-  })
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  useEffect(() => {
+    subscriptionList.forEach(subscription => {
+      if (item.container_numbers[0] === subscription.container_id) {
+        setIsSubscribed(true);
+      }
+    })
+  }, [])
+
 
   // HANDLE EMAIL
   const [mailHovered, setMailHovered] = useState(false);
@@ -179,7 +170,9 @@ function ShipmentCard({ item, index, setLoading, user, subscriptionList }) {
             shippingLine: result.shipping_line,
             direction: directionType,
             originCords: result.cords,
-            destinationCords: result.destination_cords, } })
+            destinationCords: result.destination_cords,
+          }
+        })
       }
     }
     catch (err) {
@@ -192,7 +185,9 @@ function ShipmentCard({ item, index, setLoading, user, subscriptionList }) {
 
   const subscribe = async (e) => {
     e.stopPropagation();
-    const userid = user;
+    setNotificationLoading(true);
+    setNotificationHovered(false);
+
     const directionType = item.type.toLowerCase();
     console.log("IMPORTANT");
     console.log(directionType);
@@ -205,43 +200,70 @@ function ShipmentCard({ item, index, setLoading, user, subscriptionList }) {
         throw new Error("No status found");
       }
       else if (response.code === 200) {
+        console.log("SEARCH PASSED");
         const direction = directionType
         const result = response.data;
         const status = result.status
-        const response2 = await addSubscription(userid, containerNumber, status, direction);
-        if (response2.code !== 200) {
+        const response2 = await addSubscription(userId, containerNumber, status, direction);
+
+        if (response2.code !== 201) {
+          console.log("SUBSCRIPTION FAILED");
+          console.log(response2);
           throw new Error("No status found");
         }
-        else if (response2.code === 200) {
+        else if (response2.code === 201) {
+          console.log("SUBSCRIPTION PASSED");
           const result = response2.data;
           console.log(result)
+          const subscriptions = await getSubscriptions();
+          setNotificationLoading(false);
+          setIsSubscribed(true);
+          setSubscriptions(subscriptions.data);
+          toast.success("Successfully subscribed to notifications!");
         }
       }
     }
     catch (err) {
       console.log(err);
+      setNotificationLoading(false);
+      toast.error(
+        "Error: Failed to subscribe to notifications.",
+      );
     }
-    window.location.reload();
   }
 
   const unsubscribe = async (e) => {
     e.stopPropagation();
+    setNotificationLoading(true);
+    setNotificationHovered(false);
+    
     const containerNumber = item.container_numbers[0];
     try {
       const response2 = await deleteSubscription(containerNumber);
       if (response2.code !== 200) {
+        console.log(response2);
         throw new Error("No status found");
       }
       else if (response2.code === 200) {
-        const result = response2.data;
+        const result = response2.message; // "Subscription removed"
         console.log(result)
+        const subscriptions = await getSubscriptions();
+        setNotificationLoading(false);
+        setIsSubscribed(false);
+        setSubscriptions(subscriptions.data);
+        toast.success("Successfully unsubscribed from notifications!");
       }
     }
     catch (err) {
+      setNotificationLoading(false);
+      toast.error(
+        "Error: Failed to unsubscribe from notifications.",
+      );
       console.log(err);
     }
-    window.location.reload();
   }
+
+  const [notificationLoading, setNotificationLoading] = useState(false);
 
   return (
     <div role="button" className="mb-2" onClick={handleClick} onKeyDown={handleClick} tabIndex={0}>
@@ -264,7 +286,15 @@ function ShipmentCard({ item, index, setLoading, user, subscriptionList }) {
                 <div className="w-7 h-7 mr-2" onMouseEnter={handleMouseEnterMail} onMouseLeave={handleMouseLeaveMail}>
                   {mailHovered ? <EnvelopeOpenIcon className="w-7 h-7" onClick={handleMailClick} /> : <EnvelopeIcon className="w-7 h-7" onClick={handleMailClick} />}
                 </div>
-                {isMatched &&
+                {notificationLoading &&
+                  <ClipLoader
+                    color="white"
+                    size={27}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
+                }
+                {!notificationLoading && isSubscribed &&
                   <div className="group flex relative w-7 h-7" onMouseEnter={handleMouseEnterNotification} onMouseLeave={handleMouseLeaveNotification}>
                     {notificationHovered ? <BellSlashIcon className="w-7 h-7" onClick={unsubscribe} /> : <BellIcon className="w-7 h-7" onClick={unsubscribe} />}
                     <span className="group-hover:opacity-100 transition-opacity bg-white px-1 text-sm text-blue-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 m-4 mx-auto">
@@ -272,7 +302,7 @@ function ShipmentCard({ item, index, setLoading, user, subscriptionList }) {
                     </span>
                   </div>
                 }
-                {!isMatched &&
+                {!notificationLoading && !isSubscribed &&
                   <div className="group flex relative w-7 h-7" onMouseEnter={handleMouseEnterNotification} onMouseLeave={handleMouseLeaveNotification}>
                     {notificationHovered ? <BellIcon className="w-7 h-7" onClick={subscribe} /> : <BellSlashIcon className="w-7 h-7" onClick={subscribe} />}
                     <span className="group-hover:opacity-100 transition-opacity bg-white px-1 text-sm text-blue-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 m-4 mx-auto">

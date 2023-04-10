@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getExportShipments, getImportShipments, getSubscriptions } from "src/api/shipment";
 import ClipLoader from "react-spinners/ClipLoader";
+import { authenticate } from "src/api/config";
 import ViewShipmentComponent from "./ViewShipmentComponent";
 
 export default function ToggleTab() {
@@ -18,6 +19,7 @@ export default function ToggleTab() {
     </button>
   ))
 
+  const [userId, setUserId] = useState("");
   const [importShipments, setImportShipments] = useState([]);
   const [exportShipments, setExportShipments] = useState([]);
   const [upcomingShipments, setUpcomingShipments] = useState([]);
@@ -25,6 +27,9 @@ export default function ToggleTab() {
 
   useEffect(() => {
     const fetchData = async () => {
+      const userData = await authenticate();
+      setUserId(userData.userId);
+
       const importShipments = await getImportShipments();
       setImportShipments(importShipments);
       const exportShipments = await getExportShipments();
@@ -70,9 +75,9 @@ export default function ToggleTab() {
           </div>
 
           <div className="border border-black w-3/4 bg-white">
-            {activeTab === "Upcoming" && <div><ViewShipmentComponent title="Upcoming Shipments" data={upcomingShipments} subscriptions={subscriptions} setLoading={setLoading} /></div>}
-            {activeTab === "Import" && <div><ViewShipmentComponent title="Incoming Shipments" data={importShipments} subscriptions={subscriptions} setLoading={setLoading} /></div>}
-            {activeTab === "Export" && <div><ViewShipmentComponent title="Outgoing Shipments" data={exportShipments} subscriptions={subscriptions} setLoading={setLoading} /></div>}
+            {activeTab === "Upcoming" && <div><ViewShipmentComponent title="Upcoming Shipments" userId={userId} data={upcomingShipments} subscriptions={subscriptions} setSubscriptions={setSubscriptions} setLoading={setLoading} /></div>}
+            {activeTab === "Import" && <div><ViewShipmentComponent title="Incoming Shipments" userId={userId} data={importShipments} subscriptions={subscriptions} setSubscriptions={setSubscriptions} setLoading={setLoading} /></div>}
+            {activeTab === "Export" && <div><ViewShipmentComponent title="Outgoing Shipments" userId={userId} data={exportShipments} subscriptions={subscriptions} setSubscriptions={setSubscriptions} setLoading={setLoading} /></div>}
           </div>
         </div>
       }
