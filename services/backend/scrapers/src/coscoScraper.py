@@ -79,7 +79,8 @@ def coscoScraper():
                     "data": {
                         "arrival_date": arrival_date,
                         "port_of_discharge": port_of_discharge,
-                        "vessel_name": vessel_name
+                        "vessel_name": vessel_name,
+                        "status": latest_status
                     }
                 }
         )

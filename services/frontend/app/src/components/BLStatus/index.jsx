@@ -39,11 +39,12 @@ export default function BLStatus() {
     try {
       const response = await searchShipmentStatus(billOfLadingNumber, searchType, directionType);
       if (response.code !== 200) {
+        console.log("ERROR OCCURRED");
         throw new Error("No status found");
       }
       else if (response.code === 200) {
         const result = response.data;
-        setTrackingHistory(result);
+        
         navigate("/Status", { state: { 
           blNo: billOfLadingNumber, 
           type: searchType,
@@ -52,10 +53,18 @@ export default function BLStatus() {
           vesselName: result.vessel_name, 
           status: result.delay_status, 
           portOfLoading: result.port_of_loading, 
-          shippingLine: result.shipping_line } })
+          isFcl: result.is_fcl,
+          containerReleaseDateTime: result.cont_released,
+          deliveryTakenDateTime: result.del_taken,
+          shippingLine: result.shipping_line,
+          direction: directionType,
+          originCords: result.cords,
+          destinationCords: result.destination_cords, } })
       }
+      
     }
     catch (err) {
+      console.log(err);
       navigate("/error", { state: { identifier: billOfLadingNumber, direction: directionType, type: searchType } })
     }
     setLoading(false);

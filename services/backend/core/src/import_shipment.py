@@ -25,13 +25,20 @@ class ImportShipment(db.Model):
     cr_agent_id = db.Column(db.String, nullable=False)
     port_load_id = db.Column(db.String, nullable=False)
     og_eta = db.Column(db.Date, nullable=False)
+    job_type = db.Column(db.String, nullable=False)
+    cont_released = db.Column(db.DateTime, nullable=False)
+    del_taken = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, import_ref_n, eta, ocean_bl, cr_agent_id, port_load_id):
+    def __init__(self, import_ref_n, eta, ocean_bl, cr_agent_id, port_load_id, og_eta, job_type, cont_released, del_taken):
         self.import_ref_n = import_ref_n
         self.eta = eta
         self.ocean_bl = ocean_bl
         self.cr_agent_id = cr_agent_id
         self.port_load_id = port_load_id
+        self.og_eta = og_eta
+        self.job_type = job_type
+        self.cont_released = cont_released
+        self.del_taken = del_taken
 
     def json(self):
         return {
@@ -39,12 +46,44 @@ class ImportShipment(db.Model):
             "eta": self.eta,
             "ocean_bl": self.ocean_bl,
             "cr_agent_id": self.cr_agent_id,
-            "port_load_id": self.port_load_id
+            "port_load_id": self.port_load_id,
+            "og_eta": self.og_eta,
+            "job_type": self.job_type,
+            "cont_released": self.cont_released,
+            "del_taken": self.del_taken
         }
 
 @app.route("/ping", methods=['GET'])
 def health_check():
     return("import_shipment")
+
+# Retrieve shipment job type (FCL or LCL), cont_released and del_taken by Master B/L
+@app.route("/import_shipment/cont_status", methods=['POST'])
+def retrieve_cont_status():
+    data = request.get_json()
+    master_bl = data["master_bl"]
+    response = ImportShipment.query.filter_by(ocean_bl=master_bl).first()
+
+    if response:
+        return jsonify(
+                {
+                "code": 200,
+                "data": {
+                    "import_ref_n": response.import_ref_n,
+                    "master_bl": master_bl,
+                    "job_type": response.job_type,
+                    "cont_released": response.cont_released,
+                    "del_taken": response.del_taken
+                    }
+                }
+            ), 200
+    
+    return jsonify(
+        {
+            "code": 500,
+            "message": "Failed to retrieve container status"
+        }
+    ), 500
 
 # Retrieve shipment information by Master B/L
 @app.route("/import_shipment/retrieve", methods=['POST'])

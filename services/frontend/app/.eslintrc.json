@@ -30,6 +30,7 @@
       "react/prop-types": 0,
       "react/no-array-index-key": "off",
       "react/jsx-no-constructed-context-values": "off",
+      "react/no-unstable-nested-components": "off",
       "no-unused-vars": "warn",
       "camelcase": "error",
       "spaced-comment": "error",
@@ -47,7 +48,8 @@
         "depth": 25
       }],
       "arrow-body-style": "off",
-      "prefer-destructuring": "off"
+      "prefer-destructuring": "off",
+      "no-nested-ternary": "warn"
     }
 }
   

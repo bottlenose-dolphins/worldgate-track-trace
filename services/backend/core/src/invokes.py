@@ -15,7 +15,7 @@ DEV_IP = {
 "scraper_cord": "scraper_cord:8084",
 "scraper_cosc": "scraper_cosc:8085",
 
-"core_user" : "core_user:5002",
+"core_user" : "core_users:5002",
 "core_import" : "core_import:5003",
 "core_import_cont" : "core_import_cont:5004",
 "core_import_shipment" : "core_import_shipment:5005",
@@ -25,7 +25,14 @@ DEV_IP = {
 "core_complex_scraper" : "core_complex_scraper:5009",
 "core_view_all" : "core_view_all:5010",
 "core_prefix" : "core_prefix:5011",
-"core_vendor_mast" : "core_vendor_mast:5012"
+"core_vendor_mast" : "core_vendor_mast:5012",
+"core_subscription" : "core_subscription:5016",
+"core_scheduler" : "core_scheduler:5017",
+"core_notification_complex" : "core_notification_complex:5018",
+"core_unloading_status" : "core_unloading_status:5013",
+"core_load_bl_doc": "core_load_bl_doc:5014",
+"core_vessel_location": "core_vessel_location:5015"
+
 }
 
 
