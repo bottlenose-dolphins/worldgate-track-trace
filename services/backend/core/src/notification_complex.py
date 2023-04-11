@@ -16,7 +16,9 @@ sid=getenv("twilio_sid")
 token=getenv("twilio_token")
 print("prod type: ", type(prod))
 
-
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("noti")  
 
 @app.route("/addsubscription", methods=['POST'])
 def addsubscription():

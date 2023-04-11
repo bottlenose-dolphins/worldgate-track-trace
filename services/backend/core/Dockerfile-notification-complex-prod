@@ -34,7 +34,7 @@ RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
 ENV PYTHONUNBUFFERED=1
 
-EXPOSE 80
+EXPOSE 5018
 
 # start the server
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=80"]
+CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5018"]

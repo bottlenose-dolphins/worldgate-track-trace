@@ -25,6 +25,9 @@ else:
 
 bucket = 'worldgate-tracktrace-docs'
 
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("load bl doc")  
 
 @app.route('/bl_doc/download', methods=['POST'])
 def download_bl_doc():

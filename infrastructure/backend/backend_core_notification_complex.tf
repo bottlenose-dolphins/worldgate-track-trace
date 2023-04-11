@@ -12,8 +12,8 @@ resource "aws_ecs_task_definition" "tracktrace_core_notification_complex" {
         "essential": true,
         "portMappings": [
             {
-            "containerPort": 80,
-            "hostPort": 80
+            "containerPort": 5018,
+            "hostPort": 5018
             }
         ],
         "memory": 512,
@@ -48,7 +48,6 @@ resource "aws_ecs_task_definition" "tracktrace_core_notification_complex" {
     execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole2.arn}"
 }
 
-
 resource "aws_ecs_service" "tracktrace_core_notification_complex_service" {
     name            = "tracktrace_core_notification_complex_service"                             # Naming our first service
     cluster         = "${aws_ecs_cluster.tracktrace_cluster.id}"             # Referencing our created Cluster
@@ -61,7 +60,39 @@ resource "aws_ecs_service" "tracktrace_core_notification_complex_service" {
     assign_public_ip = true # Providing our containers with public IPs
     }
 
+    load_balancer {
+    target_group_arn = "${aws_lb_target_group.target_group_core_notification_complex.arn}" # Referencing our target group
+    container_name   = "${aws_ecs_task_definition.tracktrace_core_notification_complex.family}"
+    container_port   = 5018 # Specifying the container port
+    }
+
     service_registries {
     registry_arn = "${aws_service_discovery_service.core_notification_complex.arn}"
+    }
+}
+
+resource "aws_lb_target_group" "target_group_core_notification_complex" {
+    name        = "tg-core-notification-complex"
+    port        = 5018
+    protocol    = "HTTP"
+    target_type = "ip"
+    vpc_id      = "${aws_default_vpc.default_vpc.id}" # Referencing the default VPC
+    health_check {
+        matcher = "200,301,302"
+        path = "/ping"
+    }
+
+    lifecycle {
+        create_before_destroy = false
+    }
+}
+
+resource "aws_lb_listener" "listener_core_notification_complex" {
+    load_balancer_arn = "${aws_alb.internal_load_balancer.arn}" # Referencing our load balancer
+    port              = "5018"
+    protocol          = "HTTP"
+    default_action {
+        type             = "forward"
+        target_group_arn = "${aws_lb_target_group.target_group_core_notification_complex.arn}" # Referencing our tagrte group
     }
 }

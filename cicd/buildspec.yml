@@ -27,7 +27,7 @@ phases:
   build:
     commands:
       - cd ../services/backend/core/
-      # - ./buildandpush.sh #core backend images
+      - ./buildandpush.sh #core backend images
       - cd ../scrapers
       # - ./buildandpush.sh #scraper backend images
       - cd ../../frontend

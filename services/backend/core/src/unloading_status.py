@@ -15,7 +15,10 @@ print("prod type: ", type(prod))
 
 print("********")
 
-db = SQLAlchemy(app)
+@app.route("/ping", methods=['GET'])
+def health_check():
+    return("unloading status")    
+
 
 @app.route('/unloading_status', methods=['POST'])
 def get_unloading_status():
