@@ -66,6 +66,7 @@ def ymluScraper():
         arrival_date = driver.find_element(By.ID, "ContentPlaceHolder1_rptBLNo_rptRoutingSchedule_0_lblDateTime_1").text[:10]
         port_of_discharge = driver.find_element(By.ID, "ContentPlaceHolder1_rptBLNo_gvBasicInformation_0_lblDischarge_0").text
         vessel_name = driver.find_element(By.XPATH, "//a[@title='Click here to view vessel schedule']").text
+        status = driver.find_element(By.ID, "ContentPlaceHolder1_rptBLNo_gvLatestEvent_0_lblLatestEvent_0").text
 
         if arrival_date != None:
             return jsonify(
@@ -74,7 +75,8 @@ def ymluScraper():
                     "data": {
                         "arrival_date": arrival_date,
                         "port_of_discharge": port_of_discharge,
-                        "vessel_name": vessel_name
+                        "vessel_name": vessel_name,
+                        "status": status
                     }
                 }
             )
