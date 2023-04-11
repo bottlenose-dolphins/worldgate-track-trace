@@ -214,9 +214,9 @@ function ExpandableDocument({ handleClick,  identifier, identifierType, directio
         <div className="flex justify-end mt-6 mr-2">
           <button type="button" onClick={handleClick} className="text-lg text-right text-[#217BF4]">Check Vessel Location</button>
         </div>
+      </div>
       {error !== null && isPreviewVisible && <div className="mt-4 ml-2 text-red-600">{error}</div>}
       {error == null && isPreviewVisible && <EmbeddedDocument documentUrl={previewUrl} />}
-      </div>
     </div>
   )
 }
