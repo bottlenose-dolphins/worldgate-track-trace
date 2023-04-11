@@ -4,7 +4,7 @@
 #with db uri 
 # images=('user' 'export' 'import' 'export-cont' 'import-cont' 'export-shipment' 'import-shipment' 'complex-scraper' 'prefix' 'vendor-mast' 'view-all' 'subscription', 'unloading-status' 'load-bl-doc', 'scheduler')
 
-images=('subscription')
+images=('load-bl-doc')
 
 for image in "${images[@]}"
 do
