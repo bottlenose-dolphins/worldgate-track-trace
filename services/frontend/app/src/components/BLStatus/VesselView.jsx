@@ -29,7 +29,7 @@ function VesselView({ originCords, destinationCords, portOfDischarge }) {
   return (
       isLoaded && <GoogleMap
         mapContainerStyle={containerStyle}
-        zoom={6}
+        zoom={5}
         center={{ lat: originLat, lng: originLong }}
       >
         <MarkerF 
