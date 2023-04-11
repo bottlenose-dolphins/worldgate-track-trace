@@ -5,7 +5,7 @@ FROM python:3.11
 # FROM python:3.12.0a4-alpine3.17
 
 # oracle installation 
-
+ARG CACHEBUST=5
 RUN mkdir app
 WORKDIR    /opt/oracle
 
@@ -28,9 +28,8 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
             && ldconfig
 
 WORKDIR /app
-ARG CACHEBUST=5
-COPY requirements.txt .
-COPY subscription.py .
+COPY src/requirements.txt .
+COPY src/subscription.py .
 RUN mv subscription.py app.py
 
 RUN pip install --upgrade pip

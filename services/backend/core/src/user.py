@@ -32,7 +32,7 @@ app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
 
 #needs to be toggled off to work in local docker env, toggled on to work in prod env
-app.config['JWT_COOKIE_DOMAIN'] = 'worldgatetracktrace.click'
+# app.config['JWT_COOKIE_DOMAIN'] = 'worldgatetracktrace.click'
 
 jwt = JWTManager(app)
 db = SQLAlchemy(app)

@@ -1,5 +1,5 @@
 FROM python:3.11
-
+ARG CACHEBUST2=69
 #change arch to amd64 or arm64
 ARG VERSION=109.0.5414.74-0ubuntu0.18.04.14
 ARG ARCH=arm64
@@ -20,10 +20,10 @@ RUN wget ${URLBASE}/chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb \
 && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-ARG CACHEBUST=67
+ARG CACHEBUST=675
 # copying the neccessary scripts
-COPY requirements.txt .
-COPY maerskScraper.py .
+COPY src/requirements.txt .
+COPY src/maerskScraper.py .
 RUN mv maerskScraper.py app.py
 
 # upgrade pip and install requirements

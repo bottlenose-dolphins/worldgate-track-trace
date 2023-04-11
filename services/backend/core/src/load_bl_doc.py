@@ -8,36 +8,16 @@ from flask_cors import CORS
 import boto3
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
-
-aws_access_key_id = getenv("aws_access_key_id")
-
-aws_secret_access_key = getenv("aws_secret_access_key")
-
-s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
-
-# client = boto3.client(
-#     's3',
-#     aws_access_key_id=ACCESS_KEY,
-#     aws_secret_access_key=SECRET_KEY,
-#     aws_session_token=SESSION_TOKEN
-# )
-
-
-
-bucket = 'worldgate-tracktrace-docs'
-
-app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",
-     supports_credentials=True, expose_headers="Set-Cookie")
+CORS(app, resources={r"/*": {"origins": ["http://www.worldgatetracktrace.click", "http://127.0.0.1", "http://worldgatetracktrace.click", "localhost"]}})
 
 load_dotenv()
-app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+aws_access_key_id = getenv("aws_access_key_id")
+aws_secret_access_key = getenv("aws_secret_access_key")
 prod = getenv("prod")
 
-db = SQLAlchemy(app)
+s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
+bucket = 'worldgate-tracktrace-docs'
+
 
 @app.route('/bl_doc/download', methods=['POST'])
 def download_bl_doc():

@@ -30,13 +30,13 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
 
 WORKDIR /app
 ARG CACHEBUST=5
-COPY requirements.txt .
-COPY subscription.py .
+COPY src/requirements.txt .
+COPY src/subscription.py .
 RUN mv subscription.py app.py
 
 #for invoking microservice calls within app
-COPY invokes.py .
-COPY obtainIp.py .
+COPY src/invokes.py .
+COPY src/obtainIp.py .
 
 #parsed during running of build command 
 ARG db 

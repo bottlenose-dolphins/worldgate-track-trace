@@ -1,7 +1,6 @@
 from flask_cors import CORS
 from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
-from invokes import invoke_http, invoke_http2
+from invokes import invoke_http2
 from os import getenv
 from dotenv import load_dotenv
 import json
@@ -9,23 +8,15 @@ import os
 from twilio.rest import Client
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",
-     supports_credentials=True, expose_headers="Set-Cookie")
+CORS(app, resources={r"/*": {"origins": ["http://www.worldgatetracktrace.click", "http://127.0.0.1", "http://worldgatetracktrace.click", "localhost"]}})
 
 load_dotenv()
-app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-print(getenv('SQLALCHEMY_DATABASE_URI'))
-
 prod = getenv("prod")
 sid=getenv("twilio_sid")
 token=getenv("twilio_token")
 print("prod type: ", type(prod))
 
-print("********")
 
-db = SQLAlchemy(app)
 
 @app.route("/addsubscription", methods=['POST'])
 def addsubscription():

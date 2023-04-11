@@ -12,10 +12,9 @@ import schedule
 from twilio.rest import Client
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",
-     supports_credentials=True, expose_headers="Set-Cookie")
+CORS(app, resources={r"/*": {"origins": ["http://www.worldgatetracktrace.click", "http://127.0.0.1", "http://worldgatetracktrace.click", "localhost"]}})
 
-prod = "0"
+prod = getenv("prod")
 print("prod type: ", type(prod))
 
 def function_to_call():

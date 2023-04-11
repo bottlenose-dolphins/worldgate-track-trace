@@ -2,7 +2,7 @@ FROM python:3.11
 # FROM python:3.12.0a4-alpine3.17
 
 WORKDIR /app
-COPY ../requirements.txt .
+COPY src/requirements.txt .
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
@@ -11,12 +11,12 @@ ENV PYTHONUNBUFFERED=1
 
 ARG CACHEBUST=8888
 
-COPY ../vessel_location.py .
+COPY src/vessel_location.py .
 RUN mv vessel_location.py app.py
 
 #for invoking microservice calls within app
-COPY ../invokes.py .
-COPY ../obtainIp.py .
+COPY src/invokes.py .
+COPY src/obtainIp.py .
 
 #local machine inter container communication
 ENV prod=0

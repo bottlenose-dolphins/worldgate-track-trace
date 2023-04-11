@@ -4,7 +4,7 @@ from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 
 #making other api calls
-from invokes import invoke_http, invoke_http2
+from invokes import invoke_http
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 import requests

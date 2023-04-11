@@ -152,7 +152,7 @@ services:
     container_name: core_unloading_status
     build:
       context: ./services/backend/core
-      dockerfile: dockerfiles/Dockerfile-unloading-status-dev
+      dockerfile: Dockerfile-unloading-status-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -165,7 +165,7 @@ services:
     container_name: core_load_bl_doc
     build:
       context: ./services/backend/core
-      dockerfile: dockerfiles/Dockerfile-load-bl-doc-dev
+      dockerfile: Dockerfile-load-bl-doc-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -180,7 +180,7 @@ services:
     container_name: core_vessel_location
     build:
       context: ./services/backend/core
-      dockerfile: dockerfiles/Dockerfile-vessel-location-dev
+      dockerfile: Dockerfile-vessel-location-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -190,6 +190,46 @@ services:
       - GMAPS_API_KEY=${REACT_APP_GMAPS_KEY}
     ports:
       - 5015:5015
+
+  core_subscription:
+    container_name: core_subscription
+    build:
+      context: ./services/backend/core
+      dockerfile: Dockerfile-subscription-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
+    ports:
+      - 5016:5016
+
+  core_scheduler:
+    container_name: core_scheduler
+    build:
+      context: ./services/backend/core
+      dockerfile: Dockerfile-scheduler-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
+    ports:
+      - 5017:5017
+
+  core_notification_complex:
+    container_name: core_notification_complex
+    build:
+      context: ./services/backend/core
+      dockerfile: Dockerfile-notification-complex-dev
+    networks:
+      - tracktrace_test_network
+    environment:
+      - SQLALCHEMY_DATABASE_URI=${DB_URI}
+      - twilio_sid=${twilio_sid}
+      - twilio_token=${twilio_token}
+      # - PYTHONUNBUFFERED=1
+    ports:
+      - 5018:5018
+
 
 
 
@@ -220,46 +260,6 @@ services:
     #   - web-app-node-modules-mount:/app/app/node_modules
     depends_on:
       - core_users
-    
-  core_subscription:
-    container_name: core_subscription
-    build:
-      context: ./services/backend/core
-      dockerfile: dockerfiles/Dockerfile-subscription-dev
-    networks:
-      - tracktrace_test_network
-    environment:
-      - SQLALCHEMY_DATABASE_URI=${DB_URI}
-    ports:
-      - 5016:5016
-
-  core_scheduler:
-    container_name: core_scheduler
-    build:
-      context: ./services/backend/core
-      dockerfile: dockerfiles/Dockerfile-scheduler-dev
-    networks:
-      - tracktrace_test_network
-    environment:
-      - SQLALCHEMY_DATABASE_URI=${DB_URI}
-    ports:
-      - 5017:5017
-
-  core_notification_complex:
-    container_name: core_notification_complex
-    build:
-      context: ./services/backend/core
-      dockerfile: dockerfiles/Dockerfile-notification-complex-dev
-    networks:
-      - tracktrace_test_network
-    environment:
-      - SQLALCHEMY_DATABASE_URI=${DB_URI}
-      - twilio_sid=${twilio_sid}
-      - twilio_token=${twilio_token}
-      # - PYTHONUNBUFFERED=1
-    ports:
-      - 5018:5018
-
 
 #  ____   ___  ____   __   ____  ____  ____    ____  ____  ____  _  _  __  ___  ____  ____ 
 # / ___) / __)(  _ \ / _\ (  _ \(  __)(  _ \  / ___)(  __)(  _ \/ )( \(  )/ __)(  __)/ ___)
@@ -271,12 +271,12 @@ services:
     build:
       context: ./services/backend/scrapers
       dockerfile: Dockerfile-Ymlu-dev
-      shm_size: '300mb'
+      shm_size: '600mb'
     networks:
       - tracktrace_test_network
     environment:
       - PYTHONUNBUFFERED=1
-    shm_size: '300mb'
+    shm_size: '600mb'
     ports:
       - 8080:8080
 
@@ -357,7 +357,7 @@ services:
     build:
       context: ./services/backend/scrapers
       shm_size: '1gb'
-      dockerfile: dockerfiles/Dockerfile-Maersk-dev
+      dockerfile: Dockerfile-Maersk-dev
     networks:
       - tracktrace_test_network
     environment:
@@ -371,7 +371,7 @@ services:
     build:
       context: ./services/backend/scrapers
       shm_size: '1gb'
-      dockerfile: dockerfiles/Dockerfile-Sinokor-dev
+      dockerfile: Dockerfile-Sinokor-dev
     networks:
       - tracktrace_test_network
     environment:
