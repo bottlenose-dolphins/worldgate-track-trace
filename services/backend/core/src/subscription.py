@@ -29,7 +29,7 @@ class Subscription(db.Model):
     shipment_type=db.Column(db.String, nullable=True)
 
     def __init__(self, wguser_id, container_id, status,direction,shipment_type):
-      
+
         self.container_id = container_id
         self.status = status
         self.wguser_id = wguser_id
@@ -39,7 +39,6 @@ class Subscription(db.Model):
 
     def json(self):
         return {
-           
             "container_id": self.container_id,
             "status": self.status,
             "wguser_id": self.wguser_id,
@@ -109,11 +108,11 @@ def getsubscriptions():
             }
             arr.append(data)
         return arr
-       
+
 @app.route("/ping", methods=['GET'])
 def health_check():
     return("import")
-  
+
 # Retrieve IMPORT_REF_N using WGUSER_ID -> Returning all the IMPORT_REF_N according to WGUSER_ID and sorted by latest to earliest using DELIVERY_D
 @app.route("/subscription/delete", methods=['POST'])
 def deleteuser():
@@ -121,15 +120,14 @@ def deleteuser():
         data = request.get_json()
         containerid = data['containerid']
         subscription = Subscription.query.filter_by(container_id=containerid).first()
-       
         try:
-             db.session.delete(subscription)
-             db.session.commit()
-             return jsonify({
+            db.session.delete(subscription)
+            db.session.commit()
+            return jsonify({
                 "code": 200,
                 "message": " Subscription removed "
             }), 200
-       
+
         except Exception as err:
             return jsonify({
                 "code": 500,
@@ -145,14 +143,13 @@ def updateuser():
         status=data["status"]
         subscription = Subscription.query.filter_by(container_id=containerid).first()
         subscription.status=status
-       
         try:
-             db.session.commit()
-             return jsonify({
+            db.session.commit()
+            return jsonify({
                 "code": 201,
                 "message": " status updated "
             }), 201
-       
+
         except Exception as err:
             return jsonify({
                 "code": 500,
@@ -160,7 +157,7 @@ def updateuser():
                 "data": str(err)
             }), 500
 
-      
+
         
 
 if __name__ == "__main__":

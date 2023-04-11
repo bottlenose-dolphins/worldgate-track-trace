@@ -8,7 +8,7 @@ resource "aws_ecs_task_definition" "tracktrace_core_unloading_status" {
     [
         {
         "name": "tracktrace_core_unloading_status",
-        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_unloading_status",
+        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_unloading-status",
         "essential": true,
         "portMappings": [
             {

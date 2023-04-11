@@ -8,7 +8,7 @@ resource "aws_ecs_task_definition" "tracktrace_core_notification_complex" {
     [
         {
         "name": "tracktrace_core_notification_complex",
-        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_notification_complex",
+        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_notification-complex",
         "essential": true,
         "portMappings": [
             {

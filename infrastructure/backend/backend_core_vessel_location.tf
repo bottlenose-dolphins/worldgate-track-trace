@@ -8,7 +8,7 @@ resource "aws_ecs_task_definition" "tracktrace_core_vessel_location" {
     [
         {
         "name": "tracktrace_core_vessel_location",
-        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_vessel_location",
+        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_vessel-location",
         "essential": true,
         "portMappings": [
             {

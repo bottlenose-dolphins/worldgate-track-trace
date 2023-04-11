@@ -8,7 +8,7 @@ resource "aws_ecs_task_definition" "tracktrace_scraper_maer" {
     [
         {
         "name": "tracktrace_scraper_maer",
-        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper_maer",
+        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper-Maer",
         "essential": true,
         "portMappings": [
             {

@@ -8,7 +8,7 @@ resource "aws_ecs_task_definition" "tracktrace_scraper_sino" {
     [
         {
         "name": "tracktrace_scraper_sino",
-        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper_sino",
+        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:scraper_Sino",
         "essential": true,
         "portMappings": [
             {

@@ -8,7 +8,7 @@ resource "aws_ecs_task_definition" "tracktrace_core_load_bl_doc" {
     [
         {
         "name": "tracktrace_core_load_bl_doc",
-        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_load_bl_doc",
+        "image": "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_load-bl-doc",
         "essential": true,
         "portMappings": [
             {
@@ -23,7 +23,7 @@ resource "aws_ecs_task_definition" "tracktrace_core_load_bl_doc" {
         "cpuArchitecture": "ARM64"
         },
         "overrides": { 
-            "taskRoleArn": "arn:aws:iam::283879969377:role/trackTraceServiceDiscovery"
+            "taskRoleArn": "arn:aws:iam::283879969377:role/load_bl_doc_role"
         },
         "logConfiguration": {
           "logDriver": "awslogs",
