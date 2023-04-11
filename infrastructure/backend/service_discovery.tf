@@ -330,3 +330,147 @@ resource "aws_service_discovery_service" "core_complex_scraper" {
     failure_threshold = 5
   }
 }
+
+resource "aws_service_discovery_service" "core_load_bl_doc" {
+  name = "core_load_bl_doc"
+  dns_config {
+    namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 5
+  }
+}
+
+resource "aws_service_discovery_service" "core_notification_complex" {
+  name = "core_notification_complex"
+  dns_config {
+    namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 5
+  }
+}
+
+resource "aws_service_discovery_service" "core_scheduler" {
+  name = "core_scheduler"
+  dns_config {
+    namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 5
+  }
+}
+
+resource "aws_service_discovery_service" "core_subscription" {
+  name = "core_subscription"
+  dns_config {
+    namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 5
+  }
+}
+
+resource "aws_service_discovery_service" "core_unloading_status" {
+  name = "core_unloading_status"
+  dns_config {
+    namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 5
+  }
+}
+
+resource "aws_service_discovery_service" "core_vessel_location" {
+  name = "core_vessel_location"
+  dns_config {
+    namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 5
+  }
+}
+
+resource "aws_service_discovery_service" "scraper_maer" {
+  name = "scraper_maer"
+  dns_config {
+    namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 5
+  }
+}
+
+resource "aws_service_discovery_service" "scraper_sino" {
+  name = "scraper_sino"
+  dns_config {
+    namespace_id = "${aws_service_discovery_private_dns_namespace.tracktrace.id}"
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 5
+  }
+}

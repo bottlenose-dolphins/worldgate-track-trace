@@ -42,6 +42,9 @@ RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
 ENV PYTHONUNBUFFERED=1
 
+#local machine inter container communication
+ENV prod=1
+
 EXPOSE 5002
 
 # start the server

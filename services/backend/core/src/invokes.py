@@ -14,6 +14,8 @@ DEV_IP = {
 "scraper_one": "scraper_one:8083",
 "scraper_cord": "scraper_cord:8084",
 "scraper_cosc": "scraper_cosc:8085",
+"scraper_maer": "scraper_maer:8086",
+"scraper_sino": "scraper_sino:8087",
 
 "core_user" : "core_users:5002",
 "core_import" : "core_import:5003",

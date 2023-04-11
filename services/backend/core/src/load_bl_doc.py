@@ -11,11 +11,18 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": ["http://www.worldgatetracktrace.click", "http://127.0.0.1", "http://worldgatetracktrace.click", "localhost"]}})
 
 load_dotenv()
-aws_access_key_id = getenv("aws_access_key_id")
-aws_secret_access_key = getenv("aws_secret_access_key")
 prod = getenv("prod")
 
-s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
+#initialise s3 client based on env
+if prod=="0": 
+    aws_access_key_id = getenv("aws_access_key_id")
+    aws_secret_access_key = getenv("aws_secret_access_key")
+    s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
+
+else:
+    s3 = boto3.client("s3")
+
+
 bucket = 'worldgate-tracktrace-docs'
 
 
@@ -103,4 +110,5 @@ def get_container_hbl(data):
     return hbl
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5014, debug=True)
+    # app.run(host='0.0.0.0', port=5014, debug=True)
+     app.run(host='0.0.0.0', debug=True)

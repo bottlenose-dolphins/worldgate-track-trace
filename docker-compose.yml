@@ -352,7 +352,7 @@ services:
     ports:
       - 8084:8084
   
-  scraper_maersk:
+  scraper_maer:
     container_name: scraper_maersk
     build:
       context: ./services/backend/scrapers
@@ -366,7 +366,7 @@ services:
     ports:
       - 8086:8086
   
-  scraper_sinokor:
+  scraper_sino:
     container_name: scraper_sinokor
     build:
       context: ./services/backend/scrapers

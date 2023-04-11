@@ -37,6 +37,9 @@ RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
 ENV PYTHONUNBUFFERED=1
 
+#used to run local service discovery
+ENV prod=0
+
 
 EXPOSE 5016
 

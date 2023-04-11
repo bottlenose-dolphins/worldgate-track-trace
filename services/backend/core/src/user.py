@@ -31,8 +31,12 @@ app.config['JWT_SECRET_KEY'] = getenv(
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
 
+
+prod = getenv("prod")
 #needs to be toggled off to work in local docker env, toggled on to work in prod env
-# app.config['JWT_COOKIE_DOMAIN'] = 'worldgatetracktrace.click'
+#initialise cookie if prod
+if prod=="1":
+    app.config['JWT_COOKIE_DOMAIN'] = 'worldgatetracktrace.click'
 
 jwt = JWTManager(app)
 db = SQLAlchemy(app)
@@ -291,5 +295,5 @@ def get_number():
 
 
 if __name__ == "__main__":
-    #app.run(debug=True)
-     app.run(host='0.0.0.0', port=5002, debug=True) #to work as a local flask app
+     app.run(host='0.0.0.0', debug=True)
+    #  app.run(host='0.0.0.0', port=5002, debug=True) #to work as a local flask app

@@ -295,4 +295,5 @@ def get_export_master_bl_ctr(container_number):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5018, debug=True)
+    # app.run(host='0.0.0.0', port=5018, debug=True)
+    app.run(host='0.0.0.0', debug=True)

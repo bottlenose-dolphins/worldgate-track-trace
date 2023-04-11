@@ -26,7 +26,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip
             RUN ldconfig
 
 WORKDIR /app
-ARG CACHEBUST=53488
+ARG CACHEBUST=534888
 COPY src/user.py .
 COPY src/requirements.txt . 
 COPY src/obtainIp.py .
@@ -36,6 +36,9 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 ENV TZ="Asia/Singapore"
 ENV PYTHONUNBUFFERED=1
+
+#local machine inter container communication
+ENV prod=0
 
 EXPOSE 5002
 

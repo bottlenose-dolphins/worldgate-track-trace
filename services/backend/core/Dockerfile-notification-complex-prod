@@ -19,9 +19,12 @@ COPY src/invokes.py .
 COPY src/obtainIp.py .
 
 #parsed during running of build command 
-ARG db 
-#obtained from arg db
-ENV SQLALCHEMY_DATABASE_URI=${db}
+ARG twilio_sid
+ARG twilio_token
+
+#obtained from arg
+ENV twilio_sid=${twilio_sid}
+ENV twilio_token=${twilio_token}
 
 #used to run prod service discovery
 ENV prod=1

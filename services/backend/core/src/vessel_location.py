@@ -21,7 +21,7 @@ import re
 load_dotenv()
 
 app = Flask(__name__)
-prod = getenv('prod', "0")
+prod = getenv('prod')
 
 #sea routes api key
 VESSEL_API_KEY = getenv('VESSEL_API_KEY', None)
@@ -32,8 +32,7 @@ LOCATION_API_KEY = getenv('LOCATION_API_KEY', None)
 #gmaps api key
 GMAPS_API_KEY = getenv('GMAPS_API_KEY', None)
 
-CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",
-    supports_credentials=True, expose_headers="Set-Cookie")
+CORS(app, resources={r"/*": {"origins": ["http://www.worldgatetracktrace.click", "http://127.0.0.1", "http://worldgatetracktrace.click", "localhost"]}})
 
 print("prod type: ", type(prod))
 

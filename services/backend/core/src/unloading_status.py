@@ -6,14 +6,9 @@ from os import getenv
 from dotenv import load_dotenv
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",
-     supports_credentials=True, expose_headers="Set-Cookie")
+CORS(app, resources={r"/*": {"origins": ["http://www.worldgatetracktrace.click", "http://127.0.0.1", "http://worldgatetracktrace.click", "localhost"]}})
 
 load_dotenv()
-app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI', None)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-print(getenv('SQLALCHEMY_DATABASE_URI'))
 
 prod = getenv("prod")
 print("prod type: ", type(prod))
@@ -164,5 +159,5 @@ def get_export_master_bl_ctr(container_number):
     return master_bl
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5013, debug=True)
-    # app.run(host='0.0.0.0', debug=True)
+    # app.run(host='0.0.0.0', port=5013, debug=True)
+    app.run(host='0.0.0.0', debug=True)

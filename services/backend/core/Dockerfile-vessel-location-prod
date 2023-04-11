@@ -18,6 +18,16 @@ RUN mv vessel_location.py app.py
 COPY src/invokes.py .
 COPY src/obtainIp.py .
 
+#parsed during running of build command 
+ARG VESSEL_API_KEY
+ARG LOCATION_API_KEY
+ARG GMAPS_API_KEY
+
+#obtained from arg db
+ENV VESSEL_API_KEY=${VESSEL_API_KEY}
+ENV LOCATION_API_KEY=${LOCATION_API_KEY}
+ENV GMAPS_API_KEY = ${GMAPS_API_KEY}
+
 #local machine inter container communication
 ENV prod=1
 

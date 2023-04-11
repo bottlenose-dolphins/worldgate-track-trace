@@ -13,7 +13,7 @@ RUN wget ${URLBASE}/chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb
 RUN wget ${URLBASE}/chromium-codecs-ffmpeg-extra_${VERSION}_${ARCH}.deb 
 RUN wget ${URLBASE}/chromium-browser_${VERSION}_${ARCH}.deb 
 RUN wget ${URLBASE}/chromium-chromedriver_${VERSION}_${ARCH}.deb 
-# RUN apt-get update 
+RUN apt-get update 
 RUN apt-get install -y ./chromium-codecs-ffmpeg_${VERSION}_${ARCH}.deb 
 RUN apt-get install -y ./chromium-codecs-ffmpeg-extra_${VERSION}_${ARCH}.deb 
 RUN apt-get install -y ./chromium-browser_${VERSION}_${ARCH}.deb 
