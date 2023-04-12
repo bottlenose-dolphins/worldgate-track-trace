@@ -6,7 +6,6 @@ from os import getenv
 from dotenv import load_dotenv
 import json
 import os
-from twilio.rest import Client
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, origins="http://localhost:3000",

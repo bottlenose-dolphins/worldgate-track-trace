@@ -72,13 +72,14 @@ export const addSubscription = async(userid, containerid, status,direction) => {
         return error.response.data;
     }
 }
-export const deleteSubscription = async( containerid) => {
+export const deleteSubscription = async(containerid) => {
     try {
         const authRes = await authenticate();
         if (authRes.code === 200) {
             const res = await axiosNotificationInstance.post("/deletesubscription", {
               
-                "containerid": containerid
+                "containerid": containerid,
+                "wguser_id": authRes.userId
                
             });
             if (res) {
@@ -98,7 +99,7 @@ export const getSubscriptions = async() => {
         const authRes = await authenticate();
         if (authRes.code === 200) {
             const userId = authRes.userId;
-            const res = await axiosNotificationInstance.post("/getsubscription", {
+            const res = await axiosNotificationInstance.post("/get_user_subscription", {
                 "wguser_id": userId
             });
             if (res) {
