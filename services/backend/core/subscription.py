@@ -47,8 +47,8 @@ class Subscription(db.Model):
             "shipment_type":self.shipment_type
         }
     
-def validate_subscription(containerid):
-    existing_subscription = Subscription.query.filter_by(container_id=containerid).first()
+def validate_subscription(containerid, wguser_id):
+    existing_subscription = Subscription.query.filter_by(container_id=containerid, wguser_id=wguser_id).first()
     if existing_subscription:
         return jsonify({
             "code": 401,
@@ -66,8 +66,8 @@ def insert_subscription():
     direction=data["direction"]
     shipment_type=data["shipment_type"]
 
-    if validate_subscription(containerid) is not None:
-        return validate_subscription(containerid)
+    if validate_subscription(containerid, user_id) is not None:
+        return validate_subscription(containerid, user_id)
     
     new_subscription = Subscription(user_id,containerid,status,direction,shipment_type)
 
@@ -110,6 +110,25 @@ def getsubscriptions():
             arr.append(data)
         return arr
        
+@app.route("/subscription/get_user_subscription", methods=['POST'])
+def get_user_subscription():
+    data = request.get_json()
+    wguser_id = data["wguser_id"]
+    res = Subscription.query.filter_by(wguser_id=wguser_id).all()
+     
+    arr=[]
+    for row in res:
+        data={
+            "subscription_id":row.subscription_id,
+            "wguser_id":row.wguser_id,
+            "container_id":row.container_id,
+            "status":row.status,
+            "direction":row.direction,
+            "shipment_type":row.shipment_type
+        }
+        arr.append(data)
+    return arr
+
 @app.route("/ping", methods=['GET'])
 def health_check():
     return("import")
@@ -120,7 +139,8 @@ def deleteuser():
     
         data = request.get_json()
         containerid = data['containerid']
-        subscription = Subscription.query.filter_by(container_id=containerid).first()
+        wguser_id = data['wguser_id']
+        subscription = Subscription.query.filter_by(container_id=containerid, wguser_id=wguser_id).first()
        
         try:
              db.session.delete(subscription)
