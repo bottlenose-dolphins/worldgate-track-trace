@@ -31,8 +31,8 @@ ENV GMAPS_API_KEY = ${GMAPS_API_KEY}
 #local machine inter container communication
 ENV prod=1
 
-EXPOSE 5014
+EXPOSE 80
 
 # start the server
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5014"]
+CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=80"]
 
