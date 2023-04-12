@@ -39,7 +39,7 @@ images3=('vessel-location')
 for image in "${images3[@]}"
 do
   echo "Pushing $image"
-  docker build -t "tracktrace_repo:core_$image" --file "Dockerfile-$image-prod" --build-arg VESSEL_API_KEY="4OrWAN1RwF9yIkFRVK9tE4zjhfNOXiWv6F3629ee" --build-arg LOCATION_API_KEY="1098|NvO69RTGk5mqoTeM5MxboTfq6A2MbV9bUH6UTSHU" --build-arg GMAPS_API_KEY="AIzaSyC24I-F1Ud-LVm7vK89V3MbCu8Ed-NWJ9A" . 
+  docker build -t "tracktrace_repo:core_$image" --file "Dockerfile-$image-prod" --build-arg VESSEL_API_KEY=$VESSEL_API_KEY --build-arg LOCATION_API_KEY=$LOCATION_API_KEY --build-arg GMAPS_API_KEY=$REACT_APP_GMAPS_KEY . 
   docker tag "tracktrace_repo:core_$image" "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_$image"
   docker push "283879969377.dkr.ecr.ap-southeast-1.amazonaws.com/tracktrace_repo:core_$image"
 done

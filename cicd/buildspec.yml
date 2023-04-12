@@ -31,7 +31,7 @@ phases:
       - cd ../scrapers
       - ./buildandpush.sh #scraper backend images
       - cd ../../frontend
-      # - ./buildandpush.sh #frontend images
+      - ./buildandpush.sh #frontend images
       - cd ../../cicd
       - ./terraform-deploy.sh #deploy all infra & apps
     
