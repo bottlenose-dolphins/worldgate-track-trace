@@ -15,7 +15,6 @@ export function getCookie(name) {
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) {
         const cookie = parts.pop().split(";").shift();
-        console.log(cookie);
         return cookie;
     }
     return null;

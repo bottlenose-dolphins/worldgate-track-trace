@@ -56,13 +56,14 @@ def deletesubscription():
         try:
             data = request.get_json()
             containerid=data["containerid"]
+            wguser_id = data["wguser_id"]
             jsondata={
      
-                "containerid":containerid
+                "containerid":containerid,
+                "wguser_id": wguser_id
              
             }
             response = invoke_http2("core_subscription", "subscription/delete",prod, method='POST', json=jsondata)
-            print(response)
         except Exception as e:
             return jsonify(
             {
@@ -77,7 +78,23 @@ def deletesubscription():
 def getsubscription():
         try:
             response = invoke_http2("core_subscription", "subscription/getsubscriptions",prod, method='POST')
-            print(response)
+        except Exception as e:
+            return jsonify(
+            {
+                "code": 500,
+                "message": e
+            }
+        ), 500
+    
+        return jsonify({
+                "code": 200,
+                "data": response
+            }),200
+
+@app.route("/get_user_subscription", methods=['POST'])
+def get_user_subscription():
+        try:
+            response = invoke_http2("core_subscription", "subscription/get_user_subscription",prod, method='POST', json=request.get_json())
         except Exception as e:
             return jsonify(
             {
