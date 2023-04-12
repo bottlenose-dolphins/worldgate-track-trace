@@ -5,7 +5,7 @@ import { authenticate } from "src/api/config";
 import ViewShipmentComponent from "./ViewShipmentComponent";
 
 export default function ToggleTab() {
-  const [activeTab, setActiveTab] = useState("Import");
+  const [activeTab, setActiveTab] = useState("Upcoming");
   const [loading, setLoading] = useState(true);
 
   const tabs = ["Upcoming", "Import", "Export"];
