@@ -1,0 +1,51 @@
+#  For export_cont.py
+FROM python:3.11
+
+#cx-Oracle fails to install via alpine (smaller image)
+# FROM python:3.12.0a4-alpine3.17
+
+# oracle installation 
+
+RUN mkdir app
+WORKDIR    /opt/oracle
+
+
+RUN        apt-get update && apt-get install -y libaio1 wget unzip \
+
+            #for ARM64
+            && wget https://download.oracle.com/otn_software/linux/instantclient/191000/instantclient-basiclite-linux.arm64-19.10.0.0.0dbru.zip \
+            && unzip instantclient-basiclite-linux.arm64-19.10.0.0.0dbru.zip \
+            && rm -f instantclient-basiclite-linux.arm64-19.10.0.0.0dbru.zip \
+
+            #for X64
+            # && wget https://download.oracle.com/otn_software/linux/instantclient/219000/instantclient-basiclite-linux.x64-21.9.0.0.0dbru.zip \
+            # && unzip instantclient-basiclite-linux.x64-21.9.0.0.0dbru.zip \
+            # && rm -f instantclient-basiclite-linux.x64-21.9.0.0.0dbru.zip \
+
+            && cd /opt/oracle/instantclient* \
+            && rm -f *jdbc* *occi* *mysql* *README *jar uidrvci genezi adrci \
+            && echo /opt/oracle/instantclient* > /etc/ld.so.conf.d/oracle-instantclient.conf \
+            && ldconfig
+
+WORKDIR /app
+ARG CACHEBUST=643
+COPY src/requirements.txt .
+COPY src/export_cont.py .
+RUN mv export_cont.py app.py
+
+#parsed during running of build command 
+ARG db 
+#obtained from arg db
+ENV SQLALCHEMY_DATABASE_URI=${db}
+
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+ENV TZ="Asia/Singapore"
+ENV PYTHONUNBUFFERED=1
+
+
+
+EXPOSE 80
+
+# start the server
+CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=80"]

@@ -1,0 +1,40 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.9
+
+  pre_build:
+    commands:
+      - cd cicd # change directory
+      - chmod +x configure-named-profile.sh terraform-deploy.sh terraform-destroy.sh ../services/backend/core/buildandpush.sh  ../services/backend/scrapers/buildandpush.sh ../services/frontend/buildandpush.sh # make all scripts executable
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com #ecr login
+
+      # install terraform binary
+      - curl -s -qL -o terraform_install.zip https://releases.hashicorp.com/terraform/1.3.8/terraform_1.3.8_linux_arm64.zip
+      - unzip terraform_install.zip -d /usr/bin/
+      - chmod +x /usr/bin/terraform
+      - terraform --version #check if terraform is installed
+      - ./configure-named-profile.sh # configure named profile
+  
+  # build:
+  #   commands:
+  #     - ./terraform-destroy.sh #destroy
+
+
+#commented off build commands for backend services
+  build:
+    commands:
+      - cd ../services/backend/core/
+      - ./buildandpush.sh #core backend images
+      - cd ../scrapers
+      - ./buildandpush.sh #scraper backend images
+      - cd ../../frontend
+      - ./buildandpush.sh #frontend images
+      - cd ../../cicd
+      - ./terraform-deploy.sh #deploy all infra & apps
+    
+
+#toggle between build and destroy in the release branch to build and destroy app
+

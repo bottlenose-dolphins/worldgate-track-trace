@@ -1,0 +1,15 @@
+FROM node:17-alpine
+ARG CACHEBUST=80999
+COPY . .
+WORKDIR /app
+# install node modules 
+RUN npm ci
+#build app
+RUN npm run build
+
+ENV prod=0
+# expose port 
+EXPOSE 80
+# start app
+CMD ["npm", "start"]
+

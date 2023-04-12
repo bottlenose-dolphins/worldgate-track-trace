@@ -1,0 +1,21 @@
+FROM node:17-alpine
+
+ARG CACHEBUST=654
+COPY . .
+WORKDIR /app
+
+# install node modules 
+RUN npm i
+#build app
+RUN npm run build
+ARG REACT_APP_API_ENDPOINT
+ENV REACT_APP_API_ENDPOINT=$REACT_APP_API_ENDPOINT
+
+ARG REACT_APP_GMAPS_KEY
+ENV REACT_APP_GMAPS_KEY=$REACT_APP_GMAPS_KEY
+
+# expose port 
+EXPOSE 80
+# start app
+CMD ["npm", "start"]
+

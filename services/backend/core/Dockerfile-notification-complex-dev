@@ -1,0 +1,33 @@
+# for complex_scraper.py
+
+FROM python:3.11
+
+#cx-Oracle fails to install via alpine (smaller image)
+# FROM python:3.12.0a4-alpine3.17
+
+# oracle installation 
+
+RUN mkdir app
+WORKDIR /app
+ARG CACHEBUST=6344
+COPY src/requirements.txt .
+COPY src/notification_complex.py .
+RUN mv notification_complex.py app.py
+
+#for invoking microservice calls within app
+COPY src/invokes.py .
+COPY src/obtainIp.py .
+
+
+#local machine inter container communication
+ENV prod=0
+
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+ENV TZ="Asia/Singapore"
+ENV PYTHONUNBUFFERED=1
+
+EXPOSE 5018
+
+# start the server
+CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5018"]

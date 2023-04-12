@@ -50,7 +50,7 @@ resource "aws_ecs_service" "tracktrace_scraper_good_service" {
     cluster         = "${aws_ecs_cluster.tracktrace_cluster.id}"             # Referencing our created Cluster
     task_definition = "${aws_ecs_task_definition.tracktrace_scraper_good.arn}" # Referencing the task our service will spin up
     launch_type     = "FARGATE"
-    desired_count   = 2 # Setting the number of containers we want deployed to 2
+    desired_count   = 1 # Setting the number of containers we want deployed to 2
 
     network_configuration {
     subnets          = ["${aws_default_subnet.default_subnet_a.id}", "${aws_default_subnet.default_subnet_b.id}", "${aws_default_subnet.default_subnet_c.id}"]

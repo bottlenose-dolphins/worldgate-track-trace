@@ -56,9 +56,9 @@ resource "aws_route53_zone" "hosted_zone" {
     name = "worldgatetracktrace.click"
 }
 
-resource "aws_route53_record" "www" {
+resource "aws_route53_record" "main_record" {
     zone_id = aws_route53_zone.hosted_zone.zone_id
-    name    = "www.worldgatetracktrace.click"
+    name    = "worldgatetracktrace.click"
     type    = "A"
     
     alias {
@@ -67,6 +67,31 @@ resource "aws_route53_record" "www" {
       evaluate_target_health = true
     }
 }
+
+# data "aws_alb" "int_load_balancer" {
+#   name = "int-load-balancer"
+# }
+
+resource "aws_route53_record" "int_load_balancer_record" {
+    zone_id = aws_route53_zone.hosted_zone.zone_id
+    name    = "bottlenosebackend.worldgatetracktrace.click"
+    type    = "A"
+    
+    alias {
+      name                   = data.aws_alb.int_load_balancer.dns_name
+      zone_id                = data.aws_alb.int_load_balancer.zone_id
+      evaluate_target_health = true
+    }
+}
+
+resource "aws_route53_record" "www" {
+  name    = "www"
+  zone_id = aws_route53_zone.hosted_zone.zone_id
+  type    = "CNAME"
+  ttl     = "300"
+  records = ["worldgatetracktrace.click"]
+}
+
 
 output "name_server"{
     value=aws_route53_zone.hosted_zone.name_servers

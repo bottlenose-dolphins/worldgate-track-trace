@@ -12,8 +12,8 @@ resource "aws_ecs_task_definition" "tracktrace_core_complex_scraper" {
         "essential": true,
         "portMappings": [
             {
-            "containerPort": 80,
-            "hostPort": 80
+            "containerPort": 5009,
+            "hostPort": 5009
             }
         ],
         "memory": 512,
@@ -48,20 +48,51 @@ resource "aws_ecs_task_definition" "tracktrace_core_complex_scraper" {
     execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole2.arn}"
 }
 
-
 resource "aws_ecs_service" "tracktrace_core_complex_scraper_service" {
     name            = "tracktrace_core_complex_scraper_service"                             # Naming our first service
     cluster         = "${aws_ecs_cluster.tracktrace_cluster.id}"             # Referencing our created Cluster
     task_definition = "${aws_ecs_task_definition.tracktrace_core_complex_scraper.arn}" # Referencing the task our service will spin up
     launch_type     = "FARGATE"
-    desired_count   = 2 # Setting the number of containers we want deployed to 2
+    desired_count   = 1 # Setting the number of containers we want deployed to 2
 
     network_configuration {
     subnets          = ["${aws_default_subnet.default_subnet_a.id}", "${aws_default_subnet.default_subnet_b.id}", "${aws_default_subnet.default_subnet_c.id}"]
     assign_public_ip = true # Providing our containers with public IPs
     }
 
+    load_balancer {
+    target_group_arn = "${aws_lb_target_group.target_group_core_complex_scraper.arn}" # Referencing our target group
+    container_name   = "${aws_ecs_task_definition.tracktrace_core_complex_scraper.family}"
+    container_port   = 5009 # Specifying the container port
+    }
+
     service_registries {
     registry_arn = "${aws_service_discovery_service.core_complex_scraper.arn}"
+    }
+}
+
+resource "aws_lb_target_group" "target_group_core_complex_scraper" {
+    name        = "tg-core-complex-scraper"
+    port        = 5009
+    protocol    = "HTTP"
+    target_type = "ip"
+    vpc_id      = "${aws_default_vpc.default_vpc.id}" # Referencing the default VPC
+    health_check {
+        matcher = "200,301,302"
+        path = "/ping"
+    }
+
+    lifecycle {
+        create_before_destroy = false
+    }
+}
+
+resource "aws_lb_listener" "listener_core_complex_scraper" {
+    load_balancer_arn = "${aws_alb.internal_load_balancer.arn}" # Referencing our load balancer
+    port              = "5009"
+    protocol          = "HTTP"
+    default_action {
+        type             = "forward"
+        target_group_arn = "${aws_lb_target_group.target_group_core_complex_scraper.arn}" # Referencing our tagrte group
     }
 }

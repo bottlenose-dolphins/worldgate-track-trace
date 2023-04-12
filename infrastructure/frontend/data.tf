@@ -14,6 +14,9 @@ data "aws_ecs_cluster" "tracktrace_cluster" {
     cluster_name = "tracktrace_cluster" # Naming the cluster
 }
 
+data "aws_alb" "int_load_balancer" {
+  name = "int-load-balancer"
+}
 
 
 

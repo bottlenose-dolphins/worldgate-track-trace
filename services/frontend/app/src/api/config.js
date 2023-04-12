@@ -25,6 +25,9 @@ export const authenticate = async() => {
         withCredentials: true,
         headers: {
             "X-CSRF-TOKEN": getCookie("csrf_access_token")
+            // 'Sec-Fetch-Dest': 'empty',
+            // 'Sec-Fetch-Mode': 'cors',
+            // 'Sec-Fetch-Site': 'same-site'
         }
     });
     return res.data;
