@@ -97,7 +97,10 @@ export const getSubscriptions = async() => {
     try {
         const authRes = await authenticate();
         if (authRes.code === 200) {
-            const res = await axiosNotificationInstance.post("/getsubscription");
+            const userId = authRes.userId;
+            const res = await axiosNotificationInstance.post("/getsubscription", {
+                "wguser_id": userId
+            });
             if (res) {
                 console.log(res.data);
                 return res.data;
