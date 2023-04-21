@@ -5,4 +5,26 @@ phases:
       python: 3.10
   pre_build:
     commands:
+      - chmod +x tests/install_chrome.sh
+      - sh tests/install_chrome.sh
+      - pip install --upgrade pip
+      - pip install -r services/backend/core/requirements.txt
+      - pip install -r services/backend/scrapers/requirements.txt
+      - export SQLALCHEMY_DATABASE_URI=$DB_URI
+      - export prod=0
+      - mv services/backend/core/complex_scraper.py tests/complex_scraper.py
+      - mv services/backend/core/invokes.py tests/invokes.py
+      - mv services/backend/scrapers/Cordelia.py tests/Cordelia.py
+      - mv services/backend/scrapers/coscoScraper.py tests/coscoScraper.py
+      - mv services/backend/scrapers/kmtcScraper.py tests/kmtcScraper.py
+      - mv services/backend/scrapers/oneScraper.py tests/oneScraper.py
+      - mv services/backend/scrapers/ymlu_scraper.py tests/ymlu_scraper.py
+  build:
+    commands:
       - python tests/flask_unit_test.py
+      # - python tests/complexScraper_unit_test.py
+      - python tests/cordeliaScraper_unit_test.py
+      - python tests/coscoScraper_unit_test.py
+      - python tests/kmtcScraper_unit_test.py
+      - python tests/oneScraper_unit_test.py
+      - python tests/ymluScraper_unit_test.py
